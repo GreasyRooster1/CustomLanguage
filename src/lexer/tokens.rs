@@ -96,3 +96,14 @@ impl TokenRule for NameRule {
         Token::Name(string)
     }
 }
+
+impl TokenRule for StringLiteralRule {
+    fn check(&self, string: String) -> bool {
+        string.starts_with("\"") &&
+        string.ends_with("\"")
+    }
+
+    fn get_token(&self, string: String) -> Token {
+        Token::Name(string)
+    }
+}
