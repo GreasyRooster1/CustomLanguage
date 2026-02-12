@@ -1,5 +1,7 @@
 use crate::lexer::{Token, TokenRule};
 
+const rules:[&dyn TokenRule] = {}
+
 struct FuncRule();
 struct LoopRule();
 
