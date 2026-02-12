@@ -1,10 +1,6 @@
 
 
-struct Token{
-
-}
-
-enum Tokens{
+enum Token{
     // Keywords
     Func,  // #
     Loop,  // @
@@ -23,4 +19,10 @@ enum Tokens{
     CloseParam, // )
     OpenBracket, // {
     CloseBracket, // }
+}
+
+trait TokenRule{
+    fn check(&self, string: String) -> bool;
+
+    fn get_token(&self) -> Token;
 }
