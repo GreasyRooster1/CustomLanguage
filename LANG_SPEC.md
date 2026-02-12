@@ -1,8 +1,5 @@
 
 ```
-
-let name = 10;
-
 number:f 10f
 number:f 10.0
 number 10
