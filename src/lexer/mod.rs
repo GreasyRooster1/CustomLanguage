@@ -1,4 +1,5 @@
 mod tokens;
+mod lexer;
 
 enum Token{
     // Keywords
@@ -22,7 +23,7 @@ enum Token{
 }
 
 trait TokenRule{
-    fn check(&self, string: String) -> bool;
+    fn check(string: String) -> bool;
 
-    fn get_token(&self, string: String) -> Token;
+    fn get_token(string: String) -> Token;
 }
