@@ -86,12 +86,13 @@ impl TokenRule for OpenBracketRule {
     }
 }
 
-impl TokenRule for CloseBracketRule {
+
+impl TokenRule for NameRule {
     fn check(&self, string: String) -> bool {
-        string == "}"
+        string.chars().all(char::is_alphanumeric)
     }
 
     fn get_token(&self, string: String) -> Token {
-        Token::CloseBracket
+        Token::Name(string)
     }
 }
