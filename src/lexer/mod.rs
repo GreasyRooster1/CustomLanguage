@@ -1,4 +1,4 @@
-
+mod tokens;
 
 enum Token{
     // Keywords
@@ -24,5 +24,5 @@ enum Token{
 trait TokenRule{
     fn check(&self, string: String) -> bool;
 
-    fn get_token(&self) -> Token;
+    fn get_token(&self, string: String) -> Token;
 }
