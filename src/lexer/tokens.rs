@@ -87,6 +87,16 @@ impl TokenRule for OpenBracketRule {
     }
 }
 
+impl TokenRule for CloseBracketRule {
+    fn check(&self, string: &String) -> bool {
+        string == "}"
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::CloseBracket
+    }
+}
+
 
 impl TokenRule for NameRule {
     fn check(&self, string: &String) -> bool {
