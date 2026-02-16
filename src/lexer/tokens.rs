@@ -1,8 +1,5 @@
 use crate::lexer::{Token, TokenRule};
 
-const RULES:[FuncRule;1] = {
-    FuncRule,
-}
 
 struct FuncRule();
 struct LoopRule();
@@ -106,6 +103,18 @@ impl TokenRule for StringLiteralRule {
     fn check(string: String) -> bool {
         string.starts_with("\"") &&
         string.ends_with("\"")
+    }
+
+    fn get_token(string: String) -> Token {
+        Token::Name(string)
+    }
+}
+
+impl TokenRule for NumberLiteralRule {
+    fn check(string: String) -> bool {
+        string.parse::<f64>().is_ok() ||
+        string.parse::<i32>().is_ok() ||
+        string.parse::<u32>().is_ok()
     }
 
     fn get_token(string: String) -> Token {
