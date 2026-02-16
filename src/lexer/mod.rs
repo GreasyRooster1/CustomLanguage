@@ -1,5 +1,6 @@
 mod tokens;
 mod lexer;
+mod tests;
 
 enum Token{
     // Keywords
