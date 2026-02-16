@@ -7,7 +7,7 @@ enum Token{
     Loop,  // @
 
     // Literals
-    NumberLiteral(String,BuiltinNumberType),
+    NumberLiteral(String,NumberLiteralAssumptions),
     StringLiteral(String),
     //TypeName(String),
     Name(String),
@@ -25,7 +25,7 @@ enum Token{
 enum NumberLiteralAssumptions{
     Float,
     Int,
-    UInt,
+    ExplicitRequired,
 }
 
 trait TokenRule{

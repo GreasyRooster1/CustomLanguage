@@ -1,5 +1,5 @@
-use crate::lexer::{Token, TokenRule};
-
+use crate::lexer::{NumberLiteralAssumptions, Token, TokenRule};
+use crate::lexer::Token::NumberLiteral;
 
 struct FuncRule();
 struct LoopRule();
@@ -118,6 +118,15 @@ impl TokenRule for NumberLiteralRule {
     }
 
     fn get_token(string: String) -> Token {
-        Token::Name(string)
+        let mut assumption;
+        let value = string.parse::<f64>();
+        if string.parse::<i32>().is_ok(){
+            assumption = NumberLiteralAssumptions::Int;
+        }else if string.parse::<f32>().is_ok(){
+            assumption = NumberLiteralAssumptions::Float
+        }else{
+            assumption = NumberLiteralAssumptions::ExplicitRequired
+        }
+        Token::NumberLiteral(string,assumption)
     }
 }
