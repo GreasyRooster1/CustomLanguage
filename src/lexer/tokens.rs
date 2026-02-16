@@ -1,21 +1,21 @@
 use crate::lexer::{NumberLiteralAssumptions, Token, TokenRule};
 use crate::lexer::Token::NumberLiteral;
 
-struct FuncRule();
-struct LoopRule();
+struct FuncRule;
+struct LoopRule;
 
-struct NumberLiteralRule();
-struct StringLiteralRule();
-struct TypeNameRule();
-struct NameRule();
+struct NumberLiteralRule;
+struct StringLiteralRule;
+struct TypeNameRule;
+struct NameRule;
 
-struct TypeSeparatorRule();
-struct RangeSeparatorRule();
+struct TypeSeparatorRule;
+struct RangeSeparatorRule;
 
-struct OpenParamRule();
-struct CloseParamRule();
-struct OpenBracketRule();
-struct CloseBracketRule();
+struct OpenParamRule;
+struct CloseParamRule;
+struct OpenBracketRule;
+struct CloseBracketRule;
 
 impl TokenRule for FuncRule {
     fn check(string: String) -> bool {
