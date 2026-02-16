@@ -3,7 +3,7 @@ use crate::lexer::{Token, TokenRule};
 use crate::lexer::Token::{OpenParam, TypeSeparator};
 use crate::lexer::tokens::*;
 
-pub(crate) fn get_matching_tokens(string:String, rules:Vec<Box<dyn TokenRule>>) -> Vec<Token> {
+pub(crate) fn get_matching_tokens(string:String, rules:&Vec<Box<dyn TokenRule>>) -> Vec<Token> {
     let mut tokens = vec![];
     
     for rule in rules {

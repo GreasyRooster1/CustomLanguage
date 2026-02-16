@@ -5,7 +5,7 @@ mod tests {
     use crate::lexer::lexer::*;
     use crate::lexer::{Token, TokenRule};
 
-    fn check_single_token_parse(string:String, rules:Vec<Box<dyn TokenRule>>, token: Token) -> bool{
+    fn check_single_token_parse(string:String, rules:&Vec<Box<dyn TokenRule>>, token: Token) -> bool{
         let t = get_matching_tokens(string,rules);
         dbg!(&t);
         if t.len()!=1 {return false;}
@@ -14,8 +14,8 @@ mod tests {
 
 
     #[test]
-    fn test_matching_tokens(){
+    fn test_matching_literal_tokens(){
         let rules = alloc_rules();
-        assert!(check_single_token_parse("#".to_string(),rules,Token::Func));
+        assert!(check_single_token_parse("#".to_string(),&rules,Token::Func));
     }
 }
