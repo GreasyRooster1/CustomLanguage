@@ -5,8 +5,8 @@ pub(crate) fn get_matching_tokens(string:String, rules:Vec<Box<dyn TokenRule>>) 
     let mut tokens = vec![];
     
     for rule in rules {
-        if rule.check(string) {
-            tokens.push(rule.get_token(string))
+        if rule.check(&string) {
+            tokens.push(rule.get_token(&string))
         }
     }
     
