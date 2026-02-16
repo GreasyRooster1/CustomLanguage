@@ -17,5 +17,12 @@ mod tests {
     fn test_matching_literal_tokens(){
         let rules = alloc_rules();
         assert!(check_single_token_parse("#".to_string(),&rules,Token::Func));
+        assert!(check_single_token_parse("@".to_string(),&rules,Token::Loop));
+        assert!(check_single_token_parse(":".to_string(),&rules,Token::TypeSeparator));
+        assert!(check_single_token_parse("..".to_string(),&rules,Token::RangeSeparator));
+        assert!(check_single_token_parse("(".to_string(),&rules,Token::OpenParam));
+        assert!(check_single_token_parse(")".to_string(),&rules,Token::CloseParam));
+        assert!(check_single_token_parse("{".to_string(),&rules,Token::OpenBracket));
+        assert!(check_single_token_parse("}".to_string(),&rules,Token::CloseBracket));
     }
 }
