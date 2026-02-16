@@ -1,8 +1,9 @@
 #[cfg(test)]
 mod tests {
     use std::cmp::PartialEq;
+    use std::f32::INFINITY;
     use std::mem;
-    use rand::random;
+    use rand::{random, rng, RngExt};
     use crate::lexer::lexer::*;
     use crate::lexer::{Token, TokenRule};
     use crate::lexer::NumberLiteralAssumptions::Float;
@@ -33,6 +34,17 @@ mod tests {
         let rules = alloc_rules();
         for i in 0..1000{
             let num = random::<f64>().to_string();
+            assert!(check_single_token_parse(num.clone(),&rules,Token::NumberLiteral(num,Float)))
+        }
+    }
+    #[test]
+    fn test_number_literal_all_float_token() {
+        let rules = alloc_rules();
+
+
+        for i in 0..1000{
+            let mut rng = rand::rng();
+            let num = rng.random_range(-f32::MIN..=f32::MAX).to_string();
             assert!(check_single_token_parse(num.clone(),&rules,Token::NumberLiteral(num,Float)))
         }
     }
