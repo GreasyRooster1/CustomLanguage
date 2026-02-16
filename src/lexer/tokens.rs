@@ -16,7 +16,7 @@ pub struct OpenParamRule;
 pub struct CloseParamRule;
 pub struct OpenBracketRule;
 pub struct CloseBracketRule;
-clone()
+
 impl TokenRule for FuncRule {
     fn check(&self, string: &String) -> bool {
         string == "#"

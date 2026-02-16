@@ -32,7 +32,7 @@ enum NumberLiteralAssumptions{
 }
 
 trait TokenRule{
-    fn check(&self,string: String) -> bool;
+    fn check(&self,string: &String) -> bool;
 
-    fn get_token(&self,string: String) -> Token;
+    fn get_token(&self,string: &String) -> Token;
 }
