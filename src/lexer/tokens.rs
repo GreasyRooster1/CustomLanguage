@@ -95,7 +95,7 @@ impl TokenRule for NameRule {
     }
 
     fn get_token(&self, string: &String) -> Token {
-        Token::Name(*string)
+        Token::Name((*(string.clone())).parse().unwrap())
     }
 }
 
@@ -106,7 +106,7 @@ impl TokenRule for StringLiteralRule {
     }
 
     fn get_token(&self, string: &String) -> Token {
-        Token::Name(*string)
+        Token::Name((*(string.clone())).parse().unwrap())
     }
 }
 
@@ -127,6 +127,6 @@ impl TokenRule for NumberLiteralRule {
         }else{
             assumption = NumberLiteralAssumptions::ExplicitRequired
         }
-        Token::NumberLiteral(*string, assumption)
+        Token::NumberLiteral((*(string.clone())).parse().unwrap(), assumption)
     }
 }
