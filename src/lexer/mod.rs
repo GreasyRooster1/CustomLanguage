@@ -2,6 +2,7 @@ mod tokens;
 mod lexer;
 mod tests;
 
+#[derive(Debug)]
 enum Token{
     // Keywords
     Func,  // #
@@ -23,6 +24,7 @@ enum Token{
     CloseBracket, // }
 }
 
+#[derive(Debug)]
 enum NumberLiteralAssumptions{
     Float,
     Int,

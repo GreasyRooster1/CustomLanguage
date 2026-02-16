@@ -1,7 +1,7 @@
 use crate::lexer::{Token, TokenRule};
 use crate::lexer::tokens::*;
 
-fn get_matching_tokens(string:String, rules:Vec<Box<dyn TokenRule>>) -> Vec<Token> {
+pub(crate) fn get_matching_tokens(string:String, rules:Vec<Box<dyn TokenRule>>) -> Vec<Token> {
     let mut tokens = vec![];
     
     
@@ -9,12 +9,12 @@ fn get_matching_tokens(string:String, rules:Vec<Box<dyn TokenRule>>) -> Vec<Toke
     tokens
 }
 
-fn parse(){
+pub(crate) fn parse(){
     let rules = alloc_rules();
 
 }
 
-fn alloc_rules() -> Vec<Box<dyn TokenRule>>{
+pub(crate) fn alloc_rules() -> Vec<Box<dyn TokenRule>>{
     vec![
         Box::new(FuncRule),
     ]
