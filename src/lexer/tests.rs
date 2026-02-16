@@ -1,11 +1,20 @@
 #[cfg(test)]
 mod tests {
+    use std::cmp::PartialEq;
+    use std::mem;
     use crate::lexer::lexer::*;
-    use crate::lexer::Token;
+    use crate::lexer::{Token, TokenRule};
+
+    fn check_single_token_parse(string:String, rules:Vec<Box<dyn TokenRule>>, token: Token) -> bool{
+        let t = get_matching_tokens(string,rules);
+        if t.len()!=1 {return false;}
+        mem::discriminant(&t[0]) == mem::discriminant(&token)
+    }
+
 
     #[test]
     fn test_matching_tokens(){
         let rules = alloc_rules();
-        assert_eq!(get_matching_tokens("#",rules)[0],Token::Func)
+        assert!(check_single_token_parse("#".to_string(),rules,Token::Func));
     }
 }
