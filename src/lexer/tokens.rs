@@ -113,8 +113,8 @@ impl TokenRule for StringLiteralRule {
 impl TokenRule for NumberLiteralRule {
     fn check(string: String) -> bool {
         string.parse::<f64>().is_ok() ||
-        string.parse::<i32>().is_ok() ||
-        string.parse::<u32>().is_ok()
+        string.parse::<i128>().is_ok() ||
+        string.parse::<u128>().is_ok()
     }
 
     fn get_token(string: String) -> Token {
