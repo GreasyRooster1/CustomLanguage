@@ -93,6 +93,7 @@ impl TokenRule for OpenBracketRule {
 
 impl TokenRule for NameRule {
     fn check(string: String) -> bool {
+        string.starts_with(char::is_alphabetic) &&
         string.chars().all(char::is_alphanumeric)
     }
 
