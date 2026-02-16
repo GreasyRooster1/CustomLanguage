@@ -7,6 +7,7 @@ mod tests {
 
     fn check_single_token_parse(string:String, rules:Vec<Box<dyn TokenRule>>, token: Token) -> bool{
         let t = get_matching_tokens(string,rules);
+        dbg!(&t);
         if t.len()!=1 {return false;}
         mem::discriminant(&t[0]) == mem::discriminant(&token)
     }
