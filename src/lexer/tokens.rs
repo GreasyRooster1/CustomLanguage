@@ -1,8 +1,8 @@
-use crate::lexer::Token::NumberLiteral;
+use crate::lexer::TokenType::NumberLiteral;
 use crate::lexer::{
     CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
     NumberLiteralAssumptions, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL,
-    TYPE_SEPERATOR_LITERAL, Token, TokenRule,
+    TYPE_SEPERATOR_LITERAL, TokenRule, TokenType,
 };
 
 pub struct FuncRule;
@@ -26,8 +26,8 @@ impl TokenRule for FuncRule {
         string == FUNC_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::Func
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::Func
     }
 }
 
@@ -36,8 +36,8 @@ impl TokenRule for LoopRule {
         string == LOOP_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::Loop
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::Loop
     }
 }
 
@@ -46,8 +46,8 @@ impl TokenRule for TypeSeparatorRule {
         string == TYPE_SEPERATOR_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::TypeSeparator
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::TypeSeparator
     }
 }
 
@@ -56,8 +56,8 @@ impl TokenRule for RangeSeparatorRule {
         string == RANGE_SEPERATOR_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::RangeSeparator
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::RangeSeparator
     }
 }
 
@@ -66,8 +66,8 @@ impl TokenRule for OpenParamRule {
         string == OPEN_PARAM_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::OpenParam
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::OpenParam
     }
 }
 
@@ -76,8 +76,8 @@ impl TokenRule for CloseParamRule {
         string == CLOSE_PARAM_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::CloseParam
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::CloseParam
     }
 }
 
@@ -86,8 +86,8 @@ impl TokenRule for OpenBracketRule {
         string == OPEN_BRACKET_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::OpenBracket
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::OpenBracket
     }
 }
 
@@ -96,8 +96,8 @@ impl TokenRule for CloseBracketRule {
         string == CLOSE_BRACKET_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::CloseBracket
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::CloseBracket
     }
 }
 
@@ -106,8 +106,8 @@ impl TokenRule for NameRule {
         string.starts_with(char::is_alphabetic) && string.chars().all(char::is_alphanumeric)
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::Name((*(string.clone())).parse().unwrap())
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::Name((*(string.clone())).parse().unwrap())
     }
 }
 
@@ -116,8 +116,8 @@ impl TokenRule for StringLiteralRule {
         string.starts_with("\"") && string.ends_with("\"")
     }
 
-    fn get_token(&self, string: &String) -> Token {
-        Token::Name((*(string.clone())).parse().unwrap())
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::Name((*(string.clone())).parse().unwrap())
     }
 }
 
@@ -128,7 +128,7 @@ impl TokenRule for NumberLiteralRule {
             || string.parse::<u128>().is_ok()
     }
 
-    fn get_token(&self, string: &String) -> Token {
+    fn get_token(&self, string: &String) -> TokenType {
         let mut assumption;
         let value = string.parse::<f64>();
         if string.parse::<i32>().is_ok() {
@@ -138,6 +138,6 @@ impl TokenRule for NumberLiteralRule {
         } else {
             assumption = NumberLiteralAssumptions::ExplicitRequired
         }
-        Token::NumberLiteral((*(string.clone())).parse().unwrap(), assumption)
+        TokenType::NumberLiteral((*(string.clone())).parse().unwrap(), assumption)
     }
 }

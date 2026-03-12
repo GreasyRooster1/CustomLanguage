@@ -12,7 +12,7 @@ const OPEN_BRACKET_LITERAL: &str = "{";
 const CLOSE_BRACKET_LITERAL: &str = "}";
 
 #[derive(Debug)]
-enum Token {
+enum TokenType {
     // Keywords
     Func, // #
     Loop, // @
@@ -43,6 +43,6 @@ enum NumberLiteralAssumptions {
 trait TokenRule {
     fn check(&self, string: &String) -> bool;
 
-    fn get_token(&self, string: &String) -> Token;
+    fn get_token(&self, string: &String) -> TokenType;
 }
 
