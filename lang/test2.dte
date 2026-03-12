@@ -1,6 +1,6 @@
-number:f 10f
-number:f 10.0
-number 10
+let number:f 10f
+let number:f 10.0
+let number 10
 name str:"hi" 
 
 loop i 0..10{
@@ -16,7 +16,10 @@ fn do_stuff_param(x:i){
 }
 
 fn do_stuff_param_ret(x:i):f{
-
+  let number:f = 10;
+  number = x + 20;
+  x += 30;
+  return number;
 }
 
 fn do_stuff_ret:f{
