@@ -2,11 +2,13 @@
 #[allow(clippy::module_inception)]
 mod tests {
     use crate::lexer::NumberLiteralAssumptions::Float;
-    use crate::lexer::lexer::*;
+    use crate::lexer::{
+        CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
+        OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL,
+        lexer::*,
+    };
     use crate::lexer::{Token, TokenRule};
     use rand::{RngExt, random, rng};
-    use std::cmp::PartialEq;
-    use std::f32::INFINITY;
     use std::mem;
 
     fn check_single_token_parse(
@@ -26,42 +28,42 @@ mod tests {
     fn test_matching_literal_tokens() {
         let rules = alloc_rules();
         assert!(check_single_token_parse(
-            "#".to_string(),
+            FUNC_LITERAL.to_string(),
             &rules,
             Token::Func
         ));
         assert!(check_single_token_parse(
-            "@".to_string(),
+            LOOP_LITERAL.to_string(),
             &rules,
             Token::Loop
         ));
         assert!(check_single_token_parse(
-            ":".to_string(),
+            TYPE_SEPERATOR_LITERAL.to_string(),
             &rules,
             Token::TypeSeparator
         ));
         assert!(check_single_token_parse(
-            "..".to_string(),
+            RANGE_SEPERATOR_LITERAL.to_string(),
             &rules,
             Token::RangeSeparator
         ));
         assert!(check_single_token_parse(
-            "(".to_string(),
+            OPEN_PARAM_LITERAL.to_string(),
             &rules,
             Token::OpenParam
         ));
         assert!(check_single_token_parse(
-            ")".to_string(),
+            CLOSE_PARAM_LITERAL.to_string(),
             &rules,
             Token::CloseParam
         ));
         assert!(check_single_token_parse(
-            "{".to_string(),
+            OPEN_BRACKET_LITERAL.to_string(),
             &rules,
             Token::OpenBracket
         ));
         assert!(check_single_token_parse(
-            "}".to_string(),
+            CLOSE_BRACKET_LITERAL.to_string(),
             &rules,
             Token::CloseBracket
         ));
