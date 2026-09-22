@@ -26,7 +26,8 @@ mod tests {
 
     #[test]
     fn test_token_parsing() {
-
+        let parsed = parse(include_str!("../../lang/LexerText1.dte").to_string());
+        println!("{:?}",parsed)
     }
 
     #[test]

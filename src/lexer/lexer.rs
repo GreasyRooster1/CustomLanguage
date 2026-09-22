@@ -1,6 +1,8 @@
+use std::ops::Deref;
 use crate::lexer::TokenType::{OpenParam, TypeSeparator};
 use crate::lexer::tokens::*;
 use crate::lexer::{TokenRule, TokenType};
+use log::{set_logger, warn};
 
 pub(crate) fn get_matching_tokens(
     string: String,
@@ -19,19 +21,27 @@ pub(crate) fn get_matching_tokens(
 
 pub(crate) fn parse(text: String) -> Vec<TokenType>{
     let rules = alloc_rules();
-    let mut output_tokens = vec![];
+    let mut output_tokens:Vec<TokenType> = vec![];
     let mut i = 0;
-    let mut selector_length = 1;
+    let mut selector_length = text.len();
     while i<text.len() {
-        let currentSection = text.get(i..i + selector_length);
-        let tokens = get_matching_tokens(text, &rules);
+        if(selector_length<1){
+            i+=1;
+            selector_length = text.len()-i;
+        }
+        println!("{} {} {}",i,selector_length,i+selector_length);
+        let current_section = text.get(i..(i + selector_length)).expect("no section").to_string();
+        let mut tokens = get_matching_tokens(current_section.clone(), &rules);
         if tokens.len() == 0 {
-            selector_length += 1;
+            selector_length -= 1;
             continue;
         }
+        println!("{:?}",tokens);
         if tokens.len()>1 { warn!("multiple matching tokens"); }
 
-        output_tokens.append(tokens.get(0));
+        output_tokens.push(tokens.pop().expect("Somehow no token"));
+        i+=selector_length;
+        selector_length = text.len()-i;
     }
 
     output_tokens

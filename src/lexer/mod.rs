@@ -5,7 +5,7 @@ mod tokens;
 const FUNC_LITERAL: &str = "fn ";
 const LOOP_LITERAL: &str = "loop ";
 const TYPE_SEPERATOR_LITERAL: &str = ":";
-const RANGE_SEPERATOR_LITERAL: &str = "..";
+const RANGE_SEPERATOR_LITERAL: &str = "->";
 const OPEN_PARAM_LITERAL: &str = "(";
 const CLOSE_PARAM_LITERAL: &str = ")";
 const OPEN_BRACKET_LITERAL: &str = "{";
@@ -14,8 +14,8 @@ const CLOSE_BRACKET_LITERAL: &str = "}";
 #[derive(Debug)]
 enum TokenType {
     // Keywords
-    Func, // #
-    Loop, // @
+    Func, // # (fn)
+    Loop, // @ (loop)
 
     // Literals
     NumberLiteral(String, NumberLiteralAssumptions),
