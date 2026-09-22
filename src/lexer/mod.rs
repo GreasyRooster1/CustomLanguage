@@ -11,6 +11,8 @@ const CLOSE_PARAM_LITERAL: &str = ")";
 const OPEN_BRACKET_LITERAL: &str = "{";
 const CLOSE_BRACKET_LITERAL: &str = "}";
 
+const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
+
 #[derive(Debug)]
 enum TokenType {
     // Keywords
