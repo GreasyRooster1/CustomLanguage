@@ -17,8 +17,24 @@ pub(crate) fn get_matching_tokens(
     tokens
 }
 
-pub(crate) fn parse() {
+pub(crate) fn parse(text: String) -> Vec<TokenType>{
     let rules = alloc_rules();
+    let mut output_tokens = vec![];
+    let mut i = 0;
+    let mut selector_length = 1;
+    while i<text.len() {
+        let currentSection = text.get(i..i + selector_length);
+        let tokens = get_matching_tokens(text, &rules);
+        if tokens.len() == 0 {
+            selector_length += 1;
+            continue;
+        }
+        if tokens.len()>1 { warn!("multiple matching tokens"); }
+
+        output_tokens.append(tokens.get(0));
+    }
+
+    output_tokens
 }
 
 pub(crate) fn alloc_rules() -> Vec<Box<dyn TokenRule>> {

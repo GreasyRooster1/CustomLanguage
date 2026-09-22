@@ -25,6 +25,11 @@ mod tests {
     }
 
     #[test]
+    fn test_token_parsing() {
+
+    }
+
+    #[test]
     fn test_matching_literal_tokens() {
         let rules = alloc_rules();
         assert!(check_single_token_parse(
