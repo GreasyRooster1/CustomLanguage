@@ -1,5 +1,5 @@
 use std::ops::Deref;
-use crate::lexer::TokenType::{OpenParam, TypeSeparator};
+use crate::lexer::TokenType::{OpenParam, TypeName, TypeSeparator};
 use crate::lexer::tokens::*;
 use crate::lexer::{TokenRule, TokenType};
 use log::{set_logger, warn};
@@ -51,6 +51,7 @@ pub(crate) fn alloc_rules() -> Vec<Box<dyn TokenRule>> {
         Box::new(LoopRule),
         Box::new(NumberLiteralRule),
         Box::new(StringLiteralRule),
+        Box::new(TypeNameRule),
         Box::new(NameRule),
         Box::new(TypeSeparatorRule),
         Box::new(RangeSeparatorRule),
