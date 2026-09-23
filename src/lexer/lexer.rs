@@ -29,15 +29,13 @@ pub(crate) fn parse(text: String) -> Vec<TokenType>{
             i+=1;
             selector_length = text.len()-i;
         }
-        println!("{} {} {}",i,selector_length,i+selector_length);
         let current_section = text.get(i..(i + selector_length)).expect("no section").to_string();
         let mut tokens = get_matching_tokens(current_section.clone(), &rules);
         if tokens.len() == 0 {
             selector_length -= 1;
             continue;
         }
-        println!("{:?}",tokens);
-        if tokens.len()>1 { warn!("multiple matching tokens"); }
+        if tokens.len()>1 { warn!("multiple matching tokens: {:?}", tokens); }
 
         output_tokens.push(tokens.pop().expect("Somehow no token"));
         i+=selector_length;

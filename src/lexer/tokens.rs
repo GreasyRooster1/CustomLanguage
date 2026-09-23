@@ -2,7 +2,7 @@ use crate::lexer::TokenType::NumberLiteral;
 use crate::lexer::{
     CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
     NumberLiteralAssumptions, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL,
-    TYPE_SEPERATOR_LITERAL, TokenRule, TokenType, NAME_ALLOWED_CHARS
+    TYPE_SEPERATOR_LITERAL, TokenRule, TokenType, NAME_ALLOWED_CHARS,TYPE_DENOTER_LITERAL
 };
 
 pub struct FuncRule;
@@ -98,6 +98,16 @@ impl TokenRule for CloseBracketRule {
 
     fn get_token(&self, string: &String) -> TokenType {
         TokenType::CloseBracket
+    }
+}
+
+impl TokenRule for TypeNameRule {
+    fn check(&self, string: &String) -> bool {
+        string.starts_with(TYPE_DENOTER_LITERAL) && string.chars().all(|c| NAME_ALLOWED_CHARS.contains(c))
+    }
+
+    fn get_token(&self, string: &String) -> TokenType {
+        TokenType::Name((*(string.clone())).parse().unwrap())
     }
 }
 
