@@ -21,7 +21,7 @@ enum TokenType {
     Loop, // @ (loop)
 
     // Literals
-    NumberLiteral(String, NumberLiteralAssumptions),
+    NumberLiteral(String, NumberLiteralAssumption),
     StringLiteral(String),
     // TypeName(String),
     Name(String),
@@ -37,7 +37,7 @@ enum TokenType {
 }
 
 #[derive(Debug)]
-enum NumberLiteralAssumptions {
+enum NumberLiteralAssumption {
     Float,
     Int,
     ExplicitRequired,
