@@ -28,7 +28,7 @@ enum TokenType {
 
     // Characters
     TypeSeparator,  // :
-    RangeSeparator, // ..
+    RangeSeparator, // ->
 
     OpenParam,    // (
     CloseParam,   // )
