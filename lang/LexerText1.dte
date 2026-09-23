@@ -10,7 +10,7 @@ fn do_stuff_param(x:i){
 
 }
 
-fn do_stuff_param_ret(x:i):#f{
+fn do_stuff_param_ret(x:i):f{
   let number:f = 10;
   number = x + 20;
   x += 30;

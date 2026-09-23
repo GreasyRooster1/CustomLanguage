@@ -10,7 +10,7 @@ pub struct LoopRule;
 
 pub struct NumberLiteralRule;
 pub struct StringLiteralRule;
-pub struct TypeNameRule;
+// pub struct TypeNameRule;
 pub struct NameRule;
 
 pub struct TypeSeparatorRule;
@@ -98,16 +98,6 @@ impl TokenRule for CloseBracketRule {
 
     fn get_token(&self, string: &String) -> TokenType {
         TokenType::CloseBracket
-    }
-}
-
-impl TokenRule for TypeNameRule {
-    fn check(&self, string: &String) -> bool {
-        string.starts_with(TYPE_DENOTER_LITERAL) && string.chars().all(|c| NAME_ALLOWED_CHARS.contains(c))
-    }
-
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::Name((*(string.clone())).parse().unwrap())
     }
 }
 

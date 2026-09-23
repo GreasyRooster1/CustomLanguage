@@ -51,7 +51,7 @@ pub(crate) fn alloc_rules() -> Vec<Box<dyn TokenRule>> {
         Box::new(LoopRule),
         Box::new(NumberLiteralRule),
         Box::new(StringLiteralRule),
-        Box::new(TypeNameRule),
+        // Box::new(TypeNameRule),
         Box::new(NameRule),
         Box::new(TypeSeparatorRule),
         Box::new(RangeSeparatorRule),

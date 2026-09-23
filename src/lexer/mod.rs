@@ -23,7 +23,7 @@ enum TokenType {
     // Literals
     NumberLiteral(String, NumberLiteralAssumptions),
     StringLiteral(String),
-    TypeName(String),
+    // TypeName(String),
     Name(String),
 
     // Characters
