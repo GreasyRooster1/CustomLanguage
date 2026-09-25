@@ -21,6 +21,13 @@ pub struct CloseParamRule;
 pub struct OpenBracketRule;
 pub struct CloseBracketRule;
 
+
+pub struct AddRule;
+pub struct SubRule;
+pub struct MultRule;
+pub struct DivRule;
+pub struct ModRule;
+
 impl TokenRule for FuncRule {
     fn check(&self, string: &String) -> bool {
         string == FUNC_LITERAL
@@ -98,6 +105,52 @@ impl TokenRule for CloseBracketRule {
 
     fn get_token(&self, string: &String) -> Token {
         Token::CloseBracket
+    }
+}
+
+impl TokenRule for AddRule {
+    fn check(&self, string: &String) -> bool {
+        string == "+"
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Add
+    }
+}
+impl TokenRule for SubRule {
+    fn check(&self, string: &String) -> bool {
+        string == "-"
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Sub
+    }
+}
+impl TokenRule for MultRule {
+    fn check(&self, string: &String) -> bool {
+        string == "*"
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Mult
+    }
+}
+impl TokenRule for DivRule {
+    fn check(&self, string: &String) -> bool {
+        string == "/"
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Div
+    }
+}
+impl TokenRule for ModRule {
+    fn check(&self, string: &String) -> bool {
+        string == "%"
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Mod
     }
 }
 
