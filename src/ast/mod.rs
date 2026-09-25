@@ -22,4 +22,11 @@ impl AST{
             panic!("Expected something, got {:?}", token);
         }
     }
+
+    fn parseExpr(&mut self){
+        let mut left = self.parseTerm();
+        while self.peek() == TokenType::Plus || self.peek() == Token::Sub{
+
+        }
+    }
 }
