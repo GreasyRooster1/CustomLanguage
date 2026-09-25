@@ -36,6 +36,12 @@ pub(crate) enum Token {
     CloseParam,   // )
     OpenBracket,  // {
     CloseBracket, // }
+
+    Add,
+    Sub,
+    Mult,
+    Div,
+    Mod,
 }
 
 #[derive(Debug, Clone)]
@@ -57,6 +63,12 @@ pub(crate) enum TokenType {
     CloseParam,   // )
     OpenBracket,  // {
     CloseBracket, // }
+
+    Add,
+    Sub,
+    Mult,
+    Div,
+    Mod,
 }
 
 impl PartialEq<&Token> for TokenType {
@@ -73,6 +85,11 @@ impl PartialEq<&Token> for TokenType {
             Token::CloseParam => {matches!(self,TokenType::CloseParam)}
             Token::OpenBracket => {matches!(self,TokenType::OpenBracket)}
             Token::CloseBracket => {matches!(self,TokenType::CloseBracket)}
+            Token::Add => {matches!(self,TokenType::Add)}
+            Token::Sub => {matches!(self,TokenType::Sub)}
+            Token::Mult => {matches!(self,TokenType::Mult)}
+            Token::Div => {matches!(self,TokenType::Div)}
+            Token::Mod => {matches!(self,TokenType::Mult)}
         }
     }
 }
