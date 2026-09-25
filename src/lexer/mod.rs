@@ -14,8 +14,8 @@ const TYPE_DENOTER_LITERAL: &str = "#";
 
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
-#[derive(Debug)]
-enum TokenType {
+#[derive(Debug, Clone)]
+pub(crate) enum Token {
     // Keywords
     Func, // # (fn)
     Loop, // @ (loop)
@@ -36,7 +36,31 @@ enum TokenType {
     CloseBracket, // }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
+pub(crate) enum TokenType {
+    // Keywords
+    Func, // # (fn)
+    Loop, // @ (loop)
+
+    // Literals
+    NumberLiteral,
+    StringLiteral,
+    Name,
+
+    // Characters
+    TypeSeparator,  // :
+    RangeSeparator, // ->
+
+    OpenParam,    // (
+    CloseParam,   // )
+    OpenBracket,  // {
+    CloseBracket, // }
+}
+
+
+
+
+#[derive(Debug, Clone)]
 enum NumberLiteralAssumption {
     Float,
     Int,
@@ -46,6 +70,6 @@ enum NumberLiteralAssumption {
 trait TokenRule {
     fn check(&self, string: &String) -> bool;
 
-    fn get_token(&self, string: &String) -> TokenType;
+    fn get_token(&self, string: &String) -> Token;
 }
 

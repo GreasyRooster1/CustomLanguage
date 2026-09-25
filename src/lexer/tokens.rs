@@ -1,8 +1,8 @@
-use crate::lexer::TokenType::NumberLiteral;
+use crate::lexer::Token::NumberLiteral;
 use crate::lexer::{
     CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
     NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL,
-    TYPE_SEPERATOR_LITERAL, TokenRule, TokenType, NAME_ALLOWED_CHARS,TYPE_DENOTER_LITERAL
+    TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL
 };
 
 pub struct FuncRule;
@@ -26,8 +26,8 @@ impl TokenRule for FuncRule {
         string == FUNC_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::Func
+    fn get_token(&self, string: &String) -> Token {
+        Token::Func
     }
 }
 
@@ -36,8 +36,8 @@ impl TokenRule for LoopRule {
         string == LOOP_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::Loop
+    fn get_token(&self, string: &String) -> Token {
+        Token::Loop
     }
 }
 
@@ -46,8 +46,8 @@ impl TokenRule for TypeSeparatorRule {
         string == TYPE_SEPERATOR_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::TypeSeparator
+    fn get_token(&self, string: &String) -> Token {
+        Token::TypeSeparator
     }
 }
 
@@ -56,8 +56,8 @@ impl TokenRule for RangeSeparatorRule {
         string == RANGE_SEPERATOR_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::RangeSeparator
+    fn get_token(&self, string: &String) -> Token {
+        Token::RangeSeparator
     }
 }
 
@@ -66,8 +66,8 @@ impl TokenRule for OpenParamRule {
         string == OPEN_PARAM_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::OpenParam
+    fn get_token(&self, string: &String) -> Token {
+        Token::OpenParam
     }
 }
 
@@ -76,8 +76,8 @@ impl TokenRule for CloseParamRule {
         string == CLOSE_PARAM_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::CloseParam
+    fn get_token(&self, string: &String) -> Token {
+        Token::CloseParam
     }
 }
 
@@ -86,8 +86,8 @@ impl TokenRule for OpenBracketRule {
         string == OPEN_BRACKET_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::OpenBracket
+    fn get_token(&self, string: &String) -> Token {
+        Token::OpenBracket
     }
 }
 
@@ -96,8 +96,8 @@ impl TokenRule for CloseBracketRule {
         string == CLOSE_BRACKET_LITERAL
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::CloseBracket
+    fn get_token(&self, string: &String) -> Token {
+        Token::CloseBracket
     }
 }
 
@@ -106,8 +106,8 @@ impl TokenRule for NameRule {
         string.starts_with(char::is_alphabetic) && string.chars().all(|c| NAME_ALLOWED_CHARS.contains(c))
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::Name((*(string.clone())).parse().unwrap())
+    fn get_token(&self, string: &String) -> Token {
+        Token::Name((*(string.clone())).parse().unwrap())
     }
 }
 
@@ -116,8 +116,8 @@ impl TokenRule for StringLiteralRule {
         string.starts_with("\"") && string.ends_with("\"")
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
-        TokenType::Name((*(string.clone())).parse().unwrap())
+    fn get_token(&self, string: &String) -> Token {
+        Token::Name((*(string.clone())).parse().unwrap())
     }
 }
 
@@ -128,7 +128,7 @@ impl TokenRule for NumberLiteralRule {
             || string.parse::<u128>().is_ok()
     }
 
-    fn get_token(&self, string: &String) -> TokenType {
+    fn get_token(&self, string: &String) -> Token {
         let mut assumption;
         let value = string.parse::<f64>();
         if string.parse::<i32>().is_ok() {
@@ -138,6 +138,6 @@ impl TokenRule for NumberLiteralRule {
         } else {
             assumption = NumberLiteralAssumption::ExplicitRequired
         }
-        TokenType::NumberLiteral((*(string.clone())).parse().unwrap(), assumption)
+        Token::NumberLiteral((*(string.clone())).parse().unwrap(), assumption)
     }
 }

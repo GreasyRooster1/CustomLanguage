@@ -1,13 +1,13 @@
 use std::ops::Deref;
-use crate::lexer::TokenType::{OpenParam, TypeSeparator};
+use crate::lexer::Token::{OpenParam, TypeSeparator};
 use crate::lexer::tokens::*;
-use crate::lexer::{TokenRule, TokenType};
+use crate::lexer::{TokenRule, Token};
 use log::{set_logger, warn};
 
 pub(crate) fn get_matching_tokens(
     string: String,
     rules: &Vec<Box<dyn TokenRule>>,
-) -> Vec<TokenType> {
+) -> Vec<Token> {
     let mut tokens = vec![];
 
     for rule in rules {
@@ -19,9 +19,9 @@ pub(crate) fn get_matching_tokens(
     tokens
 }
 
-pub(crate) fn parse(text: String) -> Vec<TokenType>{
+pub(crate) fn parse(text: String) -> Vec<Token>{
     let rules = alloc_rules();
-    let mut output_tokens:Vec<TokenType> = vec![];
+    let mut output_tokens:Vec<Token> = vec![];
     let mut i = 0;
     let mut selector_length = text.len();
     while i<text.len() {

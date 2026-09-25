@@ -7,14 +7,14 @@ mod tests {
         OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL,
         lexer::*,
     };
-    use crate::lexer::{TokenRule, TokenType};
+    use crate::lexer::{TokenRule, Token};
     use rand::{RngExt, random, rng};
     use std::mem;
 
     fn check_single_token_parse(
         string: String,
         rules: &Vec<Box<dyn TokenRule>>,
-        token: TokenType,
+        token: Token,
     ) -> bool {
         let t = get_matching_tokens(string, rules);
         dbg!(&t);
@@ -36,42 +36,42 @@ mod tests {
         assert!(check_single_token_parse(
             FUNC_LITERAL.to_string(),
             &rules,
-            TokenType::Func
+            Token::Func
         ));
         assert!(check_single_token_parse(
             LOOP_LITERAL.to_string(),
             &rules,
-            TokenType::Loop
+            Token::Loop
         ));
         assert!(check_single_token_parse(
             TYPE_SEPERATOR_LITERAL.to_string(),
             &rules,
-            TokenType::TypeSeparator
+            Token::TypeSeparator
         ));
         assert!(check_single_token_parse(
             RANGE_SEPERATOR_LITERAL.to_string(),
             &rules,
-            TokenType::RangeSeparator
+            Token::RangeSeparator
         ));
         assert!(check_single_token_parse(
             OPEN_PARAM_LITERAL.to_string(),
             &rules,
-            TokenType::OpenParam
+            Token::OpenParam
         ));
         assert!(check_single_token_parse(
             CLOSE_PARAM_LITERAL.to_string(),
             &rules,
-            TokenType::CloseParam
+            Token::CloseParam
         ));
         assert!(check_single_token_parse(
             OPEN_BRACKET_LITERAL.to_string(),
             &rules,
-            TokenType::OpenBracket
+            Token::OpenBracket
         ));
         assert!(check_single_token_parse(
             CLOSE_BRACKET_LITERAL.to_string(),
             &rules,
-            TokenType::CloseBracket
+            Token::CloseBracket
         ));
     }
 
@@ -83,7 +83,7 @@ mod tests {
             assert!(check_single_token_parse(
                 num.clone(),
                 &rules,
-                TokenType::NumberLiteral(num, Float)
+                Token::NumberLiteral(num, Float)
             ))
         }
     }
@@ -97,7 +97,7 @@ mod tests {
             assert!(check_single_token_parse(
                 num.clone(),
                 &rules,
-                TokenType::NumberLiteral(num, Float)
+                Token::NumberLiteral(num, Float)
             ))
         }
     }
