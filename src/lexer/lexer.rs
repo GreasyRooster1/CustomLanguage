@@ -1,5 +1,5 @@
 use std::ops::Deref;
-use crate::lexer::TokenType::{OpenParam, TypeName, TypeSeparator};
+use crate::lexer::TokenType::{OpenParam, TypeSeparator};
 use crate::lexer::tokens::*;
 use crate::lexer::{TokenRule, TokenType};
 use log::{set_logger, warn};

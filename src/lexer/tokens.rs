@@ -1,7 +1,7 @@
 use crate::lexer::TokenType::NumberLiteral;
 use crate::lexer::{
     CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
-    NumberLiteralAssumptions, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL,
+    NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL,
     TYPE_SEPERATOR_LITERAL, TokenRule, TokenType, NAME_ALLOWED_CHARS,TYPE_DENOTER_LITERAL
 };
 
@@ -132,11 +132,11 @@ impl TokenRule for NumberLiteralRule {
         let mut assumption;
         let value = string.parse::<f64>();
         if string.parse::<i32>().is_ok() {
-            assumption = NumberLiteralAssumptions::Int;
+            assumption = NumberLiteralAssumption::Int;
         } else if string.parse::<f32>().is_ok() {
-            assumption = NumberLiteralAssumptions::Float
+            assumption = NumberLiteralAssumption::Float
         } else {
-            assumption = NumberLiteralAssumptions::ExplicitRequired
+            assumption = NumberLiteralAssumption::ExplicitRequired
         }
         TokenType::NumberLiteral((*(string.clone())).parse().unwrap(), assumption)
     }

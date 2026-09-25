@@ -1,7 +1,7 @@
 #[cfg(test)]
 #[allow(clippy::module_inception)]
 mod tests {
-    use crate::lexer::NumberLiteralAssumptions::Float;
+    use crate::lexer::NumberLiteralAssumption::Float;
     use crate::lexer::{
         CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
         OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL,
