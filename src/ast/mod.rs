@@ -1,4 +1,5 @@
-use crate::lexer::Token;
+use std::cmp::PartialEq;
+use crate::lexer::{Token, TokenType};
 
 pub struct AST{
     tokens: Vec<Token>,
@@ -15,9 +16,9 @@ impl AST{
         &self.tokens[self.index-1]
     }
 
-    fn expect(&mut self, expected: Token){
+    fn expect(&mut self, expected: TokenType){
         let token = self.eat();
-        if !matches!(expected,token) {
+        if expected==token {
             panic!("Expected something, got {:?}", token);
         }
     }

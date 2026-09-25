@@ -1,3 +1,5 @@
+
+
 mod lexer;
 mod tests;
 mod tokens;
@@ -57,7 +59,23 @@ pub(crate) enum TokenType {
     CloseBracket, // }
 }
 
-
+impl PartialEq<&Token> for TokenType {
+    fn eq(&self, other: &&Token) -> bool {
+        match other {
+            Token::Func => {matches!(self,TokenType::Func)}
+            Token::Loop => {matches!(self,TokenType::Loop)}
+            Token::NumberLiteral(_, _) => {matches!(self,TokenType::NumberLiteral)}
+            Token::StringLiteral(_) => {matches!(self,TokenType::StringLiteral)}
+            Token::Name(_) => {matches!(self,TokenType::Name)}
+            Token::TypeSeparator => {matches!(self,TokenType::TypeSeparator)}
+            Token::RangeSeparator => {matches!(self,TokenType::RangeSeparator)}
+            Token::OpenParam => {matches!(self,TokenType::OpenParam)}
+            Token::CloseParam => {matches!(self,TokenType::CloseParam)}
+            Token::OpenBracket => {matches!(self,TokenType::OpenBracket)}
+            Token::CloseBracket => {matches!(self,TokenType::CloseBracket)}
+        }
+    }
+}
 
 
 #[derive(Debug, Clone)]
