@@ -1,6 +1,6 @@
 
 
-mod lexer;
+pub(crate) mod lexer;
 mod tests;
 mod tokens;
 
@@ -13,6 +13,7 @@ const CLOSE_PARAM_LITERAL: &str = ")";
 const OPEN_BRACKET_LITERAL: &str = "{";
 const CLOSE_BRACKET_LITERAL: &str = "}";
 const TYPE_DENOTER_LITERAL: &str = "#";
+const RETURN_LITERAL: &str = "ret";
 
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
@@ -42,6 +43,8 @@ pub enum Token {
     Mult,
     Div,
     Mod,
+    
+    Return
 }
 
 #[derive(Debug, Clone)]
@@ -69,6 +72,8 @@ pub enum TokenType {
     Mult,
     Div,
     Mod,
+    
+    Return
 }
 
 impl PartialEq<&Token> for TokenType {
@@ -90,6 +95,7 @@ impl PartialEq<&Token> for TokenType {
             Token::Mult => {matches!(self,TokenType::Mult)}
             Token::Div => {matches!(self,TokenType::Div)}
             Token::Mod => {matches!(self,TokenType::Mult)}
+            Token::Return => {matches!(self,TokenType::Return)}
         }
     }
 }

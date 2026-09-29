@@ -1,3 +1,5 @@
+mod tests;
+
 use std::cmp::PartialEq;
 use crate::ast::Node::{BinOp, Number};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
@@ -8,6 +10,13 @@ pub struct AST{
 }
 
 impl AST{
+    fn new(tokens: Vec<Token>) -> AST{
+        AST{
+            tokens,
+            index:0,
+        }
+    }
+
     fn peek(&self) -> &Token {
         &self.tokens[self.index]
     }
@@ -35,7 +44,7 @@ impl AST{
     }
 
     fn parse_term(&mut self) -> Node{
-        let mut left = self.parse_term();
+        let mut left = self.parse_factor();
         while TokenType::Mult==self.peek() || TokenType::Div==self.peek() || TokenType::Mod==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
@@ -54,6 +63,16 @@ impl AST{
         match self.eat().clone(){
             Token::NumberLiteral(a)=>Number(a),
             _ => {panic!("not a number")}
+        }
+    }
+
+    fn parse_statement(&mut self) -> Node{
+        match self.peek(){
+            Token::Func => {}
+            Token::Loop => {}
+            Token::Name(_) => {}
+            Token::Return =>{}
+            _ => {}
         }
     }
 }

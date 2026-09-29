@@ -19,7 +19,7 @@ pub(crate) fn get_matching_tokens(
     tokens
 }
 
-pub(crate) fn parse(text: String) -> Vec<Token>{
+pub fn parse(text: String) -> Vec<Token>{
     let rules = alloc_rules();
     let mut output_tokens:Vec<Token> = vec![];
     let mut i = 0;
