@@ -23,7 +23,7 @@ pub(crate) enum Token {
     Loop, // @ (loop)
 
     // Literals
-    NumberLiteral(String, NumberLiteralAssumption),
+    NumberLiteral(NumberLiteralAssumption),
     StringLiteral(String),
     // TypeName(String),
     Name(String),
@@ -76,7 +76,7 @@ impl PartialEq<&Token> for TokenType {
         match other {
             Token::Func => {matches!(self,TokenType::Func)}
             Token::Loop => {matches!(self,TokenType::Loop)}
-            Token::NumberLiteral(_, _) => {matches!(self,TokenType::NumberLiteral)}
+            Token::NumberLiteral(_) => {matches!(self,TokenType::NumberLiteral)}
             Token::StringLiteral(_) => {matches!(self,TokenType::StringLiteral)}
             Token::Name(_) => {matches!(self,TokenType::Name)}
             Token::TypeSeparator => {matches!(self,TokenType::TypeSeparator)}
@@ -97,9 +97,8 @@ impl PartialEq<&Token> for TokenType {
 
 #[derive(Debug, Clone)]
 enum NumberLiteralAssumption {
-    Float,
-    Int,
-    ExplicitRequired,
+    Float(f64),
+    Int(i128)
 }
 
 trait TokenRule {

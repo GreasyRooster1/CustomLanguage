@@ -1,4 +1,5 @@
 use std::cmp::PartialEq;
+use crate::ast::Node::BinOp;
 use crate::lexer::{Token, TokenType};
 
 pub struct AST{
@@ -23,10 +24,38 @@ impl AST{
         }
     }
 
-    fn parseExpr(&mut self){
-        let mut left = self.parseTerm();
-        while self.peek() == TokenType::Plus || self.peek() == Token::Sub{
-
+    fn parse_expr(&mut self) -> Node{
+        let mut left = self.parse_term();
+        while TokenType::Add==self.peek() || TokenType::Sub==self.peek(){
+            let op = self.eat().clone();
+            let right = self.parse_term();
+            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
         }
+        left
     }
+
+    fn parse_term(&mut self) -> Node{
+        let mut left = self.parse_term();
+        while TokenType::Mult==self.peek() || TokenType::Div==self.peek() || TokenType::Mod==self.peek(){
+            let op = self.eat().clone();
+            let right = self.parse_term();
+            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+        }
+        left
+    }
+
+    fn parse_factor(&mut self) -> Node{
+        if TokenType::OpenParam == self.peek(){
+            self.eat();
+            let mut node = self.parse_expr();
+            self.expect(TokenType::CloseParam);
+            return node;
+        }
+        return self.parse_expr();
+    }
+}
+
+pub enum Node{
+    BinOp(Box<Node>, Box<Token>, Box<Node>),
+    Number()
 }
