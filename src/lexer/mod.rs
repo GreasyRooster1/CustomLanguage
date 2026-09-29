@@ -17,7 +17,7 @@ const TYPE_DENOTER_LITERAL: &str = "#";
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
 #[derive(Debug, Clone)]
-pub(crate) enum Token {
+pub enum Token {
     // Keywords
     Func, // # (fn)
     Loop, // @ (loop)
@@ -45,7 +45,7 @@ pub(crate) enum Token {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum TokenType {
+pub enum TokenType {
     // Keywords
     Func, // # (fn)
     Loop, // @ (loop)
@@ -96,7 +96,7 @@ impl PartialEq<&Token> for TokenType {
 
 
 #[derive(Debug, Clone)]
-enum NumberLiteralAssumption {
+pub enum NumberLiteralAssumption {
     Float(f64),
     Int(i128)
 }

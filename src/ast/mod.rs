@@ -1,6 +1,6 @@
 use std::cmp::PartialEq;
-use crate::ast::Node::BinOp;
-use crate::lexer::{Token, TokenType};
+use crate::ast::Node::{BinOp, Number};
+use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 pub struct AST{
     tokens: Vec<Token>,
@@ -47,15 +47,18 @@ impl AST{
     fn parse_factor(&mut self) -> Node{
         if TokenType::OpenParam == self.peek(){
             self.eat();
-            let mut node = self.parse_expr();
+            let node = self.parse_expr();
             self.expect(TokenType::CloseParam);
             return node;
         }
-        return self.parse_expr();
+        match self.eat().clone(){
+            Token::NumberLiteral(a)=>Number(a),
+            _ => {panic!("not a number")}
+        }
     }
 }
 
 pub enum Node{
     BinOp(Box<Node>, Box<Token>, Box<Node>),
-    Number()
+    Number(NumberLiteralAssumption)
 }
