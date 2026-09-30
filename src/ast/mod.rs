@@ -104,7 +104,7 @@ impl AST{
             Token::Return => self.parse_return(),
             Token::EOF => panic!("EOF"),
 
-            _ => {todo!()}
+            _ => {Node::Nop}
         }
     }
 
@@ -194,6 +194,7 @@ pub enum Node{
     ForeverLoop(Box<Node>),
     ForLoop(Box<Name>, Box<Node>, Box<Node>), // var, range, block
     Range(Box<Node>, Box<Node>, Box<Node>), //start, stop, step
+    Nop,
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
