@@ -2,7 +2,7 @@ mod tests;
 
 use std::cmp::PartialEq;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, BlockStatement, Function, Identifier, Number, Parameter};
+use crate::ast::Node::{BinOp, BlockStatement, Function, Identifier, Number, Parameter, ReturnStatement};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -142,7 +142,8 @@ impl AST{
 
     fn parse_return(&mut self) -> Node{
         self.expect(TokenType::Return);
-        self.parse_expr()
+
+        ReturnStatement(Box::new(self.parse_expr()))
     }
 }
 
@@ -154,6 +155,7 @@ pub enum Node{
     Parameter(Box<Name>, Box<Name>), // name, type
     Identifier(Box<Name>),
     BlockStatement(Vec<Box<Node>>),
+    ReturnStatement(Box<Node>),
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
