@@ -79,11 +79,12 @@ mod tests {
     fn test_number_literal_ufloat_token() {
         let rules = alloc_rules();
         for i in 0..1000 {
-            let num = random::<f64>().to_string();
+            let val = random::<f64>();
+            let num = val.to_string();
             assert!(check_single_token_parse(
                 num.clone(),
                 &rules,
-                Token::NumberLiteral(num, Float)
+                Token::NumberLiteral(Float(val))
             ))
         }
     }
@@ -93,11 +94,12 @@ mod tests {
 
         for i in 0..1000 {
             let mut rng = rand::rng();
-            let num = rng.random_range(-f32::MIN..=f32::MAX).to_string();
+            let val = rng.random_range(-f32::MIN..=f32::MAX);
+            let num = val.to_string();
             assert!(check_single_token_parse(
                 num.clone(),
                 &rules,
-                Token::NumberLiteral(num, Float)
+                Token::NumberLiteral(Float(val as f64))
             ))
         }
     }

@@ -1,9 +1,11 @@
 mod tests;
 
 use std::cmp::PartialEq;
+use serde::Serialize;
 use crate::ast::Node::{BinOp, Function, Number, Parameter};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
+#[derive(Debug, Serialize)]
 pub struct Name(String);
 
 pub struct AST{
@@ -108,6 +110,7 @@ impl AST{
     }
 }
 
+#[derive(Serialize, Debug)]
 pub enum Node{
     BinOp(Box<Node>, Box<Token>, Box<Node>),
     Number(NumberLiteralAssumption),

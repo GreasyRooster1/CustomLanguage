@@ -1,4 +1,4 @@
-
+use serde::Serialize;
 
 pub(crate) mod lexer;
 mod tests;
@@ -18,7 +18,7 @@ const COMMA_LITERAL: &str = ",";
 
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub enum Token {
     // Keywords
     Func, // # (fn)
@@ -105,7 +105,7 @@ impl PartialEq<&Token> for TokenType {
 }
 
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub enum NumberLiteralAssumption {
     Float(f64),
     Int(i128)

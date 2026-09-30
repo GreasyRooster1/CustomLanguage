@@ -5,9 +5,12 @@ mod tests {
     use crate::lexer::lexer::parse;
 
     #[test]
-    fn test_token_parsing() {
-        let parsed = parse(include_str!("../../lang/LexerText1.dte").to_string());
-        println!("{:?}",parsed)
+    fn test_expression_parse() {
+        let parsed = parse(include_str!("../../lang/ASTExpressionTest1.dte").to_string());
+        println!("{:?}",parsed);
+        let mut ast = AST::new(parsed);
+        let node = ast.parse_expr();
+        println!("{:#?}",node);
     }
 
 }
