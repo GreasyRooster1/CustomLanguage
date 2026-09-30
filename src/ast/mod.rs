@@ -2,7 +2,7 @@ mod tests;
 
 use std::cmp::PartialEq;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, BlockStatement, Function, Identifier, Number, Parameter, Program, ReturnStatement};
+use crate::ast::Node::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, Identifier, Number, Parameter, Program, ReturnStatement};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -83,6 +83,19 @@ impl AST{
         }
     }
 
+    fn parse_range(&mut self) -> Node{
+        let left = self.parse_expr();
+        self.expect(TokenType::RangeSeparator);
+        let right = self.parse_expr();
+        let step =if TokenType::StepSeparator==self.peek() {
+            self.expect(TokenType::StepSeparator);
+            self.parse_expr()
+        }else{
+            Number(NumberLiteralAssumption::Int(1))
+        };
+        Node::Range(Box::from(left), Box::from(right), Box::from(step))
+    }
+
     fn parse_statement(&mut self) -> Node{
         match self.peek(){
             Token::Func => self.parse_function(),
@@ -94,12 +107,18 @@ impl AST{
             _ => {todo!()}
         }
     }
-    
+
     fn parse_loop(&mut self) -> Node{
         self.expect(TokenType::Loop);
+        if TokenType::OpenBracket == self.peek(){
+            let block = self.parse_block();
+            return ForeverLoop(Box::new(block));
+        }
         let name_token = self.expect_and_get(TokenType::Name);
         let name = unwrap_name(name_token).unwrap();
-        self.expect(TokenType::OpenParam);
+        let range = self.parse_range();
+        let block = self.parse_block();
+        ForLoop(Box::new(name), Box::new(range), Box::new(block))
     }
 
     fn parse_function(&mut self) -> Node{
@@ -152,7 +171,7 @@ impl AST{
 
         ReturnStatement(Box::new(self.parse_expr()))
     }
-    
+
     fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
@@ -173,7 +192,7 @@ pub enum Node{
     ReturnStatement(Box<Node>),
     Program(Vec<Box<Node>>),
     ForeverLoop(Box<Node>),
-    ForLoop(Box<Node>, Box<Node>, Box<Node>), // var, range, block
+    ForLoop(Box<Name>, Box<Node>, Box<Node>), // var, range, block
     Range(Box<Node>, Box<Node>, Box<Node>), //start, stop, step
 }
 

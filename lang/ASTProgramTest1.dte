@@ -6,6 +6,9 @@ fn do_stuff_param_ret(x:i, y:f):f{
     loop i 0->10 by 2{
         
     }
+    loop{
+    
+    }
   ret 10;
 }
 
