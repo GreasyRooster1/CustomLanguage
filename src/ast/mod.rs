@@ -22,6 +22,9 @@ impl AST{
     }
 
     fn peek(&self) -> &Token {
+        if(self.index>=self.tokens.len()){
+            return &Token::EOF;
+        }
         &self.tokens[self.index]
     }
 
@@ -32,15 +35,15 @@ impl AST{
 
     fn expect(&mut self, expected: TokenType){
         let token = self.eat();
-        if expected==token {
-            panic!("Expected something, got {:?}", token);
+        if expected!=token {
+            panic!("got {:?}, expected {:?} {:?}", token, expected, expected==token);
         }
     }
 
-    fn expect_and_eat(&mut self, expected: TokenType) -> Token {
+    fn expect_and_get(&mut self, expected: TokenType) -> Token {
         let token = self.eat().clone();
-        if expected==&token {
-            panic!("Expected something, got {:?}", token);
+        if expected!=&token {
+            panic!("got {:?}, expected {:?}", token, expected);
         }
         token
     }
@@ -69,6 +72,7 @@ impl AST{
         if TokenType::OpenParam == self.peek(){
             self.eat();
             let node = self.parse_expr();
+            println!("{:?}", self.peek());
             self.expect(TokenType::CloseParam);
             return node;
         }
@@ -84,22 +88,23 @@ impl AST{
             // Token::Loop => {}
             // Token::Name(_) => {}
             // Token::Return =>{}
+
             _ => {todo!()}
         }
     }
 
     fn parse_function(&mut self) -> Node{
         self.expect(TokenType::Func);
-        let name_token = self.expect_and_eat(TokenType::Name);
+        let name_token = self.expect_and_get(TokenType::Name);
         let name = unwrap_name(name_token).unwrap();
         self.expect(TokenType::OpenParam);
 
         let mut params = Vec::new();
         while TokenType::Name==self.peek() {
-            let param_name_token = self.expect_and_eat(TokenType::Name);
+            let param_name_token = self.expect_and_get(TokenType::Name);
             let param_name = unwrap_name(param_name_token).unwrap();
             self.expect(TokenType::TypeSeparator);
-            let param_type_token = self.expect_and_eat(TokenType::Name);
+            let param_type_token = self.expect_and_get(TokenType::Name);
             let param_type = unwrap_name(param_type_token).unwrap();
             self.expect(TokenType::Comma);
             params.push(Box::new(Parameter(Box::new(param_name),Box::new(param_type))));

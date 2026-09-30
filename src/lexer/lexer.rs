@@ -20,7 +20,7 @@ pub(crate) fn get_matching_tokens(
 }
 
 pub fn parse(text: String) -> Vec<Token>{
-    let clean_text:String = text.chars().filter(|c| !c.is_whitespace()).collect();;
+    let clean_text:String = text.chars().filter(|c| !c.is_whitespace()).collect();
     let rules = alloc_rules();
     let mut output_tokens:Vec<Token> = vec![];
     let mut i = 0;

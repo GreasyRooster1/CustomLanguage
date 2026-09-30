@@ -13,4 +13,9 @@ mod tests {
         println!("{:#?}",node);
     }
 
+    #[test]
+    fn test_close_param_eq() {
+        assert_eq!(true, TokenType::CloseParam== &Token::CloseParam)
+    }
+
 }

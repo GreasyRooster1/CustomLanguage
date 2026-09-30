@@ -185,8 +185,9 @@ impl TokenRule for StringLiteralRule {
 
 impl TokenRule for NumberLiteralRule {
     fn check(&self, string: &String) -> bool {
-        string.parse::<f64>().is_ok()
-            || string.parse::<i128>().is_ok()
+        !string.starts_with("+") &&
+            (string.parse::<f64>().is_ok()
+            || string.parse::<i128>().is_ok())
     }
 
     fn get_token(&self, string: &String) -> Token {

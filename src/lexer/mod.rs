@@ -46,7 +46,8 @@ pub enum Token {
     Div,
     Mod,
     
-    Return
+    Return,
+    EOF,
 }
 
 #[derive(Debug, Clone)]
@@ -76,7 +77,8 @@ pub enum TokenType {
     Div,
     Mod,
     
-    Return
+    Return,
+    EOF,
 }
 
 impl PartialEq<&Token> for TokenType {
@@ -99,7 +101,8 @@ impl PartialEq<&Token> for TokenType {
             Token::Mult => {matches!(self,TokenType::Mult)}
             Token::Div => {matches!(self,TokenType::Div)}
             Token::Mod => {matches!(self,TokenType::Mult)}
-            Token::Return => {matches!(self,TokenType::Return)}
+            Token::Return => {matches!(self,TokenType::Return)},
+            Token::EOF => {matches!(self,TokenType::EOF)}
         }
     }
 }
