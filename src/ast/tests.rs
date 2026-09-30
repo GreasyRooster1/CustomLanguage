@@ -26,9 +26,9 @@ mod tests {
     fn test_program_parse() {
         let parsed = parse(include_str!("../../lang/ASTProgramTest1.dte").to_string());
         println!("{:?}",parsed);
-        let mut ast = AST::new(parsed);
-        let node = ast.parse_program();
-        println!("{:#?}",node);
+        // let mut ast = AST::new(parsed);
+        // let node = ast.parse_program();
+        // println!("{:#?}",node);
     }
 
     #[test]

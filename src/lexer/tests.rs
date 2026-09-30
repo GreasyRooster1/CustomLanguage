@@ -32,7 +32,7 @@ mod tests {
 
     #[test]
     fn test_matching_literal_tokens() {
-        let rules = alloc_rules();
+        let rules = alloc_rules_with_precidence();
         assert!(check_single_token_parse(
             FUNC_LITERAL.to_string(),
             &rules,
@@ -77,7 +77,7 @@ mod tests {
 
     #[test]
     fn test_number_literal_ufloat_token() {
-        let rules = alloc_rules();
+        let rules = alloc_rules_with_precidence();
         for i in 0..1000 {
             let val = random::<f64>();
             let num = val.to_string();
@@ -90,7 +90,7 @@ mod tests {
     }
     #[test]
     fn test_number_literal_all_float_token() {
-        let rules = alloc_rules();
+        let rules = alloc_rules_with_precidence();
 
         for i in 0..1000 {
             let mut rng = rand::rng();

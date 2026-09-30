@@ -20,7 +20,7 @@ pub(crate) fn get_matching_tokens(
 }
 
 pub fn parse(text: String) -> Vec<Token>{
-    let rules = alloc_rules();
+    let rules = alloc_rules_with_precidence();
     let mut output_tokens:Vec<Token> = vec![];
     let mut i = 0;
     let mut selector_length = text.len();
@@ -46,13 +46,10 @@ pub fn parse(text: String) -> Vec<Token>{
     output_tokens
 }
 
-pub(crate) fn alloc_rules() -> Vec<Box<dyn TokenRule>> {
+pub(crate) fn alloc_rules_with_precidence() -> Vec<Box<dyn TokenRule>> {
     vec![
         Box::new(FuncRule),
         Box::new(LoopRule),
-        Box::new(NumberLiteralRule),
-        Box::new(StringLiteralRule),
-        Box::new(NameRule),
         Box::new(TypeSeparatorRule),
         Box::new(RangeSeparatorRule),
         Box::new(StepSeparatorRule),
@@ -68,6 +65,9 @@ pub(crate) fn alloc_rules() -> Vec<Box<dyn TokenRule>> {
         Box::new(ModRule),
         Box::new(ReturnRule),
 
+        Box::new(NumberLiteralRule),
+        Box::new(StringLiteralRule),
+        Box::new(NameRule),
     ]
 }
 
