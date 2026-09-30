@@ -104,7 +104,7 @@ impl AST{
             Token::Return => self.parse_return(),
             Token::EOF => panic!("EOF"),
 
-            _ => {Node::Nop}
+            _ => {panic!("not implemented")}
         }
     }
 
@@ -161,6 +161,9 @@ impl AST{
         let mut statements = Vec::new();
         while TokenType::CloseBracket!=self.peek() {
            statements.push(Box::new(self.parse_statement()));
+        }
+        if statements.len()==0 {
+            statements.push(Box::new(Node::Nop));
         }
         self.expect(TokenType::CloseBracket);
         BlockStatement(statements)

@@ -3,7 +3,6 @@
 
 fn do_stuff_param_ret(x:i, y:f):f{
     loop{
-        ret 10;
     }
     ret 10;
 }
