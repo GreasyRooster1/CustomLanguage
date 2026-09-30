@@ -2,7 +2,7 @@ mod tests;
 
 use std::cmp::PartialEq;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, Function, Number, Parameter};
+use crate::ast::Node::{BinOp, Function, Identifier, Number, Parameter};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -78,6 +78,7 @@ impl AST{
         }
         match self.eat().clone(){
             Token::NumberLiteral(a)=>Number(a),
+            Token::Name(s)=>Identifier(Box::from(Name(s))),
             _ => {panic!("not a number")}
         }
     }
@@ -140,6 +141,7 @@ pub enum Node{
     Number(NumberLiteralAssumption),
     Function(Box<Name>,Vec<Box<Node>>,Box<Name>,Box<Node>), //name, params, return type, statement
     Parameter(Box<Name>, Box<Name>), // name, type
+    Identifier(Box<Name>),
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
