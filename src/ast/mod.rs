@@ -87,7 +87,7 @@ impl AST{
             Token::Func => self.parse_function(),
             // Token::Loop => {}
             // Token::Name(_) => {}
-            // Token::Return =>{}
+            Token::Return => self.parse_return(),
 
             _ => {todo!()}
         }
@@ -126,6 +126,11 @@ impl AST{
         let statement = self.parse_statement();
         self.expect_and_get(TokenType::CloseBracket);
         Function(Box::from(name), params, Box::new(return_type), Box::new(statement))
+    }
+
+    fn parse_return(&mut self) -> Node{
+        self.expect(TokenType::Return);
+        self.parse_expr()
     }
 }
 
