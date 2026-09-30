@@ -1,7 +1,7 @@
 mod tests;
 
 use std::cmp::PartialEq;
-use crate::ast::Node::{BinOp, Number};
+use crate::ast::Node::{BinOp, Function, Number, Parameter};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 pub struct Name(String);
@@ -88,16 +88,23 @@ impl AST{
 
     fn parse_function(&mut self) -> Node{
         self.expect(TokenType::Func);
-        let name = self.expect_and_eat(TokenType::Name);
+        let name_token = self.expect_and_eat(TokenType::Name);
+        let name = unwrap_name(name_token).unwrap();
         self.expect(TokenType::OpenParam);
+
+        let mut params = Vec::new();
         while TokenType::Name==self.peek() {
-            let param_name = self.expect_and_eat(TokenType::Name);
+            let param_name_token = self.expect_and_eat(TokenType::Name);
+            let param_name = unwrap_name(param_name_token).unwrap();
             self.expect(TokenType::TypeSeparator);
-            let param_name = self.expect_and_eat(TokenType::Name);
+            let param_type_token = self.expect_and_eat(TokenType::Name);
+            let param_type = unwrap_name(param_type_token).unwrap();
             self.expect(TokenType::Comma);
+            params.push(Box::new(Parameter(Box::new(param_name),Box::new(param_type))));
         }
 
-        name
+        let statement = self.parse_statement();
+        Function(Box::from(name), params, Box::new(statement))
     }
 }
 
@@ -106,4 +113,13 @@ pub enum Node{
     Number(NumberLiteralAssumption),
     Function(Box<Name>,Vec<Box<Node>>,Box<Node>),
     Parameter(Box<Name>, Box<Name>), // name, type
+}
+
+fn unwrap_name(token: Token) -> Result<Name, ()>{
+    match token {
+        Token::Name(a)=>{
+            Ok(Name(a))
+        }
+        _ => {Err(())}
+    }
 }
