@@ -4,6 +4,8 @@ use std::cmp::PartialEq;
 use crate::ast::Node::{BinOp, Number};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
+pub struct Name(String);
+
 pub struct AST{
     tokens: Vec<Token>,
     index: usize,
@@ -31,6 +33,14 @@ impl AST{
         if expected==token {
             panic!("Expected something, got {:?}", token);
         }
+    }
+
+    fn expect_and_eat(&mut self, expected: TokenType) -> Token {
+        let token = self.eat().clone();
+        if expected==&token {
+            panic!("Expected something, got {:?}", token);
+        }
+        token
     }
 
     fn parse_expr(&mut self) -> Node{
@@ -68,16 +78,30 @@ impl AST{
 
     fn parse_statement(&mut self) -> Node{
         match self.peek(){
-            Token::Func => {}
-            Token::Loop => {}
-            Token::Name(_) => {}
-            Token::Return =>{}
-            _ => {}
+            Token::Func => self.parse_function(),
+            // Token::Loop => {}
+            // Token::Name(_) => {}
+            // Token::Return =>{}
+            _ => {todo!()}
         }
+    }
+
+    fn parse_function(&mut self) -> Node{
+        self.expect(TokenType::Func);
+        let name = self.expect_and_eat(TokenType::Name);
+        self.expect(TokenType::OpenParam);
+        while TokenType::Name==self.peek() {
+            let param_name = self.eat();
+            self.expect(TokenType::TypeSeparator);
+        }
+
+        name
     }
 }
 
 pub enum Node{
     BinOp(Box<Node>, Box<Token>, Box<Node>),
-    Number(NumberLiteralAssumption)
+    Number(NumberLiteralAssumption),
+    Function(Box<Name>,Vec<Box<Node>>,Box<Node>),
+    Parameter(Box<Name>, Box<Name>), // name, type
 }
