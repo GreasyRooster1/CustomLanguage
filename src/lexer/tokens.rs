@@ -1,9 +1,5 @@
 use crate::lexer::Token::NumberLiteral;
-use crate::lexer::{
-    CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL,
-    NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL,
-    TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL
-};
+use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL};
 
 pub struct FuncRule;
 pub struct LoopRule;
@@ -20,6 +16,7 @@ pub struct OpenParamRule;
 pub struct CloseParamRule;
 pub struct OpenBracketRule;
 pub struct CloseBracketRule;
+pub struct CommaRule;
 
 
 pub struct AddRule;
@@ -105,6 +102,16 @@ impl TokenRule for CloseBracketRule {
 
     fn get_token(&self, string: &String) -> Token {
         Token::CloseBracket
+    }
+}
+
+impl TokenRule for CommaRule {
+    fn check(&self, string: &String) -> bool {
+        string == COMMA_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Comma
     }
 }
 

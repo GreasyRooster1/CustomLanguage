@@ -91,8 +91,10 @@ impl AST{
         let name = self.expect_and_eat(TokenType::Name);
         self.expect(TokenType::OpenParam);
         while TokenType::Name==self.peek() {
-            let param_name = self.eat();
+            let param_name = self.expect_and_eat(TokenType::Name);
             self.expect(TokenType::TypeSeparator);
+            let param_name = self.expect_and_eat(TokenType::Name);
+            self.expect(TokenType::Comma);
         }
 
         name
