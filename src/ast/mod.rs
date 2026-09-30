@@ -2,7 +2,7 @@ mod tests;
 
 use std::cmp::PartialEq;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, Function, Identifier, Number, Parameter};
+use crate::ast::Node::{BinOp, BlockStatement, Function, Identifier, Number, Parameter};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -124,10 +124,20 @@ impl AST{
             Name("None".to_string())
         };
 
+        let block = self.parse_block();
+
+
+        Function(Box::from(name), params, Box::new(return_type), Box::new(block))
+    }
+
+    fn parse_block(&mut self) -> Node{
         self.expect(TokenType::OpenBracket);
-        let statement = self.parse_statement();
+        let mut statements = Vec::new();
+        while TokenType::CloseBracket!=self.peek() {
+           statements.push(Box::new(self.parse_statement()));
+        }
         self.expect(TokenType::CloseBracket);
-        Function(Box::from(name), params, Box::new(return_type), Box::new(statement))
+        BlockStatement(statements)
     }
 
     fn parse_return(&mut self) -> Node{
@@ -140,9 +150,10 @@ impl AST{
 pub enum Node{
     BinOp(Box<Node>, Box<Token>, Box<Node>),
     Number(NumberLiteralAssumption),
-    Function(Box<Name>,Vec<Box<Node>>,Box<Name>,Box<Node>), //name, params, return type, statement
+    Function(Box<Name>,Vec<Box<Node>>,Box<Name>,Box<Node>), //name, params, return type, block statement
     Parameter(Box<Name>, Box<Name>), // name, type
     Identifier(Box<Name>),
+    BlockStatement(Vec<Box<Node>>),
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
