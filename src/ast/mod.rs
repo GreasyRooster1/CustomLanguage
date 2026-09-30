@@ -86,13 +86,20 @@ impl AST{
     fn parse_statement(&mut self) -> Node{
         match self.peek(){
             Token::Func => self.parse_function(),
-            // Token::Loop => {}
+            Token::Loop => self.parse_loop(),
             // Token::Name(_) => {}
             Token::Return => self.parse_return(),
             Token::EOF => panic!("EOF"),
 
             _ => {todo!()}
         }
+    }
+    
+    fn parse_loop(&mut self) -> Node{
+        self.expect(TokenType::Loop);
+        let name_token = self.expect_and_get(TokenType::Name);
+        let name = unwrap_name(name_token).unwrap();
+        self.expect(TokenType::OpenParam);
     }
 
     fn parse_function(&mut self) -> Node{
@@ -165,6 +172,9 @@ pub enum Node{
     BlockStatement(Vec<Box<Node>>),
     ReturnStatement(Box<Node>),
     Program(Vec<Box<Node>>),
+    ForeverLoop(Box<Node>),
+    ForLoop(Box<Node>, Box<Node>, Box<Node>), // var, range, block
+    Range(Box<Node>, Box<Node>, Box<Node>), //start, stop, step
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
