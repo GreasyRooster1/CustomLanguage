@@ -1,15 +1,11 @@
 
+
+
 fn do_stuff_param_ret(x:i, y:f):f{
-    loop i 0->10{
-        
-    }
-    loop i 0->10 by 2{
-        
-    }
     loop{
-    
+        ret 10;
     }
-  ret 10;
+    ret 10;
 }
 
 fn do_again(x:i, y:f):f{

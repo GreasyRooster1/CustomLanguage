@@ -2,6 +2,10 @@ loop i 0->10{
 
 }
 
+loop{
+
+}
+
 fn do_stuff{
 
 }

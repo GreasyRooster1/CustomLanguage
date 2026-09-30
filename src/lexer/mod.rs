@@ -5,7 +5,7 @@ mod tests;
 mod tokens;
 
 const FUNC_LITERAL: &str = "fn ";
-const LOOP_LITERAL: &str = "loop ";
+const LOOP_LITERAL: &str = "loop";
 const TYPE_SEPERATOR_LITERAL: &str = ":";
 const RANGE_SEPERATOR_LITERAL: &str = "->";
 const OPEN_PARAM_LITERAL: &str = "(";

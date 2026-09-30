@@ -2,7 +2,7 @@ use std::ops::Deref;
 use crate::lexer::Token::{Comma, OpenParam, TypeSeparator};
 use crate::lexer::tokens::*;
 use crate::lexer::{TokenRule, Token};
-use log::{set_logger, warn};
+use log::{info, set_logger, warn};
 
 pub(crate) fn get_matching_tokens(
     string: String,
@@ -24,8 +24,8 @@ pub fn parse(text: String) -> Vec<Token>{
     let mut output_tokens:Vec<Token> = vec![];
     let mut i = 0;
     let mut selector_length = text.len();
-    while i< text.len() {
-        if(selector_length<1){
+    while i < text.len() {
+        if selector_length<1{
             i+=1;
             selector_length = text.len()-i;
         }
@@ -35,9 +35,9 @@ pub fn parse(text: String) -> Vec<Token>{
             selector_length -= 1;
             continue;
         }
-        if tokens.len()>1 { warn!("multiple matching tokens: {:?}", tokens); }
+        if tokens.len()>1 { println!("multiple matching tokens: {:?}", tokens); }
 
-        output_tokens.push(tokens.pop().expect("Somehow no token"));
+        output_tokens.push(tokens.get(0).expect("no token").clone());
         i+=selector_length;
         selector_length = text.len()-i;
     }
