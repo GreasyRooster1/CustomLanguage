@@ -1,4 +1,8 @@
 
 fn do_stuff_param_ret(x:i, y:f):f{
-  return 10;
+  ret 10;
+}
+
+fn do_again(x:i, y:f):f{
+  ret 10;
 }

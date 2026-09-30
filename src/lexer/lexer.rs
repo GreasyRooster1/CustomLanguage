@@ -42,6 +42,7 @@ pub fn parse(text: String) -> Vec<Token>{
         selector_length = text.len()-i;
     }
 
+    output_tokens.push(Token::EOF);
     output_tokens
 }
 

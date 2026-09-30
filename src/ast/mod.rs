@@ -89,6 +89,7 @@ impl AST{
             // Token::Loop => {}
             // Token::Name(_) => {}
             Token::Return => self.parse_return(),
+            Token::EOF => panic!("EOF"),
 
             _ => {todo!()}
         }
@@ -123,9 +124,9 @@ impl AST{
             Name("None".to_string())
         };
 
-        self.expect_and_get(TokenType::OpenBracket);
+        self.expect(TokenType::OpenBracket);
         let statement = self.parse_statement();
-        self.expect_and_get(TokenType::CloseBracket);
+        self.expect(TokenType::CloseBracket);
         Function(Box::from(name), params, Box::new(return_type), Box::new(statement))
     }
 
