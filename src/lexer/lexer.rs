@@ -20,17 +20,16 @@ pub(crate) fn get_matching_tokens(
 }
 
 pub fn parse(text: String) -> Vec<Token>{
-    let clean_text:String = text.chars().filter(|c| !c.is_whitespace()).collect();
     let rules = alloc_rules();
     let mut output_tokens:Vec<Token> = vec![];
     let mut i = 0;
-    let mut selector_length = clean_text.len();
-    while i< clean_text.len() {
+    let mut selector_length = text.len();
+    while i< text.len() {
         if(selector_length<1){
             i+=1;
-            selector_length = clean_text.len()-i;
+            selector_length = text.len()-i;
         }
-        let current_section = clean_text.get(i..(i + selector_length)).expect("no section").to_string();
+        let current_section = text.get(i..(i + selector_length)).expect("no section").to_string();
         let mut tokens = get_matching_tokens(current_section.clone(), &rules);
         if tokens.len() == 0 {
             selector_length -= 1;
@@ -40,7 +39,7 @@ pub fn parse(text: String) -> Vec<Token>{
 
         output_tokens.push(tokens.pop().expect("Somehow no token"));
         i+=selector_length;
-        selector_length = clean_text.len()-i;
+        selector_length = text.len()-i;
     }
 
     output_tokens

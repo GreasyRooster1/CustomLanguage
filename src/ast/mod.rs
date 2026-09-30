@@ -106,7 +106,9 @@ impl AST{
             self.expect(TokenType::TypeSeparator);
             let param_type_token = self.expect_and_get(TokenType::Name);
             let param_type = unwrap_name(param_type_token).unwrap();
-            self.expect(TokenType::Comma);
+            if TokenType::Comma==self.peek() {
+                self.expect(TokenType::Comma);
+            }
             params.push(Box::new(Parameter(Box::new(param_name),Box::new(param_type))));
         }
 
@@ -120,7 +122,9 @@ impl AST{
             Name("None".to_string())
         };
 
+        self.expect_and_get(TokenType::OpenBracket);
         let statement = self.parse_statement();
+        self.expect_and_get(TokenType::CloseBracket);
         Function(Box::from(name), params, Box::new(return_type), Box::new(statement))
     }
 }
