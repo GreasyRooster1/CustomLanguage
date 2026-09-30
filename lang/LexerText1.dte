@@ -17,6 +17,6 @@ fn do_stuff_param_ret(x:i, y:f):f{
   return number;
 }
 
-fn do_stuff_ret:#f{
+fn do_stuff_ret:f{
 
 }

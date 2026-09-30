@@ -110,8 +110,18 @@ impl AST{
             params.push(Box::new(Parameter(Box::new(param_name),Box::new(param_type))));
         }
 
+        self.expect(TokenType::CloseParam);
+
+        let return_type = if TokenType::TypeSeparator==self.peek() {
+            self.eat();
+            let return_type_token = self.expect_and_get(TokenType::Name);
+            unwrap_name(return_type_token).unwrap()
+        }else{
+            Name("None".to_string())
+        };
+
         let statement = self.parse_statement();
-        Function(Box::from(name), params, Box::new(statement))
+        Function(Box::from(name), params, Box::new(return_type), Box::new(statement))
     }
 }
 
@@ -119,7 +129,7 @@ impl AST{
 pub enum Node{
     BinOp(Box<Node>, Box<Token>, Box<Node>),
     Number(NumberLiteralAssumption),
-    Function(Box<Name>,Vec<Box<Node>>,Box<Node>),
+    Function(Box<Name>,Vec<Box<Node>>,Box<Name>,Box<Node>), //name, params, return type, statement
     Parameter(Box<Name>, Box<Name>), // name, type
 }
 

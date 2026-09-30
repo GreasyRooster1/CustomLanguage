@@ -14,6 +14,15 @@ mod tests {
     }
 
     #[test]
+    fn test_func_parse() {
+        let parsed = parse(include_str!("../../lang/ASTFuncTest1.dte").to_string());
+        println!("{:?}",parsed);
+        let mut ast = AST::new(parsed);
+        let node = ast.parse_expr();
+        println!("{:#?}",node);
+    }
+
+    #[test]
     fn test_close_param_eq() {
         assert_eq!(true, TokenType::CloseParam== &Token::CloseParam)
     }
