@@ -23,6 +23,15 @@ mod tests {
     }
 
     #[test]
+    fn test_program_parse() {
+        let parsed = parse(include_str!("../../lang/ASTProgramTest1.dte").to_string());
+        println!("{:?}",parsed);
+        let mut ast = AST::new(parsed);
+        let node = ast.parse_program();
+        println!("{:#?}",node);
+    }
+
+    #[test]
     fn test_close_param_eq() {
         assert_eq!(true, TokenType::CloseParam== &Token::CloseParam)
     }

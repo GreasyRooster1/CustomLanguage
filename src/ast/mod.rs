@@ -2,7 +2,7 @@ mod tests;
 
 use std::cmp::PartialEq;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, BlockStatement, Function, Identifier, Number, Parameter, ReturnStatement};
+use crate::ast::Node::{BinOp, BlockStatement, Function, Identifier, Number, Parameter, Program, ReturnStatement};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -145,6 +145,14 @@ impl AST{
 
         ReturnStatement(Box::new(self.parse_expr()))
     }
+    
+    fn parse_program(&mut self) -> Node{
+        let mut statements = Vec::new();
+        while TokenType::EOF!=self.peek() {
+            statements.push(Box::new(self.parse_statement()));
+        }
+        Program(statements)
+    }
 }
 
 #[derive(Serialize, Debug)]
@@ -156,6 +164,7 @@ pub enum Node{
     Identifier(Box<Name>),
     BlockStatement(Vec<Box<Node>>),
     ReturnStatement(Box<Node>),
+    Program(Vec<Box<Node>>),
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
