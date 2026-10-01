@@ -3,7 +3,19 @@
 
 fn do_stuff_param_ret(x:i, y:f):f{
     loop{
+
     }
+    loop {
+
+    }
+    loop i 0->10{
+
+    }
+    loop j 0->10 by 2{
+
+    }
+
+    if
     ret 10;
 }
 
