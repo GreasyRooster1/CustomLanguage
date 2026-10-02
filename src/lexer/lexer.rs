@@ -50,6 +50,7 @@ pub(crate) fn alloc_rules_with_precidence() -> Vec<Box<dyn TokenRule>> {
     vec![
         Box::new(FuncRule),
         Box::new(LoopRule),
+        Box::new(IfRule),
         Box::new(TypeSeparatorRule),
         Box::new(RangeSeparatorRule),
         Box::new(StepSeparatorRule),

@@ -1,8 +1,9 @@
 use crate::lexer::Token::NumberLiteral;
-use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL, RETURN_LITERAL, STEP_SEPERATOR_LITERAL};
+use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL, RETURN_LITERAL, STEP_SEPERATOR_LITERAL, IF_LITERAL};
 
 pub struct FuncRule;
 pub struct LoopRule;
+pub struct IfRule;
 
 pub struct NumberLiteralRule;
 pub struct StringLiteralRule;
@@ -45,6 +46,16 @@ impl TokenRule for LoopRule {
 
     fn get_token(&self, string: &String) -> Token {
         Token::Loop
+    }
+}
+
+impl TokenRule for IfRule {
+    fn check(&self, string: &String) -> bool {
+        string == IF_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::If
     }
 }
 

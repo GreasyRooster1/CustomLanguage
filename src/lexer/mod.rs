@@ -6,6 +6,7 @@ mod tokens;
 
 const FUNC_LITERAL: &str = "fn ";
 const LOOP_LITERAL: &str = "loop";
+const IF_LITERAL: &str = "if";
 const TYPE_SEPERATOR_LITERAL: &str = ":";
 const RANGE_SEPERATOR_LITERAL: &str = "->";
 const OPEN_PARAM_LITERAL: &str = "(";
@@ -24,6 +25,7 @@ pub enum Token {
     // Keywords
     Func, // # (fn)
     Loop, // @ (loop)
+    If, // $ (if)
 
     // Literals
     NumberLiteral(NumberLiteralAssumption),
@@ -57,6 +59,7 @@ pub enum TokenType {
     // Keywords
     Func, // # (fn)
     Loop, // @ (loop)
+    If, // $ (if)
 
     // Literals
     NumberLiteral,
@@ -89,6 +92,7 @@ impl PartialEq<&Token> for TokenType {
         match other {
             Token::Func => {matches!(self,TokenType::Func)}
             Token::Loop => {matches!(self,TokenType::Loop)}
+            Token::If => {matches!(self,TokenType::If)}
             Token::NumberLiteral(_) => {matches!(self,TokenType::NumberLiteral)}
             Token::StringLiteral(_) => {matches!(self,TokenType::StringLiteral)}
             Token::Name(_) => {matches!(self,TokenType::Name)}
