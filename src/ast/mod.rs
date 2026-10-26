@@ -2,7 +2,7 @@ mod tests;
 
 use std::cmp::PartialEq;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, Identifier, Number, Parameter, Program, ReturnStatement};
+use crate::ast::Node::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, Identifier, If, Number, Parameter, Program, ReturnStatement};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -103,8 +103,9 @@ impl AST{
             // Token::Name(_) => {}
             Token::Return => self.parse_return(),
             Token::EOF => panic!("EOF"),
+            Token::If => self.parse_if(),
 
-            _ => {panic!("not implemented")}
+            _ => {panic!("not implemented {}",self.peek())}
         }
     }
 
@@ -175,6 +176,13 @@ impl AST{
         ReturnStatement(Box::new(self.parse_expr()))
     }
 
+    fn parse_if(&mut self) -> Node{
+        self.expect(TokenType::If);
+        let condition = self.parse_expr();
+        let body = self.parse_block();
+        If(Box::new(condition), Box::new(body))
+    }
+
     fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
@@ -197,6 +205,7 @@ pub enum Node{
     ForeverLoop(Box<Node>),
     ForLoop(Box<Name>, Box<Node>, Box<Node>), // var, range, block
     Range(Box<Node>, Box<Node>, Box<Node>), //start, stop, step
+    If(Box<Node>, Box<Node>), //condition, block
     Nop,
 }
 

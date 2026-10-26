@@ -1,4 +1,5 @@
 use serde::Serialize;
+use strum::Display;
 
 pub(crate) mod lexer;
 mod tests;
@@ -20,7 +21,7 @@ const STEP_SEPERATOR_LITERAL: &str = "by";
 
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize,Display)]
 pub enum Token {
     // Keywords
     Func, // # (fn)

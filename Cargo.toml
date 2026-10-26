@@ -6,3 +6,4 @@ edition = "2024"
 log = "0.4.34"
 rand = "0.10.0"
 serde = { version = "1.0.229", features = ["derive"] }
+strum = { version = "0.26", features = ["derive"] }
