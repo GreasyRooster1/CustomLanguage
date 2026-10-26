@@ -15,7 +15,7 @@ fn do_stuff_param_ret(x:i, y:f):f{
 
     }
 
-    if x>10{
+    if x>10 {
         ret 8;
     }
     ret 10;
