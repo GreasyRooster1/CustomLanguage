@@ -20,9 +20,13 @@ const COMMA_LITERAL: &str = ",";
 const STEP_SEPERATOR_LITERAL: &str = "by";
 const ASSIGNMENT_EQ_LITERAL: &str = "=";
 const CHECK_EQ_LITERAL: &str = "==";
+const CHECK_NOT_EQ_LITERAL: &str = "!=";
+const GREATER_THAN_LITERAL: &str = ">";
+const LESS_THAN_LITERAL: &str = "<";
 const AND_LITERAL: &str = "&&";
 const OR_LITERAL: &str = "||";
 const NOT_LITERAL: &str = "!";
+
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
 #[derive(Debug, Clone, Serialize,Display)]
@@ -57,6 +61,9 @@ pub enum Token {
     
     AssignmentEq,
     CheckEq,
+    CheckNotEq,
+    GreaterThan,
+    LessThan,
     And,
     Or,
     Not,
@@ -96,6 +103,9 @@ pub enum TokenType {
 
     AssignmentEq,
     CheckEq,
+    CheckNotEq,
+    GreaterThan,
+    LessThan,
     And,
     Or,
     Not,
@@ -128,6 +138,9 @@ impl PartialEq<&Token> for TokenType {
             Token::Mod => {matches!(self,TokenType::Mult)}
             Token::AssignmentEq => {matches!(self,TokenType::AssignmentEq)}
             Token::CheckEq => {matches!(self,TokenType::CheckEq)}
+            Token::CheckNotEq => {matches!(self,TokenType::CheckNotEq)}
+            Token::GreaterThan => {matches!(self,TokenType::GreaterThan)}
+            Token::LessThan => {matches!(self,TokenType::LessThan)}
             Token::And => {matches!(self,TokenType::And)}
             Token::Or => {matches!(self,TokenType::Or)}
             Token::Not => {matches!(self,TokenType::Not)}

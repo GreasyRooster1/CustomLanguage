@@ -82,6 +82,24 @@ impl AST{
             _ => {panic!("not a number")}
         }
     }
+    fn parse_gate(&mut self) -> Node{
+        let mut left = self.parse_factor();
+        while TokenType::And==self.peek() || TokenType::Or==self.peek(){
+            let op = self.eat().clone();
+            let right = self.parse_term();
+            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+        }
+        left
+    }
+    fn parse_condition(&mut self) -> Node{
+        let mut left = self.parse_factor();
+        while TokenType::CheckEq==self.peek() || TokenType::CheckNotEq==self.peek() || TokenType::GreaterThan==self.peek() || TokenType::LessThan==self.peek(){
+            let op = self.eat().clone();
+            let right = self.parse_term();
+            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+        }
+        left
+    }
 
     fn parse_range(&mut self) -> Node{
         let left = self.parse_expr();
