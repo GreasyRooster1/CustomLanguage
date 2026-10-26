@@ -48,7 +48,7 @@ impl AST{
         token
     }
 
-    fn parse_expr(&mut self) -> Node{
+    fn parse_add_sub(&mut self) -> Node{
         let mut left = self.parse_term();
         while TokenType::Add==self.peek() || TokenType::Sub==self.peek(){
             let op = self.eat().clone();
@@ -83,7 +83,7 @@ impl AST{
         }
     }
     fn parse_gate(&mut self) -> Node{
-        let mut left = self.parse_condition();
+        let mut left = self.parse_factor();
         while TokenType::And==self.peek() || TokenType::Or==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
@@ -91,8 +91,8 @@ impl AST{
         }
         left
     }
-    fn parse_condition(&mut self) -> Node{
-        let mut left = self.parse_factor();
+    fn parse_expr(&mut self) -> Node{
+        let mut left = self.parse_add_sub();
         while TokenType::CheckEq==self.peek() || TokenType::CheckNotEq==self.peek() || TokenType::GreaterThan==self.peek() || TokenType::LessThan==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
