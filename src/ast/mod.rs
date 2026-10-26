@@ -224,6 +224,7 @@ pub enum Node{
     ForLoop(Box<Name>, Box<Node>, Box<Node>), // var, range, block
     Range(Box<Node>, Box<Node>, Box<Node>), //start, stop, step
     If(Box<Node>, Box<Node>), //condition, block
+    Not(Box<Node>),
     Nop,
 }
 
