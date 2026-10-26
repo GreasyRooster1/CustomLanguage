@@ -18,7 +18,11 @@ const TYPE_DENOTER_LITERAL: &str = "#";
 const RETURN_LITERAL: &str = "ret";
 const COMMA_LITERAL: &str = ",";
 const STEP_SEPERATOR_LITERAL: &str = "by";
-
+const ASSIGNMENT_EQ_LITERAL: &str = "=";
+const CHECK_EQ_LITERAL: &str = "==";
+const AND_LITERAL: &str = "&&";
+const OR_LITERAL: &str = "||";
+const NOT_LITERAL: &str = "!";
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
 #[derive(Debug, Clone, Serialize,Display)]
@@ -50,6 +54,12 @@ pub enum Token {
     Mult,
     Div,
     Mod,
+    
+    AssignmentEq,
+    CheckEq,
+    And,
+    Or,
+    Not,
     
     Return,
     EOF,
@@ -83,7 +93,13 @@ pub enum TokenType {
     Mult,
     Div,
     Mod,
-    
+
+    AssignmentEq,
+    CheckEq,
+    And,
+    Or,
+    Not,
+
     Return,
     EOF,
 }
@@ -110,6 +126,11 @@ impl PartialEq<&Token> for TokenType {
             Token::Mult => {matches!(self,TokenType::Mult)}
             Token::Div => {matches!(self,TokenType::Div)}
             Token::Mod => {matches!(self,TokenType::Mult)}
+            Token::AssignmentEq => {matches!(self,TokenType::AssignmentEq)}
+            Token::CheckEq => {matches!(self,TokenType::CheckEq)}
+            Token::And => {matches!(self,TokenType::And)}
+            Token::Or => {matches!(self,TokenType::Or)}
+            Token::Not => {matches!(self,TokenType::Not)}
             Token::Return => {matches!(self,TokenType::Return)},
             Token::EOF => {matches!(self,TokenType::EOF)}
         }

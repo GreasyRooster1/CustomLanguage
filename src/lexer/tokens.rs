@@ -1,5 +1,5 @@
 use crate::lexer::Token::NumberLiteral;
-use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL, RETURN_LITERAL, STEP_SEPERATOR_LITERAL, IF_LITERAL};
+use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL, RETURN_LITERAL, STEP_SEPERATOR_LITERAL, IF_LITERAL, ASSIGNMENT_EQ_LITERAL, CHECK_EQ_LITERAL, AND_LITERAL, OR_LITERAL, NOT_LITERAL};
 
 pub struct FuncRule;
 pub struct LoopRule;
@@ -26,6 +26,12 @@ pub struct SubRule;
 pub struct MultRule;
 pub struct DivRule;
 pub struct ModRule;
+
+pub struct AssignmentEqRule;
+pub struct CheckEqRule;
+pub struct AndRule;
+pub struct OrRule;
+pub struct NotRule;
 
 pub struct ReturnRule;
 
@@ -184,6 +190,53 @@ impl TokenRule for ModRule {
         Token::Mod
     }
 }
+impl TokenRule for AssignmentEqRule {
+    fn check(&self, string: &String) -> bool {
+        string == ASSIGNMENT_EQ_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::AssignmentEq
+    }
+}
+impl TokenRule for CheckEqRule {
+    fn check(&self, string: &String) -> bool {
+        string == CHECK_EQ_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::CheckEq
+    }
+}
+impl TokenRule for AndRule {
+    fn check(&self, string: &String) -> bool {
+        string == AND_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::And
+    }
+}
+impl TokenRule for OrRule {
+    fn check(&self, string: &String) -> bool {
+        string == OR_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Or
+    }
+}
+impl TokenRule for NotRule {
+    fn check(&self, string: &String) -> bool {
+        string == NOT_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::Not
+    }
+}
+
+
 
 impl TokenRule for NameRule {
     fn check(&self, string: &String) -> bool {
