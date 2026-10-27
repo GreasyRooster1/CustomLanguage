@@ -1,6 +1,8 @@
 mod tests;
+mod nodes;
 
 use std::cmp::PartialEq;
+use enum_dispatch::enum_dispatch;
 use serde::Serialize;
 use crate::ast::Node::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, Identifier, If, Number, Parameter, Program, ReturnStatement};
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
