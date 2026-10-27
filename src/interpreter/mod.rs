@@ -1,8 +1,9 @@
 use std::collections::HashMap;
-use crate::ast::Node;
+use crate::ast::{BlockStatement, Node, Program};
 
 pub struct Interpreter {
-    stack: Vec<Node>,
+    stack: Vec<StackFrame>,
+    ast: Program,
 }
 
 struct StackFrame{
@@ -16,5 +17,29 @@ enum Variable{
 }
 
 pub trait Interpret {
-    fn execute(&self);
+    fn execute(&self, interpreter: &mut Interpreter);
+}
+
+impl Interpret for Program{
+    fn execute(&self, interpreter: &mut Interpreter) {
+        for block in &self.statements{
+            let Node::BlockStatementNode(body) = block else { return };
+            body.execute(interpreter);
+        }
+    }
+}
+impl Interpret for BlockStatement{
+    fn execute(&self, interpreter: &mut Interpreter) {
+        for block in &self.statements{
+            match block{
+                Node::FunctionNode(f) => f.execute(),
+                Node::BlockStatementNode(b) => b.execute(),
+                Node::ReturnStatementNode(r) => r.execute(),
+                Node::ForeverLoopNode(f) => f.execute(),
+                Node::ForLoopNode(f) => f.execute(),
+                Node::IfNode(i) => i.execute(),
+                _ => {}
+            }
+        }
+    }
 }

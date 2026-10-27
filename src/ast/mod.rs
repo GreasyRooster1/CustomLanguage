@@ -1,7 +1,7 @@
 mod tests;
-mod nodes;
+pub mod nodes;
 
-use crate::ast::nodes::*;
+pub use crate::ast::nodes::*;
 use std::cmp::PartialEq;
 use serde::Serialize;
 use crate::ast::Node::ProgramNode;
