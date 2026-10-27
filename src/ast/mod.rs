@@ -1,10 +1,10 @@
 mod tests;
 mod nodes;
 
+use crate::ast::nodes::*;
 use std::cmp::PartialEq;
-use enum_dispatch::enum_dispatch;
 use serde::Serialize;
-use crate::ast::Node::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, Identifier, If, Number, Parameter, Program, ReturnStatement};
+use crate::ast::Node::ProgramNode;
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
 #[derive(Debug, Serialize)]
@@ -55,7 +55,11 @@ impl AST{
         while TokenType::Add==self.peek() || TokenType::Sub==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
-            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+            left = Node::BinOpNode(Box::new(BinOp{
+                left,
+                op,
+                right
+            }))
         }
         left
     }
@@ -65,7 +69,11 @@ impl AST{
         while TokenType::Mult==self.peek() || TokenType::Div==self.peek() || TokenType::Mod==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
-            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+            left = Node::BinOpNode(Box::new(BinOp{
+                left,
+                op,
+                right
+            }))
         }
         left
     }
@@ -79,8 +87,12 @@ impl AST{
             return node;
         }
         match self.eat().clone(){
-            Token::NumberLiteral(a)=>Number(a),
-            Token::Name(s)=>Identifier(Box::from(Name(s))),
+            Token::NumberLiteral(assumption)=>Node::NumberNode(Box::new(Number{
+                assumption
+            })),
+            Token::Name(s)=>Node::IdentifierNode(Box::new(Identifier{
+                name:Name(s),
+            })),
             _ => {panic!("not a number")}
         }
     }
@@ -89,7 +101,11 @@ impl AST{
         while TokenType::And==self.peek() || TokenType::Or==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
-            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+            left = Node::BinOpNode(Box::new(BinOp{
+                left,
+                op,
+                right
+            }))
         }
         left
     }
@@ -98,7 +114,11 @@ impl AST{
         while TokenType::CheckEq==self.peek() || TokenType::CheckNotEq==self.peek() || TokenType::GreaterThan==self.peek() || TokenType::LessThan==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
-            left = BinOp(Box::from(left), Box::new(op), Box::new(right));
+            left = Node::BinOpNode(Box::new(BinOp{
+                left,
+                op,
+                right
+            }))
         }
         left
     }
@@ -111,9 +131,15 @@ impl AST{
             self.expect(TokenType::StepSeparator);
             self.parse_expr()
         }else{
-            Number(NumberLiteralAssumption::Int(1))
+            Node::NumberNode(Box::new(Number{
+                assumption:NumberLiteralAssumption::Int(1)
+            }))
         };
-        Node::Range(Box::from(left), Box::from(right), Box::from(step))
+        Node::RangeNode(Box::new(Range{
+            start:left,
+            stop:right,
+            step,
+        }))
     }
 
     fn parse_statement(&mut self) -> Node{
@@ -133,13 +159,19 @@ impl AST{
         self.expect(TokenType::Loop);
         if TokenType::OpenBracket == self.peek(){
             let block = self.parse_block();
-            return ForeverLoop(Box::new(block));
+            return Node::ForeverLoopNode(Box::new(ForeverLoop{
+                body:block
+            }));
         }
         let name_token = self.expect_and_get(TokenType::Name);
         let name = unwrap_name(name_token).unwrap();
         let range = self.parse_range();
         let block = self.parse_block();
-        ForLoop(Box::new(name), Box::new(range), Box::new(block))
+        Node::ForLoopNode(Box::new(ForLoop{
+            name,
+            range,
+            body:block,
+        }))
     }
 
     fn parse_function(&mut self) -> Node{
@@ -158,7 +190,10 @@ impl AST{
             if TokenType::Comma==self.peek() {
                 self.expect(TokenType::Comma);
             }
-            params.push(Box::new(Parameter(Box::new(param_name),Box::new(param_type))));
+            params.push(Parameter{
+                name:param_name,
+                p_type:param_type,
+            });
         }
 
         self.expect(TokenType::CloseParam);
@@ -174,60 +209,74 @@ impl AST{
         let block = self.parse_block();
 
 
-        Function(Box::from(name), params, Box::new(return_type), Box::new(block))
+        Node::FunctionNode(Box::from(Function{
+            name,
+            params,
+            ret_type:return_type,
+            body:block,
+        }))
     }
 
     fn parse_block(&mut self) -> Node{
         self.expect(TokenType::OpenBracket);
         let mut statements = Vec::new();
         while TokenType::CloseBracket!=self.peek() {
-           statements.push(Box::new(self.parse_statement()));
+           statements.push(self.parse_statement());
         }
         if statements.len()==0 {
-            statements.push(Box::new(Node::Nop));
+            statements.push(Node::NopNode);
         }
         self.expect(TokenType::CloseBracket);
-        BlockStatement(statements)
+        Node::BlockStatementNode(Box::new(BlockStatement{
+            statements
+        }))
     }
 
     fn parse_return(&mut self) -> Node{
         self.expect(TokenType::Return);
 
-        ReturnStatement(Box::new(self.parse_expr()))
+        Node::ReturnStatementNode(Box::new(ReturnStatement {
+            expression: self.parse_expr()
+        }))
     }
 
     fn parse_if(&mut self) -> Node{
         self.expect(TokenType::If);
         let condition = self.parse_expr();
         let body = self.parse_block();
-        If(Box::new(condition), Box::new(body))
+        Node::IfNode(Box::new(If{
+            condition,
+            body
+        }))
     }
 
     fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
-            statements.push(Box::new(self.parse_statement()));
+            statements.push(self.parse_statement());
         }
-        Program(statements)
+        Node::ProgramNode(Box::new(Program {
+            statements
+        }))
     }
 }
 
 #[derive(Serialize, Debug)]
 pub enum Node{
-    BinOp(Box<Node>, Box<Token>, Box<Node>),
-    Number(NumberLiteralAssumption),
-    Function(Box<Name>,Vec<Box<Node>>,Box<Name>,Box<Node>), //name, params, return type, block statement
-    Parameter(Box<Name>, Box<Name>), // name, type
-    Identifier(Box<Name>),
-    BlockStatement(Vec<Box<Node>>),
-    ReturnStatement(Box<Node>),
-    Program(Vec<Box<Node>>),
-    ForeverLoop(Box<Node>),
-    ForLoop(Box<Name>, Box<Node>, Box<Node>), // var, range, block
-    Range(Box<Node>, Box<Node>, Box<Node>), //start, stop, step
-    If(Box<Node>, Box<Node>), //condition, block
-    Not(Box<Node>),
-    Nop,
+    BinOpNode(Box<BinOp>),
+    NumberNode(Box<Number>),
+    FunctionNode(Box<Function>), //name, params, return type, block statement
+    ParameterNode(Box<Parameter>), // name, type
+    IdentifierNode(Box<Identifier>),
+    BlockStatementNode(Box<BlockStatement>),
+    ReturnStatementNode(Box<ReturnStatement>),
+    ProgramNode(Box<Program>),
+    ForeverLoopNode(Box<ForeverLoop>),
+    ForLoopNode(Box<ForLoop>), // var, range, block
+    RangeNode(Box<Range>), //start, stop, step
+    IfNode(Box<If>), //condition, block
+    NotNode(Box<Not>),
+    NopNode,
 }
 
 fn unwrap_name(token: Token) -> Result<Name, ()>{
