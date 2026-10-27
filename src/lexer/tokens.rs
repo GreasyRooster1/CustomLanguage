@@ -297,10 +297,10 @@ impl TokenRule for NumberLiteralRule {
 
     fn get_token(&self, string: &String) -> Token {
         let mut assumption;
-        let f32_val = string.parse::<f64>();
-        let i128_val = string.parse::<i128>();
-        if i128_val.is_ok() {
-            assumption = NumberLiteralAssumption::Int(i128_val.expect("somehow failed"));
+        let f32_val = string.parse::<f32>();
+        let i32_val = string.parse::<i32>();
+        if i32_val.is_ok() {
+            assumption = NumberLiteralAssumption::Int(i32_val.expect("somehow failed"));
         } else if f32_val.is_ok() {
             assumption = NumberLiteralAssumption::Float(f32_val.expect("somehow failed"));
         }else{

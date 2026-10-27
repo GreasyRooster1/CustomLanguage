@@ -79,7 +79,7 @@ mod tests {
     fn test_number_literal_ufloat_token() {
         let rules = alloc_rules_with_precidence();
         for i in 0..1000 {
-            let val = random::<f64>();
+            let val = random::<f32>();
             let num = val.to_string();
             assert!(check_single_token_parse(
                 num.clone(),
@@ -99,7 +99,7 @@ mod tests {
             assert!(check_single_token_parse(
                 num.clone(),
                 &rules,
-                Token::NumberLiteral(Float(val as f64))
+                Token::NumberLiteral(Float(val))
             ))
         }
     }

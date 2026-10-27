@@ -153,8 +153,8 @@ impl PartialEq<&Token> for TokenType {
 
 #[derive(Debug, Clone, Serialize)]
 pub enum NumberLiteralAssumption {
-    Float(f64),
-    Int(i128)
+    Float(f32),
+    Int(i32)
 }
 
 trait TokenRule {
