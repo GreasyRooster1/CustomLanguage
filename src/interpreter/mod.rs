@@ -2,7 +2,7 @@ mod tests;
 mod interpret;
 
 use std::collections::HashMap;
-use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Program, Statement};
+use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -48,4 +48,26 @@ enum Value{
 
 pub trait Interpret {
     fn execute(&self, interpreter: &mut Interpreter);
+}
+
+pub trait FunctionExecution{
+    fn execute(&self, args:Vec<Node>, params:Vec<Parameter>, interpreter: &mut Interpreter);
+}
+
+struct BlockFunctionExecution{
+    block: BlockStatement,
+}
+impl FunctionExecution for BlockFunctionExecution{
+    fn execute(&self, args:Vec<Node>, params:Vec<Parameter>, interpreter: &mut Interpreter){
+        interpreter.stack.push(StackScope::new());
+        
+        self.block.execute(interpreter);
+    }
+}
+
+struct DebugFunctionExecution;
+impl FunctionExecution for DebugFunctionExecution{
+    fn execute(&self, args:Vec<Node>, params:Vec<Parameter>, interpreter: &mut Interpreter){
+        todo!()
+    }
 }
