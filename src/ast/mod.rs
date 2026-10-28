@@ -301,7 +301,7 @@ impl AST{
         };
         self.expect(TokenType::TypeSeparator);
         let value = self.parse_expr();
-        self.expect(TokenType::StepSeparator);
+        self.expect(TokenType::StatementSeparator);
         Node::AssignmentNode(Box::new(Assignment{
             name,
             type_name,
