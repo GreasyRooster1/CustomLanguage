@@ -210,20 +210,20 @@ impl PartialOrd for Value {
             return None;
         }
         if *self==ValueType::Int && *rhs==ValueType::Int{
-            let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(a) =self else { return None };
+            let Value::Int(b) =self else { return None };
             PartialOrd::partial_cmp(a, b)
         }else if *self==ValueType::Float && *rhs==ValueType::Int{
-            let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(a) =self else { return None };
+            let Value::Int(b) =self else { return None };
             PartialOrd::partial_cmp(a, &(*b as f32))
         }else if *self==ValueType::Int && *rhs==ValueType::Float {
-            let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(a) =self else { return None };
+            let Value::Float(b) =self else { return None };
             PartialOrd::partial_cmp(&(*a as f32), b)
         }else if *self==ValueType::Float && *rhs==ValueType::Float {
-            let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(a) =self else { return None };
+            let Value::Float(b) =self else { return None };
             PartialOrd::partial_cmp(a, b)
         }else{
             None

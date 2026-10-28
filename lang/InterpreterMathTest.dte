@@ -1,0 +1,6 @@
+
+
+x i:10;
+y i:11;
+
+debug_int(x+y);
