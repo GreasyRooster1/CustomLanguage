@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use serde::Serialize;
 use strum::Display;
-use crate::interpreter::FunctionExecution;
+use crate::interpreter::functions::FunctionExecution;
 
 #[derive(Debug,Clone,Serialize,Display)]
 pub(crate) enum Value{
