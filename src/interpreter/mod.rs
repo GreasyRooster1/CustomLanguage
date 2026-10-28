@@ -2,7 +2,6 @@ mod tests;
 mod interpret;
 
 use std::collections::HashMap;
-use std::mem::type_info::Type;
 use serde::Serialize;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
 
