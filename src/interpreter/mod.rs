@@ -35,7 +35,7 @@ impl Interpreter {
         self.stack.first_mut().unwrap()
     }
 
-    pub(crate) fn get_variable_typed(&mut self, name: Name,val_type:ValueType) -> Result<Option<Value>,CompileError>{
+    pub(crate) fn get_variable_typed(&mut self, name: &Name, val_type:ValueType) -> Result<Option<Value>,CompileError>{
         match self.get_variable(name){
             Some(v) => {
                 if v==val_type {
@@ -47,7 +47,7 @@ impl Interpreter {
             None => Ok(None),
         }
     }
-    pub(crate) fn get_variable(&mut self, name: Name) -> Option<Value> {
+    pub(crate) fn get_variable(&mut self, name: &Name) -> Option<Value> {
         match self.current_scope().variables.get(&name){
             Some(v) => Some(v.clone()),
             None => match self.global_scope().variables.get(&name) {
@@ -56,7 +56,7 @@ impl Interpreter {
             }
         }
     }
-    pub(crate) fn get_variable_strict_scope(&self, name: Name, scope:StackScope) -> Option<Value> {
+    pub(crate) fn get_variable_strict_scope(&self, name: &Name, scope:StackScope) -> Option<Value> {
         match scope.variables.get(&name){
             Some(v) => Some(v.clone()),
             None => None

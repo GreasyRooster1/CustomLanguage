@@ -26,7 +26,7 @@ pub(crate) enum ValueType{
 }
 
 #[derive(Clone, Debug)]
-struct FunctionValue{
+pub struct FunctionValue{
     pub(crate) executor:Arc<dyn FunctionExecution>,
     pub(crate) parameters: Vec<Parameter>,
     pub(crate) return_value: Name,
@@ -41,6 +41,19 @@ impl From<&Value> for ValueType{
             Value::Bool(_) => ValueType::Bool,
             Value::Function(_) => ValueType::Function,
             Value::NoValue => ValueType::NoValue,
+        }
+    }
+}
+
+impl From<Name> for ValueType{
+    fn from(value: Name) -> Self {
+        match value.0.as_str() {
+            "f" => ValueType::Float,
+            "i" => ValueType::Int,
+            "str" => ValueType::String,
+            "b" => ValueType::Bool,
+            "func" => ValueType::Function,
+            _ => ValueType::NoValue
         }
     }
 }
