@@ -1,6 +1,7 @@
 use crate::ast::{BlockStatement, Function, FunctionCall, Node, Program, Statement};
-use crate::interpreter::{Interpret, Interpreter, Value};
-use crate::interpreter::Value::NoValue;
+use crate::interpreter::{Interpret, Interpreter};
+use crate::interpreter::value::{Value, ValueType};
+use crate::interpreter::value::Value::NoValue;
 
 impl Interpret for Program{
     fn execute(&self, interpreter: &mut Interpreter) -> Value {
@@ -46,10 +47,7 @@ impl Interpret for Function{
 
 impl Interpret for FunctionCall{
     fn execute(&self, interpreter: &mut Interpreter) -> Value {
-        let function = match interpreter.global_scope().variables.get(&self.name){
-            Some(f) => f.clone(),
-            None => panic!("function not defined")
-        };
+        let function = interpreter.get_variable_typed(self.name,ValueType::Function);
         function.execute(interpreter);
         NoValue
     }

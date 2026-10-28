@@ -1,5 +1,6 @@
 mod tests;
 mod interpret;
+mod value;
 
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -68,23 +69,11 @@ pub(crate) struct StackScope {
 
 impl StackScope {
     fn new() -> StackScope {
-        StackScope{
+        StackScope {
             variables: HashMap::new(),
         }
     }
 }
-
-#[derive(Debug,Clone,Serialize,Display)]
-pub(crate) enum Value{
-    Float(f32),
-    Int(i32),
-    String(String),
-    Bool(bool),
-    #[serde(skip_serializing)]
-    Function(Arc<dyn FunctionExecution>),
-    NoValue
-}
-
 
 pub trait Interpret {
     fn execute(&self, interpreter: &mut Interpreter) -> Value;
