@@ -5,24 +5,29 @@ number:f 10.0
 number 10
 name str:"hi" 
 
-@i 0..10{
 
+fn do_stuff_param_ret(x:i, y:f):f{
+    loop{
+
+    }
+    loop {
+
+    }
+    loop i 0->10{
+
+    }
+    loop j 0->10 by 2{
+
+    }
+
+    if x>10 {
+        ret 8;
+    }
+    ret 10;
 }
 
-#do_stuff{
-
-}
-
-#do_stuff_param(x:i){
-
-}
-
-#do_stuff_param_ret(x:i):f{
-
-}
-
-#do_stuff_ret:f{
-
+fn do_again(x:i, y:f):f{
+  ret 10;
 }
 
 ```
