@@ -3,6 +3,7 @@ mod interpret;
 
 use std::collections::HashMap;
 use std::mem::type_info::Type;
+use serde::Serialize;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
 
 #[derive(Debug)]
@@ -19,8 +20,12 @@ impl Interpreter {
         }
     }
 
-    pub(crate) fn execute(&mut self,program: Program) {
+    pub(crate) fn execute(&mut self,program: Program) -> Value {
         program.execute(self)
+    }
+
+    pub(crate) fn current_stack(&mut self) -> &mut StackScope {
+        self.stack.last_mut().unwrap()
     }
 }
 
@@ -39,7 +44,7 @@ impl StackScope {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug,Clone,Serialize)]
 enum Value{
     Float(f32),
     Int(i32),
@@ -53,9 +58,10 @@ pub trait Interpret {
 }
 
 pub trait FunctionExecution{
-    fn execute(&self, args:Vec<Node>, params:Vec<Parameter>, interpreter: &mut Interpreter);
+    fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter);
 }
 
+#[derive(Debug,Clone,Serialize)]
 pub struct FunctionHeader{
     pub(crate) parameters: Vec<Parameter>,
     pub(crate) corresponding_args: Vec<Value>,
@@ -64,9 +70,11 @@ struct BlockFunctionExecution{
     block: BlockStatement,
 }
 impl FunctionExecution for BlockFunctionExecution{
-    fn execute(&self, args:Vec<Node>, params:Vec<Parameter>, interpreter: &mut Interpreter){
+    fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter){
         let mut scope = StackScope::new();
-        scope.variables.insert();
+        for i in 0..header.parameters.len() {
+            scope.variables.insert(header.parameters[i].name.clone(), header.corresponding_args[i].clone());
+        }
         interpreter.stack.push(scope);
 
         self.block.execute(interpreter);
@@ -75,7 +83,7 @@ impl FunctionExecution for BlockFunctionExecution{
 
 struct DebugFunctionExecution;
 impl FunctionExecution for DebugFunctionExecution{
-    fn execute(&self, args:Vec<Node>, params:Vec<Parameter>, interpreter: &mut Interpreter){
-        todo!()
+    fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter){
+        println!("debug called with header {:#?} and state: {:?}",header,interpreter);
     }
 }
