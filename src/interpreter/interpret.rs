@@ -39,14 +39,14 @@ impl Interpret for Statement{
 impl Interpret for Function{
     fn execute(&self, interpreter: &mut Interpreter) -> Value {
         let Node::BlockStatementNode(body) = self.body.clone() else { panic!("not a statement") };
-        interpreter.global_scope.functions.insert(self.name.clone(), *body);
+        interpreter.global_scope().variables.insert(self.name.clone(), *body);
         NoValue
     }
 }
 
 impl Interpret for FunctionCall{
     fn execute(&self, interpreter: &mut Interpreter) -> Value {
-        let function = match interpreter.global_scope.functions.get(&self.name){
+        let function = match interpreter.global_scope().variables.get(&self.name){
             Some(f) => f.clone(),
             None => panic!("function not defined")
         };
