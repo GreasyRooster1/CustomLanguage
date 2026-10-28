@@ -255,9 +255,10 @@ impl AST{
 
     fn parse_return(&mut self) -> Node{
         self.expect(TokenType::Return);
-
+        let expression = self.parse_expr();
+        self.expect(TokenType::StatementSeparator);
         Node::ReturnStatementNode(Box::new(ReturnStatement {
-            expression: self.parse_expr()
+            expression
         }))
     }
 
@@ -282,6 +283,7 @@ impl AST{
             args.push(self.parse_expr());
         }
         self.expect(TokenType::CloseParam);
+        self.expect(TokenType::StatementSeparator);
         Node::FunctionCallNode(Box::new(FunctionCall{
             name,
             args
@@ -299,6 +301,7 @@ impl AST{
         };
         self.expect(TokenType::TypeSeparator);
         let value = self.parse_expr();
+        self.expect(TokenType::StepSeparator);
         Node::AssignmentNode(Box::new(Assignment{
             name,
             type_name,

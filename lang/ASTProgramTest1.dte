@@ -2,7 +2,7 @@
 
 
 fn do_stuff_param_ret(x:i, y:f):f{
-    x i:20
+    x i:20;
     loop{
 
     }
@@ -19,6 +19,7 @@ fn do_stuff_param_ret(x:i, y:f):f{
     if x>10 {
         ret 8;
     }
+    do_again();
     ret 10;
 }
 

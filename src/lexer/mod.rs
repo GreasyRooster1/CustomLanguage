@@ -26,6 +26,7 @@ const LESS_THAN_LITERAL: &str = "<";
 const AND_LITERAL: &str = "&&";
 const OR_LITERAL: &str = "||";
 const NOT_LITERAL: &str = "!";
+const STATEMENT_SEPERATOR_LITERAL: &str = ";";
 
 const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
@@ -46,6 +47,7 @@ pub enum Token {
     TypeSeparator,  // :
     RangeSeparator, // ->
     StepSeparator, // by
+    StatementSeparator, // ;
 
     OpenParam,    // (
     CloseParam,   // )
@@ -88,6 +90,7 @@ pub enum TokenType {
     TypeSeparator,  // :
     RangeSeparator, // ->
     StepSeparator, // by
+    StatementSeparator, // ;
 
     OpenParam,    // (
     CloseParam,   // )
@@ -126,6 +129,7 @@ impl PartialEq<&Token> for TokenType {
             Token::TypeSeparator => {matches!(self,TokenType::TypeSeparator)}
             Token::RangeSeparator => {matches!(self,TokenType::RangeSeparator)}
             Token::StepSeparator => {matches!(self,TokenType::StepSeparator)}
+            Token::StatementSeparator => {matches!(self,TokenType::StatementSeparator)}
             Token::OpenParam => {matches!(self,TokenType::OpenParam)}
             Token::CloseParam => {matches!(self,TokenType::CloseParam)}
             Token::OpenBracket => {matches!(self,TokenType::OpenBracket)}
