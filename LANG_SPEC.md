@@ -1,9 +1,8 @@
 
 ```
-number:f 10f
-number:f 10.0
-number 10
 name str:"hi" 
+x i:20
+y f:3.14
 
 
 fn do_stuff_param_ret(x:i, y:f):f{
@@ -32,10 +31,10 @@ fn do_again(x:i, y:f):f{
 
 ```
 
-## Keywords:
-- 
-
 ## Types
-- f32 - 32 bit float
-- i32 - 32 bit signed int
-- u32 - 32 bit unsigned int
+- f - 32-bit float
+- i - 32-bit signed int
+
+## Interfaces
+interfaces allow for turing control flow execution into sys calls
+they are the basis of a standard library
