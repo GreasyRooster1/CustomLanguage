@@ -4,7 +4,7 @@ use strum::Display;
 use crate::ast::{Name, Parameter};
 use crate::interpreter::functions::FunctionExecution;
 
-#[derive(Debug,Clone,Serialize,Display)]
+#[derive(Debug,Clone,Serialize,Display, PartialEq)]
 pub(crate) enum Value{
     Float(f32),
     Int(i32),
@@ -42,6 +42,12 @@ impl From<&Value> for ValueType{
             Value::Function(_) => ValueType::Function,
             Value::NoValue => ValueType::NoValue,
         }
+    }
+}
+
+impl PartialEq for FunctionValue{
+    fn eq(&self, other: &Self) -> bool {
+        self.parameters==other.parameters && self.return_value==other.return_value
     }
 }
 

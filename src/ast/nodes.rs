@@ -20,6 +20,7 @@ pub struct Function{
     pub(crate) body: Node,
 }
 #[derive(Debug,Serialize, Clone)]
+#[derive(PartialEq)]
 pub struct Parameter{
     pub(crate) name: Name,
     pub(crate) p_type: Name,
