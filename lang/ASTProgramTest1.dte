@@ -2,6 +2,7 @@
 
 
 fn do_stuff_param_ret(x:i, y:f):f{
+    x i:20
     loop{
 
     }

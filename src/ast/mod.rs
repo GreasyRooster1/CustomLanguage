@@ -271,6 +271,24 @@ impl AST{
         }))
     }
 
+    fn parse_assignment(&mut self) -> Node{
+        let name = match self.expect_and_get(TokenType::Name){
+            Token::Name(name) => Name(name),
+            _ => {panic!("not a name")}
+        };
+        let type_name = match self.expect_and_get(TokenType::Name){
+            Token::Name(name) => Name(name),
+            _ => {panic!("not a name")}
+        };
+        self.expect(TokenType::TypeSeparator);
+        let value = self.parse_expr();
+        Node::AssignmentNode(Box::new(Assignment{
+            name,
+            type_name,
+            value
+        }))
+    }
+
     pub fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
@@ -299,6 +317,7 @@ pub enum Node{
     NotNode(Box<Not>),
     StatementNode(Box<Statement>),
     FunctionCallNode(Box<FunctionCall>),
+    AssignmentNode(Box<Assignment>),
     NopNode,
 }
 

@@ -75,4 +75,10 @@ pub struct FunctionCall{
     pub(crate) args: Vec<Node>,
 }
 #[derive(Debug,Serialize, Clone)]
+pub struct Assignment{
+    pub(crate) name: Name,
+    pub(crate) type_name: Name,
+    pub(crate) value: Node,
+}
+#[derive(Debug,Serialize, Clone)]
 pub struct Nop;
