@@ -1,7 +1,7 @@
 mod tests;
 
 use std::collections::HashMap;
-use crate::ast::{BlockStatement, Function, Name, Node, Program};
+use crate::ast::{BlockStatement, Function, Name, Node, Program, Statement};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -51,24 +51,31 @@ pub trait Interpret {
 
 impl Interpret for Program{
     fn execute(&self, interpreter: &mut Interpreter) {
-        for block in &self.statements{
-            let Node::BlockStatementNode(body) = block else { return };
-            body.execute(interpreter);
+        for statement in &self.statements{
+            let Node::StatementNode(s) = statement else { return };
+            s.execute(interpreter);
         }
     }
 }
 impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) {
-        for block in &self.statements{
-            match block{
-                Node::FunctionNode(f) => f.execute(interpreter),
-                Node::BlockStatementNode(b) => b.execute(interpreter),
-                // Node::ReturnStatementNode(r) => r.execute(interpreter),
-                // Node::ForeverLoopNode(f) => f.execute(interpreter),
-                // Node::ForLoopNode(f) => f.execute(interpreter),
-                // Node::IfNode(i) => i.execute(interpreter),
-                _ => {}
-            }
+        for statement in &self.statements{
+            let Node::StatementNode(s) = statement else { return };
+            s.execute(interpreter);
+        }
+    }
+}
+
+impl Interpret for Statement{
+    fn execute(&self, interpreter: &mut Interpreter) {
+        match &self.statement {
+            Node::FunctionNode(f) => f.execute(interpreter),
+            Node::BlockStatementNode(b) => b.execute(interpreter),
+            // Node::ReturnStatementNode(r) => r.execute(interpreter),
+            // Node::ForeverLoopNode(f) => f.execute(interpreter),
+            // Node::ForLoopNode(f) => f.execute(interpreter),
+            // Node::IfNode(i) => i.execute(interpreter),
+            _ => {}
         }
     }
 }
