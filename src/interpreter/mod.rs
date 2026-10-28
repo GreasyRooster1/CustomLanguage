@@ -86,6 +86,14 @@ impl StackScope {
             }],
             return_value: Name("none".to_string()),
         }));
+        scope.insert(Name("debug_int".to_string()),Value::Function(FunctionValue{
+            executor: Arc::new(DebugFunctionExecution),
+            parameters: vec![Parameter{
+                name: Name("arg".to_string()),
+                p_type: Name("i".to_string()),
+            }],
+            return_value: Name("none".to_string()),
+        }));
         StackScope {
             variables: scope,
         }

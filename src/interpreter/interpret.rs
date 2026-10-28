@@ -1,7 +1,7 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Node, Number, Program};
+use crate::ast::{BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
-use crate::error::CompileError::Unspecified;
+use crate::error::CompileError::{Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
 use crate::interpreter::functions::{BlockFunctionExecution, FunctionHeader};
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
@@ -97,6 +97,15 @@ impl Interpret for Number{
     }
 }
 
+impl Interpret for Identifier{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        match interpreter.get_variable(&self.name){
+            Some(val) => Ok(val.clone()),
+            None => Err(ValueNotFound)
+        }
+    }
+}
+
 impl Interpret for Node {
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         match self {
@@ -105,7 +114,7 @@ impl Interpret for Node {
             Node::StringNode(n)         => n.execute(interpreter),
             Node::FunctionNode(n)       => n.execute(interpreter),
             //Node::ParameterNode(n)      => n.execute(interpreter),
-            //Node::IdentifierNode(n)     => n.execute(interpreter),
+            Node::IdentifierNode(n)     => n.execute(interpreter),
             Node::BlockStatementNode(n) => n.execute(interpreter),
             //Node::ReturnStatementNode(n)=> n.execute(interpreter),
             Node::ProgramNode(n)        => n.execute(interpreter),

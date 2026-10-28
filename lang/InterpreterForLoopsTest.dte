@@ -1,0 +1,9 @@
+
+
+loop i 0->10 {
+    debug_int(i);
+}
+
+loop i 0->10 by 2{
+    debug_int(i);
+}
