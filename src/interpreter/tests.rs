@@ -30,9 +30,9 @@ mod tests {
         println!("{:#?}",program);
 
         let mut interpreter = Interpreter::new();
-        interpreter.execute(*program);
+        let output_val = interpreter.execute(*program).unwrap();
 
-        println!("{:#?}",interpreter)
+        println!("{:#?}",output_val)
     }
 
 }

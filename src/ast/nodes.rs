@@ -66,10 +66,6 @@ pub struct Not {
     condition: Node,
 }
 #[derive(Debug,Serialize, Clone)]
-pub struct Statement{
-    pub(crate) statement: Node,
-}
-#[derive(Debug,Serialize, Clone)]
 pub struct FunctionCall{
     pub(crate) name: Name,
     pub(crate) args: Vec<Node>,

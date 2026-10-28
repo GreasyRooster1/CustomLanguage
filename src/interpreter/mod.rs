@@ -8,7 +8,7 @@ use std::fmt::Debug;
 use std::sync::Arc;
 use serde::Serialize;
 use strum::Display;
-use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
+use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::interpreter::value::{Value, ValueType};
 

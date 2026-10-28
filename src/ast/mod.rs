@@ -150,32 +150,27 @@ impl AST{
     }
 
     fn parse_statement(&mut self) -> Node{
-        Node::StatementNode(Box::new(
-            Statement{
-                statement: match self.peek(){
-                    Token::Func => self.parse_function(),
-                    Token::Loop => self.parse_loop(),
-                    // Token::Name(_) => {}
-                    Token::Return => self.parse_return(),
-                    Token::EOF => panic!("EOF"),
-                    Token::If => self.parse_if(),
-                    Token::Name(_)=>{
-                        if TokenType::Name == self.peek_ahead(){
-                            self.parse_assignment()
-                        }else if TokenType::OpenParam == self.peek_ahead(){
-                            self.parse_function_call()
-                        }else{
-                            panic!("not an assignment or function {} & {}",self.peek(),self.peek_ahead());
-                        }
-                    }
-
-                    _ => {panic!("not implemented {}",self.peek())}
+        match self.peek() {
+            Token::Func => self.parse_function(),
+            Token::Loop => self.parse_loop(),
+            // Token::Name(_) => {}
+            Token::Return => self.parse_return(),
+            Token::EOF => panic!("EOF"),
+            Token::If => self.parse_if(),
+            Token::Name(_) => {
+                if TokenType::Name == self.peek_ahead() {
+                    self.parse_assignment()
+                } else if TokenType::OpenParam == self.peek_ahead() {
+                    self.parse_function_call()
+                } else {
+                    panic!("not an assignment or function {} & {}", self.peek(), self.peek_ahead());
                 }
             }
-        ))
+            _ => panic!("not a statement"),
+        }
     }
 
-    fn parse_loop(&mut self) -> Node{
+    fn parse_loop(&mut self) -> Node {
         self.expect(TokenType::Loop);
         if TokenType::OpenBracket == self.peek(){
             let block = self.parse_block();
@@ -334,7 +329,6 @@ pub enum Node{
     RangeNode(Box<Range>), //start, stop, step
     IfNode(Box<If>), //condition, block
     NotNode(Box<Not>),
-    StatementNode(Box<Statement>),
     FunctionCallNode(Box<FunctionCall>),
     AssignmentNode(Box<Assignment>),
     NopNode,

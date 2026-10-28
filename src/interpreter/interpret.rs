@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, Function, FunctionCall, Node, Program, Statement};
+use crate::ast::{BlockStatement, Function, FunctionCall, Node, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::Unspecified;
 use crate::interpreter::{Interpret, Interpreter};
@@ -11,8 +11,7 @@ use crate::lexer::Token::Func;
 impl Interpret for Program{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
-            let Node::StatementNode(s) = statement else { panic!("not a statement") };
-            s.execute(interpreter);
+            statement.execute(interpreter);
         }
         Ok(NoValue)
     }
@@ -20,25 +19,9 @@ impl Interpret for Program{
 impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
-            let Node::StatementNode(s) = statement else { panic!("not a statement") };
-            s.execute(interpreter);
+            statement.execute(interpreter);
         }
         Ok(NoValue)
-    }
-}
-
-impl Interpret for Statement{
-    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
-        match &self.statement {
-            Node::FunctionNode(f) => f.execute(interpreter),
-            Node::BlockStatementNode(b) => b.execute(interpreter),
-            Node::FunctionCallNode(c) => c.execute(interpreter),
-            // Node::ReturnStatementNode(r) => r.execute(interpreter),
-            // Node::ForeverLoopNode(f) => f.execute(interpreter),
-            // Node::ForLoopNode(f) => f.execute(interpreter),
-            // Node::IfNode(i) => i.execute(interpreter),
-            _ => Ok(NoValue)
-        }
     }
 }
 
@@ -93,7 +76,6 @@ impl Interpret for Node {
             //Node::RangeNode(n)          => n.execute(interpreter),
             //Node::IfNode(n)             => n.execute(interpreter),
             //Node::NotNode(n)            => n.execute(interpreter),
-            Node::StatementNode(n)      => n.execute(interpreter),
             Node::FunctionCallNode(n)   => n.execute(interpreter),
             //Node::AssignmentNode(n)     => n.execute(interpreter),
             Node::NopNode               => Ok(Value::NoValue),
