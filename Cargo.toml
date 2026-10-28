@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+custom_error = "1.9.2"
 enumtrait = "1.0.0"
 log = "0.4.34"
 rand = "0.10.0"

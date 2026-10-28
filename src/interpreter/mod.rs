@@ -5,7 +5,9 @@ use std::collections::HashMap;
 use std::fmt::Debug;
 use std::sync::Arc;
 use serde::Serialize;
+use strum::Display;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
+use crate::error::CompileError;
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -30,6 +32,18 @@ impl Interpreter {
         self.stack.first_mut().unwrap()
     }
 
+    pub(crate) fn get_variable_typed(&mut self, name: Name,val_type:Value) -> Result<Option<Value>,CompileError>{
+        match self.get_variable(name){
+            Some(v) => {
+                if matches!(v,val_type){
+                    Ok(Some(val_type))
+                }else{
+                    Err(CompileError::WrongTypeAssumption { expected: val_type})
+                }
+            }
+            None => Ok(None),
+        }
+    }
     pub(crate) fn get_variable(&mut self, name: Name) -> Option<Value> {
         match self.current_scope().variables.get(&name){
             Some(v) => Some(v.clone()),
@@ -60,7 +74,7 @@ impl StackScope {
     }
 }
 
-#[derive(Debug,Clone,Serialize)]
+#[derive(Debug,Clone,Serialize,Display)]
 pub(crate) enum Value{
     Float(f32),
     Int(i32),
