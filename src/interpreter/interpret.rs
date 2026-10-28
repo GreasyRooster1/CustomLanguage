@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, Function, FunctionCall, Node, Number, Program};
+use crate::ast::{BlockStatement, ForeverLoop, Function, FunctionCall, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::Unspecified;
 use crate::interpreter::{Interpret, Interpreter};
@@ -60,6 +60,14 @@ impl Interpret for FunctionCall{
     }
 }
 
+impl Interpret for ForeverLoop{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        loop{
+            self.body.execute(interpreter)?;
+        }
+    }
+}
+
 impl Interpret for String{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         Ok(Value::String(self.clone()))
@@ -87,7 +95,7 @@ impl Interpret for Node {
             Node::BlockStatementNode(n) => n.execute(interpreter),
             //Node::ReturnStatementNode(n)=> n.execute(interpreter),
             Node::ProgramNode(n)        => n.execute(interpreter),
-            //Node::ForeverLoopNode(n)    => n.execute(interpreter),
+            Node::ForeverLoopNode(n)    => n.execute(interpreter),
             //Node::ForLoopNode(n)        => n.execute(interpreter),
             //Node::RangeNode(n)          => n.execute(interpreter),
             //Node::IfNode(n)             => n.execute(interpreter),

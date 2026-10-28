@@ -22,7 +22,23 @@ mod tests {
 
     #[test]
     fn test_interpreter_debugs() {
-        let parsed = parse(include_str!("../../lang/ASTProgramTest2.dte").to_string());
+        let parsed = parse(include_str!("../../lang/InterpreterFunctionsTest.dte").to_string());
+        println!("{:?}",parsed);
+        let mut ast = AST::new(parsed);
+        let node = ast.parse_program();
+        let Node::ProgramNode(program) = node else { panic!("Expected program node, got {:?}", node) };
+        println!("{:#?}",program);
+
+        let mut interpreter = Interpreter::new();
+        println!("{:#?}",interpreter);
+        let output_val = interpreter.execute(*program).unwrap();
+
+        println!("{:#?}",output_val)
+    }
+
+    #[test]
+    fn test_interpreter_loops() {
+        let parsed = parse(include_str!("../../lang/InterpreterLoopsTest.dte").to_string());
         println!("{:?}",parsed);
         let mut ast = AST::new(parsed);
         let node = ast.parse_program();

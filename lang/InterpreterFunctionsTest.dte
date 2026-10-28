@@ -1,0 +1,9 @@
+
+
+
+fn execute(){
+    debug("inside execute");
+}
+
+execute();
+execute();
