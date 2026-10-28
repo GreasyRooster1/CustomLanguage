@@ -5,17 +5,19 @@ use crate::ast::{BlockStatement, Function, Name, Node, Program};
 
 pub struct Interpreter {
     stack: Vec<StackScope>,
-    ast: Program,
     global_scope: StackScope,
 }
 
 impl Interpreter {
-    pub(crate) fn new(program: Program) -> Self {
+    pub(crate) fn new() -> Self {
         Interpreter{
             stack: vec![],
-            ast: program,
             global_scope: StackScope::new(),
         }
+    }
+
+    pub(crate) fn execute(mut self,program: Program) {
+        program.execute(&mut self)
     }
 }
 

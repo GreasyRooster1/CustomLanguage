@@ -15,8 +15,7 @@ mod tests {
         println!("{:#?}",program);
 
         let interpreter = Interpreter::new();
-
-        program.execute(/* &mut Interpreter */);
+        interpreter.execute(*program);
     }
 
 }
