@@ -1,12 +1,12 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
+use crate::ast::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
 use crate::interpreter::functions::{BlockFunctionExecution, FunctionHeader};
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
 use crate::interpreter::value::Value::NoValue;
-use crate::lexer::NumberLiteralAssumption;
+use crate::lexer::{NumberLiteralAssumption, Token};
 use crate::lexer::Token::Func;
 
 impl Interpret for Program{
@@ -119,6 +119,39 @@ impl Interpret for Identifier{
             Some(val) => Ok(val.clone()),
             None => Err(ValueNotFound)
         }
+    }
+}
+
+impl Interpret for BinOp{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        let a = self.right.execute(interpreter)?;
+        let b = self.left.execute(interpreter)?;
+        if (a==ValueType::Int||a==ValueType::Float) && (b==ValueType::Int||b==ValueType::Float){
+            match self.op {
+                Token::Add => a+b,
+                Token::Sub => a-b,
+                Token::Mult => a*b,
+                Token::Div => a/b,
+                Token::Mod => a%b,
+                _ => Err(Unspecified)
+            }?
+        }
+        Ok(match self.op {
+            Token::Add => {}
+            Token::Sub => {}
+            Token::Mult => {}
+            Token::Div => {}
+            Token::Mod => {}
+
+            Token::CheckEq => Value::Bool(a==b),
+            Token::CheckNotEq => {}
+            Token::GreaterThan => {}
+            Token::LessThan => {}
+
+            Token::And => {}
+            Token::Or => {}
+            _ => Err(Unspecified)
+        })
     }
 }
 
