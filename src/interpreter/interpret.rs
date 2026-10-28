@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, ForeverLoop, Function, FunctionCall, Node, Number, Program};
+use crate::ast::{BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::Unspecified;
 use crate::interpreter::{Interpret, Interpreter};
@@ -67,6 +67,20 @@ impl Interpret for ForeverLoop{
         }
     }
 }
+impl Interpret for ForLoop{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        let Node::RangeNode(range_node) = &self.range else{ return Err(Unspecified) };
+        let Value::Int(start) = range_node.start.execute(interpreter)? else{ return Err(Unspecified) };
+        let Value::Int(stop) = range_node.stop.execute(interpreter)? else{ return Err(Unspecified) };
+        let Value::Int(step) = range_node.step.execute(interpreter)? else{ return Err(Unspecified) };
+        interpreter.current_scope().variables.insert(self.name.clone(),Value::Int(start));
+        for i in (start..stop).step_by(step as usize) {
+            interpreter.current_scope().variables.insert(self.name.clone(),Value::Int(i));
+            self.body.execute(interpreter)?;
+        }
+        Ok(NoValue)
+    }
+}
 
 impl Interpret for String{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
@@ -96,7 +110,7 @@ impl Interpret for Node {
             //Node::ReturnStatementNode(n)=> n.execute(interpreter),
             Node::ProgramNode(n)        => n.execute(interpreter),
             Node::ForeverLoopNode(n)    => n.execute(interpreter),
-            //Node::ForLoopNode(n)        => n.execute(interpreter),
+            Node::ForLoopNode(n)        => n.execute(interpreter),
             //Node::RangeNode(n)          => n.execute(interpreter),
             //Node::IfNode(n)             => n.execute(interpreter),
             //Node::NotNode(n)            => n.execute(interpreter),
