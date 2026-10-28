@@ -7,10 +7,10 @@ pub struct Interpreter {
 }
 
 struct StackFrame{
-    scope:HashMap<String,Variable>,
+    scope:HashMap<String, Value>,
 }
 
-enum Variable{
+enum Value{
     Float(f32),
     Int(i32),
     String(String),
