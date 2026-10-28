@@ -65,7 +65,7 @@ impl Interpret for Node {
         match self {
             //Node::BinOpNode(n)          => n.execute(interpreter),
             //Node::NumberNode(n)         => n.execute(interpreter),
-            //Node::FunctionNode(n)       => n.execute(interpreter),
+            Node::FunctionNode(n)       => n.execute(interpreter),
             //Node::ParameterNode(n)      => n.execute(interpreter),
             //Node::IdentifierNode(n)     => n.execute(interpreter),
             Node::BlockStatementNode(n) => n.execute(interpreter),

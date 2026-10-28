@@ -80,11 +80,14 @@ impl StackScope {
         let mut scope:HashMap<Name, Value> = HashMap::new();
         scope.insert(Name("debug".to_string()),Value::Function(FunctionValue{
             executor: Arc::new(DebugFunctionExecution),
-            parameters: vec![],
+            parameters: vec![Parameter{
+                name: Name("arg".to_string()),
+                p_type: Name("str".to_string()),
+            }],
             return_value: Name("none".to_string()),
         }));
         StackScope {
-            variables: HashMap::new(),
+            variables: scope,
         }
     }
 }

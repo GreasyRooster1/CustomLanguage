@@ -31,6 +31,13 @@ mod tests {
     }
 
     #[test]
+    fn test_string_token_parsing() {
+        let parsed = parse(include_str!("../../lang/StringLexerText1.dte").to_string());
+        println!("{:?}",parsed)
+    }
+
+
+    #[test]
     fn test_matching_literal_tokens() {
         let rules = alloc_rules_with_precidence();
         assert!(check_single_token_parse(

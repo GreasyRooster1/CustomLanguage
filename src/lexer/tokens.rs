@@ -296,7 +296,7 @@ impl TokenRule for StringLiteralRule {
     }
 
     fn get_token(&self, string: &String) -> Token {
-        Token::Name((*(string.clone())).parse().unwrap())
+        Token::StringLiteral((*(string.clone())).parse().unwrap())
     }
 }
 
