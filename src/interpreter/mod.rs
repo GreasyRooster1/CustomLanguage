@@ -30,8 +30,8 @@ impl Interpreter {
         self.stack.first_mut().unwrap()
     }
 
-    pub(crate) fn get_variable(&mut self, name: Name, scope:StackScope) -> Option<Value> {
-        match scope.variables.get(&name){
+    pub(crate) fn get_variable(&mut self, name: Name) -> Option<Value> {
+        match self.current_scope().variables.get(&name){
             Some(v) => Some(v.clone()),
             None => match self.global_scope().variables.get(&name) {
                 Some(v) => Some(v.clone()),
