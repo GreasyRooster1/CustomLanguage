@@ -1,0 +1,7 @@
+
+
+fn fib(n:i):i{
+
+}
+
+debug_int(x+y);

@@ -1,6 +1,6 @@
 use std::cmp::{Ordering, PartialOrd};
 use std::sync::Arc;
-use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
+use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program, ReturnStatement};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
@@ -21,7 +21,10 @@ impl Interpret for Program{
 impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
-            statement.execute(interpreter)?;
+            let val = statement.execute(interpreter)?;
+            if matches!(statement, Node::ReturnStatementNode(_)){
+                return Ok(val);
+            }
         }
         Ok(NoValue)
     }
@@ -57,7 +60,7 @@ impl Interpret for FunctionCall{
         }
 
         let header = FunctionHeader::new(arg_values, function.parameters)?;
-        function.executor.execute(header,interpreter)
+        function.executor.call(header, interpreter)
     }
 }
 
@@ -162,6 +165,14 @@ impl Interpret for Assignment{
     }
 }
 
+impl Interpret for ReturnStatement{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        let val = self.expression.execute(interpreter)?;
+        interpreter.stack.pop();
+        Ok(val)
+    }
+}
+
 impl Interpret for Node {
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         match self {
@@ -172,7 +183,7 @@ impl Interpret for Node {
             //Node::ParameterNode(n)      => n.execute(interpreter),
             Node::IdentifierNode(n)     => n.execute(interpreter),
             Node::BlockStatementNode(n) => n.execute(interpreter),
-            //Node::ReturnStatementNode(n)=> n.execute(interpreter),
+            Node::ReturnStatementNode(n)=> n.execute(interpreter),
             Node::ProgramNode(n)        => n.execute(interpreter),
             Node::ForeverLoopNode(n)    => n.execute(interpreter),
             Node::ForLoopNode(n)        => n.execute(interpreter),

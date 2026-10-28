@@ -33,7 +33,7 @@ impl FunctionHeader {
 
 
 pub trait FunctionExecution: Debug {
-    fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value>;
+    fn call(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value>;
 }
 
 #[derive(Debug)]
@@ -41,7 +41,7 @@ pub struct BlockFunctionExecution{
     pub(crate) block: BlockStatement,
 }
 impl FunctionExecution for BlockFunctionExecution{
-    fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value> {
+    fn call(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value> {
         let mut scope = StackScope::new();
         for i in 0..header.parameters.len() {
             scope.variables.insert(header.parameters[i].name.clone(), header.corresponding_args[i].clone());
@@ -55,7 +55,7 @@ impl FunctionExecution for BlockFunctionExecution{
 #[derive(Debug)]
 pub struct DebugFunctionExecution;
 impl FunctionExecution for DebugFunctionExecution{
-    fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value>{
+    fn call(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value>{
         println!("debug called with header {:#?} and state: {:?}",header,interpreter);
         Ok(NoValue)
     }

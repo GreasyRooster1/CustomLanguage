@@ -1,0 +1,7 @@
+
+
+fn execute(n:i):i{
+    ret n+5;
+}
+
+debug_int(execute(2));
