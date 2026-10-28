@@ -1,3 +1,4 @@
+use std::cmp::{Ordering, PartialOrd};
 use std::sync::Arc;
 use crate::ast::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
@@ -133,8 +134,12 @@ impl Interpret for BinOp{
                 Token::Mult => a*b,
                 Token::Div => a/b,
                 Token::Mod => a%b,
+                Token::GreaterThan => Ok(Value::Bool(a>b)),
+                Token::LessThan => Ok(Value::Bool(a<b)),
                 _ => Err(Unspecified)
-            }?
+            }?;
+        }else{
+            
         }
         Ok(match self.op {
             Token::Add => {}
@@ -145,8 +150,7 @@ impl Interpret for BinOp{
 
             Token::CheckEq => Value::Bool(a==b),
             Token::CheckNotEq => {}
-            Token::GreaterThan => {}
-            Token::LessThan => {}
+            
 
             Token::And => {}
             Token::Or => {}
