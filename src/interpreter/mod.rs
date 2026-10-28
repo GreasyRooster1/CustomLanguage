@@ -10,7 +10,8 @@ use serde::Serialize;
 use strum::Display;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program};
 use crate::error::{CompileError, CompileResult};
-use crate::interpreter::value::{Value, ValueType};
+use crate::interpreter::functions::DebugFunctionExecution;
+use crate::interpreter::value::{FunctionValue, Value, ValueType};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -20,7 +21,7 @@ pub struct Interpreter {
 impl Interpreter {
     pub(crate) fn new() -> Self {
         Interpreter{
-            stack: vec![StackScope::new()],
+            stack: vec![StackScope::global()],
         }
     }
 
@@ -71,6 +72,17 @@ pub(crate) struct StackScope {
 
 impl StackScope {
     fn new() -> StackScope {
+        StackScope {
+            variables: HashMap::new(),
+        }
+    }
+    fn global() -> StackScope {
+        let mut scope:HashMap<Name, Value> = HashMap::new();
+        scope.insert(Name("debug".to_string()),Value::Function(FunctionValue{
+            executor: Arc::new(DebugFunctionExecution),
+            parameters: vec![],
+            return_value: Name("none".to_string()),
+        }));
         StackScope {
             variables: HashMap::new(),
         }

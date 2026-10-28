@@ -11,7 +11,7 @@ use crate::lexer::Token::Func;
 impl Interpret for Program{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
-            statement.execute(interpreter);
+            statement.execute(interpreter)?;
         }
         Ok(NoValue)
     }
@@ -19,7 +19,7 @@ impl Interpret for Program{
 impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
-            statement.execute(interpreter);
+            statement.execute(interpreter)?;
         }
         Ok(NoValue)
     }
