@@ -1,6 +1,6 @@
 mod tests;
 mod interpret;
-mod value;
+pub(crate) mod value;
 mod functions;
 
 use std::collections::HashMap;
@@ -9,8 +9,8 @@ use std::sync::Arc;
 use serde::Serialize;
 use strum::Display;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
-use crate::error::CompileError;
-use crate::interpreter::value::Value;
+use crate::error::{CompileError, CompileResult};
+use crate::interpreter::value::{Value, ValueType};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -24,7 +24,7 @@ impl Interpreter {
         }
     }
 
-    pub(crate) fn execute(&mut self,program: Program) -> Value {
+    pub(crate) fn execute(&mut self,program: Program) -> CompileResult<Value> {
         program.execute(self)
     }
 
@@ -35,11 +35,11 @@ impl Interpreter {
         self.stack.first_mut().unwrap()
     }
 
-    pub(crate) fn get_variable_typed(&mut self, name: Name,val_type:Value) -> Result<Option<Value>,CompileError>{
+    pub(crate) fn get_variable_typed(&mut self, name: Name,val_type:ValueType) -> Result<Option<Value>,CompileError>{
         match self.get_variable(name){
             Some(v) => {
-                if matches!(v,val_type){
-                    Ok(Some(val_type))
+                if v==val_type {
+                    Ok(Some(v))
                 }else{
                     Err(CompileError::WrongTypeAssumption { expected: val_type})
                 }
@@ -78,5 +78,5 @@ impl StackScope {
 }
 
 pub trait Interpret {
-    fn execute(&self, interpreter: &mut Interpreter) -> Value;
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value>;
 }

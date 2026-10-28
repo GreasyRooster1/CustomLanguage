@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use serde::Serialize;
 use strum::Display;
+use crate::ast::{Name, Parameter};
 use crate::interpreter::functions::FunctionExecution;
 
 #[derive(Debug,Clone,Serialize,Display)]
@@ -10,7 +11,7 @@ pub(crate) enum Value{
     String(String),
     Bool(bool),
     #[serde(skip_serializing)]
-    Function(Arc<dyn FunctionExecution>),
+    Function(FunctionValue),
     NoValue
 }
 
@@ -22,6 +23,13 @@ pub(crate) enum ValueType{
     Bool,
     Function,
     NoValue
+}
+
+#[derive(Clone, Debug)]
+struct FunctionValue{
+    pub(crate) executor:Arc<dyn FunctionExecution>,
+    pub(crate) parameters: Vec<Parameter>,
+    pub(crate) return_value: Name,
 }
 
 impl From<&Value> for ValueType{

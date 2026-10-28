@@ -1,8 +1,11 @@
 use custom_error::custom_error;
-use crate::interpreter::Value;
+use crate::interpreter::value::ValueType;
 
 custom_error! {
     pub CompileError
     Unspecified = "unspecified",
-    WrongTypeAssumption{expected:Value} = "wrong type, expected type '{expected}'",
+    WrongTypeAssumption{expected:ValueType} = "wrong type, expected type '{expected}'",
+    ValueNotFound = "value not found",
 }
+
+pub type CompileResult<T> = std::result::Result<T, CompileError>;
