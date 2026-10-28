@@ -8,6 +8,7 @@ custom_error! {
     WrongTypeAssumption{expected:ValueType} = "wrong type, expected type '{expected}'",
     ValueNotFound = "value not found",
     ArgsDontMatchSig = "args dont match signature",
+    IfConditionNotBool="condition not bool",
 }
 
 pub type CompileResult<T> = std::result::Result<T, CompileError>;

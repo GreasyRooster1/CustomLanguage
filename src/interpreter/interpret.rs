@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, Node, Number, Program};
+use crate::ast::{BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
@@ -82,6 +82,22 @@ impl Interpret for ForLoop{
     }
 }
 
+impl Interpret for If{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        let val =  self.condition.execute(interpreter)?;
+        if self.condition.execute(interpreter)?==ValueType::Bool{
+            let Value::Bool(b) = val else {return Err(CompileError::IfConditionNotBool)};
+            if b{
+                Ok(self.body.execute(interpreter)?)
+            }else{
+                Ok(NoValue)
+            }
+        }else{
+            Err(CompileError::IfConditionNotBool)?
+        }
+    }
+}
+
 impl Interpret for String{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         Ok(Value::String(self.clone()))
@@ -121,7 +137,7 @@ impl Interpret for Node {
             Node::ForeverLoopNode(n)    => n.execute(interpreter),
             Node::ForLoopNode(n)        => n.execute(interpreter),
             //Node::RangeNode(n)          => n.execute(interpreter),
-            //Node::IfNode(n)             => n.execute(interpreter),
+            Node::IfNode(n)             => n.execute(interpreter),
             //Node::NotNode(n)            => n.execute(interpreter),
             Node::FunctionCallNode(n)   => n.execute(interpreter),
             //Node::AssignmentNode(n)     => n.execute(interpreter),
