@@ -1,7 +1,7 @@
 mod tests;
 
 use std::collections::HashMap;
-use crate::ast::{BlockStatement, Function, Name, Node, Program, Statement};
+use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Program, Statement};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -71,6 +71,7 @@ impl Interpret for Statement{
         match &self.statement {
             Node::FunctionNode(f) => f.execute(interpreter),
             Node::BlockStatementNode(b) => b.execute(interpreter),
+            Node::FunctionCallNode(c) => c.execute(interpreter),
             // Node::ReturnStatementNode(r) => r.execute(interpreter),
             // Node::ForeverLoopNode(f) => f.execute(interpreter),
             // Node::ForLoopNode(f) => f.execute(interpreter),
@@ -84,5 +85,12 @@ impl Interpret for Function{
     fn execute(&self, interpreter: &mut Interpreter) {
         let Node::BlockStatementNode(body) = self.body.clone() else { return };
         interpreter.global_scope.functions.insert(self.name.clone(), *body);
+    }
+}
+
+impl Interpret for FunctionCall{
+    fn execute(&self, interpreter: &mut Interpreter) {
+        let function = interpreter.global_scope.functions.get(&self.name).unwrap().clone();
+        function.execute(interpreter);
     }
 }
