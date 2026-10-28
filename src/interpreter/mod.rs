@@ -9,6 +9,7 @@ use serde::Serialize;
 use strum::Display;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
 use crate::error::CompileError;
+use crate::interpreter::value::Value;
 
 #[derive(Debug)]
 pub struct Interpreter {
