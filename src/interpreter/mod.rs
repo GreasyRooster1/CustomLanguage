@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::ast::{BlockStatement, Node, Program};
+use crate::ast::{BlockStatement, Function, Name, Node, Program};
 
 pub struct Interpreter {
     stack: Vec<StackScope>,
@@ -8,7 +8,8 @@ pub struct Interpreter {
 }
 
 struct StackScope {
-    scope:HashMap<String, Value>,
+    variables:HashMap<Name, Value>,
+    functions:HashMap<Name, BlockStatement>,
 }
 
 enum Value{
@@ -34,14 +35,21 @@ impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) {
         for block in &self.statements{
             match block{
-                Node::FunctionNode(f) => f.execute(),
-                Node::BlockStatementNode(b) => b.execute(),
-                Node::ReturnStatementNode(r) => r.execute(),
-                Node::ForeverLoopNode(f) => f.execute(),
-                Node::ForLoopNode(f) => f.execute(),
-                Node::IfNode(i) => i.execute(),
+                Node::FunctionNode(f) => f.execute(interpreter),
+                Node::BlockStatementNode(b) => b.execute(interpreter),
+                // Node::ReturnStatementNode(r) => r.execute(interpreter),
+                // Node::ForeverLoopNode(f) => f.execute(interpreter),
+                // Node::ForLoopNode(f) => f.execute(interpreter),
+                // Node::IfNode(i) => i.execute(interpreter),
                 _ => {}
             }
         }
+    }
+}
+
+impl Interpret for Function{
+    fn execute(&self, interpreter: &mut Interpreter) {
+        let Node::BlockStatementNode(body) = self.body.clone() else { return };
+        interpreter.global_scope.functions.insert(self.name.clone(), *body);
     }
 }

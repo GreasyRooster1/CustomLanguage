@@ -7,8 +7,8 @@ use serde::Serialize;
 use crate::ast::Node::ProgramNode;
 use crate::lexer::{NumberLiteralAssumption, Token, TokenType};
 
-#[derive(Debug, Serialize)]
-pub struct Name(String);
+#[derive(Debug, Serialize, Eq, Hash, PartialEq, Clone)]
+pub struct Name(pub(crate) String);
 
 pub struct AST{
     tokens: Vec<Token>,
@@ -261,7 +261,7 @@ impl AST{
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub enum Node{
     BinOpNode(Box<BinOp>),
     NumberNode(Box<Number>),
