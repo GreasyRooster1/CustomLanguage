@@ -10,6 +10,7 @@ custom_error! {
     ArgsDontMatchSig = "args dont match signature",
     IfConditionNotBool="condition not bool",
     NotNumber = "not a number",
+    InvalidOperation = "invalid operation",
 }
 
 pub type CompileResult<T> = std::result::Result<T, CompileError>;

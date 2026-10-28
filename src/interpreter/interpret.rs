@@ -2,7 +2,7 @@ use std::cmp::{Ordering, PartialOrd};
 use std::sync::Arc;
 use crate::ast::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
-use crate::error::CompileError::{Unspecified, ValueNotFound};
+use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
 use crate::interpreter::functions::{BlockFunctionExecution, FunctionHeader};
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
@@ -136,26 +136,21 @@ impl Interpret for BinOp{
                 Token::Mod => a%b,
                 Token::GreaterThan => Ok(Value::Bool(a>b)),
                 Token::LessThan => Ok(Value::Bool(a<b)),
+                Token::CheckEq => Ok(Value::Bool(a==b)),
+                Token::CheckNotEq => Ok(Value::Bool(a!=b)),
                 _ => Err(Unspecified)
-            }?;
+            }
+        }else if a==ValueType::Bool && b==ValueType::Bool {
+            let Value::Bool(a_bool) = a else { return Err(CompileError::Unspecified) };
+            let Value::Bool(b_bool) = b else { return Err(CompileError::Unspecified) };
+            match self.op{
+                Token::And => Ok(Value::Bool(a_bool && b_bool)),
+                Token::Or => Ok(Value::Bool(a_bool || b_bool)),
+                _ => Err(Unspecified)
+            }
         }else{
-            
+            Err(InvalidOperation)
         }
-        Ok(match self.op {
-            Token::Add => {}
-            Token::Sub => {}
-            Token::Mult => {}
-            Token::Div => {}
-            Token::Mod => {}
-
-            Token::CheckEq => Value::Bool(a==b),
-            Token::CheckNotEq => {}
-            
-
-            Token::And => {}
-            Token::Or => {}
-            _ => Err(Unspecified)
-        })
     }
 }
 
