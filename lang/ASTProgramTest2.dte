@@ -2,7 +2,7 @@
 
 
 fn execute(){
-    debug;
+    debug("inside execute");
 }
 
 execute();

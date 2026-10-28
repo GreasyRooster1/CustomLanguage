@@ -2,6 +2,8 @@ mod tests;
 mod interpret;
 
 use std::collections::HashMap;
+use std::fmt::Debug;
+use std::sync::Arc;
 use serde::Serialize;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program, Statement};
 
@@ -49,14 +51,17 @@ enum Value{
     Int(i32),
     String(String),
     Bool(bool),
+    #[serde(skip_serializing)]
+    Function(Arc<dyn FunctionExecution>),
     NoValue
 }
+
 
 pub trait Interpret {
     fn execute(&self, interpreter: &mut Interpreter) -> Value;
 }
 
-pub trait FunctionExecution{
+pub trait FunctionExecution: Debug {
     fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter);
 }
 
@@ -65,6 +70,7 @@ pub struct FunctionHeader{
     pub(crate) parameters: Vec<Parameter>,
     pub(crate) corresponding_args: Vec<Value>,
 }
+#[derive(Debug)]
 struct BlockFunctionExecution{
     block: BlockStatement,
 }
@@ -80,6 +86,7 @@ impl FunctionExecution for BlockFunctionExecution{
     }
 }
 
+#[derive(Debug)]
 struct DebugFunctionExecution;
 impl FunctionExecution for DebugFunctionExecution{
     fn execute(&self, header:FunctionHeader, interpreter: &mut Interpreter){

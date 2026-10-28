@@ -46,7 +46,10 @@ impl Interpret for Function{
 
 impl Interpret for FunctionCall{
     fn execute(&self, interpreter: &mut Interpreter) -> Value {
-        let function = interpreter.global_scope.functions.get(&self.name).unwrap().clone();
+        let function = match interpreter.global_scope.functions.get(&self.name){
+            Some(f) => f.clone(),
+            None => panic!("function not defined")
+        };
         function.execute(interpreter);
         NoValue
     }

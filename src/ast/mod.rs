@@ -165,8 +165,7 @@ impl AST{
                         }else if TokenType::OpenParam == self.peek_ahead(){
                             self.parse_function_call()
                         }else{
-                            panic!("not an assignment or function"
-                            )
+                            panic!("not an assignment or function {} & {}",self.peek(),self.peek_ahead());
                         }
                     }
 
