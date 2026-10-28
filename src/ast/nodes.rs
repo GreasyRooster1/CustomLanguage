@@ -25,12 +25,8 @@ pub struct Parameter{
     pub(crate) p_type: Name,
 }
 #[derive(Debug,Serialize, Clone)]
-pub struct Identifier{
+pub struct Identifier {
     pub(crate) name: Name,
-}
-#[derive(Debug,Serialize, Clone)]
-pub struct Statement{
-    pub(crate) statement: Node,
 }
 #[derive(Debug,Serialize, Clone)]
 pub struct BlockStatement{
@@ -68,6 +64,15 @@ pub struct If{
 #[derive(Debug,Serialize, Clone)]
 pub struct Not {
     condition: Node,
+}
+#[derive(Debug,Serialize, Clone)]
+pub struct Statement{
+    pub(crate) statement: Node,
+}
+#[derive(Debug,Serialize, Clone)]
+pub struct FunctionCall{
+    pub(crate) name: Name,
+    pub(crate) args: Vec<Node>,
 }
 #[derive(Debug,Serialize, Clone)]
 pub struct Nop;

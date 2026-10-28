@@ -254,6 +254,23 @@ impl AST{
         }))
     }
 
+    fn parse_function_call(&mut self) -> Node{
+        let name = match self.expect_and_get(TokenType::Name){
+            Token::Name(name) => Name(name),
+            _ => {panic!("not a name")}
+        };
+        self.expect(TokenType::OpenParam);
+        let mut args = Vec::new();
+        while TokenType::CloseParam!=self.peek() {
+            args.push(self.parse_expr());
+        }
+        self.expect(TokenType::CloseParam);
+        Node::FunctionCallNode(Box::new(FunctionCall{
+            name,
+            args
+        }))
+    }
+
     pub fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
@@ -281,6 +298,7 @@ pub enum Node{
     IfNode(Box<If>), //condition, block
     NotNode(Box<Not>),
     StatementNode(Box<Statement>),
+    FunctionCallNode(Box<FunctionCall>),
     NopNode,
 }
 
