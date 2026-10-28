@@ -103,3 +103,10 @@ impl StackScope {
 pub(crate) trait Interpret {
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value>;
 }
+
+fn expect_type(val:Value,t:ValueType)->CompileResult<Value>{
+    if val==t{
+        return Ok(val)
+    }
+    Err(CompileError::WrongTypeAssumption { expected: t})
+}

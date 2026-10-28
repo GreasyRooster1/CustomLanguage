@@ -9,6 +9,7 @@ custom_error! {
     ValueNotFound = "value not found",
     ArgsDontMatchSig = "args dont match signature",
     IfConditionNotBool="condition not bool",
+    NotNumber = "not a number",
 }
 
 pub type CompileResult<T> = std::result::Result<T, CompileError>;

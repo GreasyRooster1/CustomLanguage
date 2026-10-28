@@ -1,7 +1,9 @@
+use std::ops::Add;
 use std::sync::Arc;
 use serde::Serialize;
 use strum::Display;
 use crate::ast::{Name, Parameter};
+use crate::error::{CompileError, CompileResult};
 use crate::interpreter::functions::FunctionExecution;
 
 #[derive(Debug,Clone,Serialize,Display, PartialEq)]
@@ -32,6 +34,12 @@ pub struct FunctionValue{
     pub(crate) return_value: Name,
 }
 
+impl Value{
+    fn is_num(&self) -> bool{
+        *self==ValueType::Float || *self==ValueType::Int
+    }
+}
+
 impl From<&Value> for ValueType{
     fn from(value: &Value) -> Self {
         match value{
@@ -42,6 +50,36 @@ impl From<&Value> for ValueType{
             Value::Function(_) => ValueType::Function,
             Value::NoValue => ValueType::NoValue,
         }
+    }
+}
+
+impl Add for Value{
+    type Output = CompileResult<Value>;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        if !(self.is_num() || rhs.is_num()){
+            return Err(CompileError::NotNumber);
+        }
+        if self==ValueType::Int && rhs==ValueType::Int{
+            let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            Ok(Value::Int(a+b))
+        }else if(self==ValueType::Float && rhs==ValueType::Int){
+            let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            Ok(Value::Float(a+b as f32))
+        }else if(self==ValueType::Int && rhs==ValueType::Float){
+            let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            Ok(Value::Float(a as f32+b))
+        }else if(self==ValueType::Float && rhs==ValueType::Float){
+            let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            Ok(Value::Float(a+b))
+        }else{
+            Err(CompileError::Unspecified)
+        }
+        
     }
 }
 
