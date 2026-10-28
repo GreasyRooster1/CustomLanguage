@@ -2,11 +2,12 @@ use std::collections::HashMap;
 use crate::ast::{BlockStatement, Node, Program};
 
 pub struct Interpreter {
-    stack: Vec<StackFrame>,
+    stack: Vec<StackScope>,
     ast: Program,
+    global_scope: StackScope,
 }
 
-struct StackFrame{
+struct StackScope {
     scope:HashMap<String, Value>,
 }
 
@@ -14,6 +15,7 @@ enum Value{
     Float(f32),
     Int(i32),
     String(String),
+    Bool(bool),
 }
 
 pub trait Interpret {
