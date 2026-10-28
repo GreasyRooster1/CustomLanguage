@@ -92,6 +92,6 @@ impl StackScope {
     }
 }
 
-pub trait Interpret {
+pub(crate) trait Interpret {
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value>;
 }

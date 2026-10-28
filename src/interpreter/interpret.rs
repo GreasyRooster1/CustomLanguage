@@ -1,11 +1,12 @@
 use std::sync::Arc;
-use crate::ast::{BlockStatement, Function, FunctionCall, Node, Program};
+use crate::ast::{BlockStatement, Function, FunctionCall, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::Unspecified;
 use crate::interpreter::{Interpret, Interpreter};
 use crate::interpreter::functions::{BlockFunctionExecution, FunctionHeader};
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
 use crate::interpreter::value::Value::NoValue;
+use crate::lexer::NumberLiteralAssumption;
 use crate::lexer::Token::Func;
 
 impl Interpret for Program{
@@ -59,12 +60,27 @@ impl Interpret for FunctionCall{
     }
 }
 
+impl Interpret for String{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        Ok(Value::String(self.clone()))
+    }
+}
+
+impl Interpret for Number{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        Ok(match self.assumption{
+            NumberLiteralAssumption::Float(f) => Value::Float(f),
+            NumberLiteralAssumption::Int(i) => Value::Int(i)
+        })
+    }
+}
 
 impl Interpret for Node {
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         match self {
             //Node::BinOpNode(n)          => n.execute(interpreter),
-            //Node::NumberNode(n)         => n.execute(interpreter),
+            Node::NumberNode(n)         => n.execute(interpreter),
+            Node::StringNode(n)         => n.execute(interpreter),
             Node::FunctionNode(n)       => n.execute(interpreter),
             //Node::ParameterNode(n)      => n.execute(interpreter),
             //Node::IdentifierNode(n)     => n.execute(interpreter),

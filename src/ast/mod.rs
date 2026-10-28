@@ -100,6 +100,7 @@ impl AST{
             Token::Name(s)=>Node::IdentifierNode(Box::new(Identifier{
                 name:Name(s),
             })),
+            Token::StringLiteral(s)=>Node::StringNode(Box::new(s)),
             _ => {panic!("not a number")}
         }
     }
@@ -318,6 +319,7 @@ impl AST{
 pub enum Node{
     BinOpNode(Box<BinOp>),
     NumberNode(Box<Number>),
+    StringNode(Box<String>),
     FunctionNode(Box<Function>), //name, params, return type, block statement
     ParameterNode(Box<Parameter>), // name, type
     IdentifierNode(Box<Identifier>),
