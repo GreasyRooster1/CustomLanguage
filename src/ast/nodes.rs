@@ -29,6 +29,10 @@ pub struct Identifier{
     pub(crate) name: Name,
 }
 #[derive(Debug,Serialize, Clone)]
+pub struct Statement{
+    pub(crate) statement: Node,
+}
+#[derive(Debug,Serialize, Clone)]
 pub struct BlockStatement{
     pub(crate) statements: Vec<Node>,
 }

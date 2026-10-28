@@ -14,8 +14,10 @@ mod tests {
         let Node::ProgramNode(program) = node else { panic!("Expected program node, got {:?}", node) };
         println!("{:#?}",program);
 
-        let interpreter = Interpreter::new();
+        let mut interpreter = Interpreter::new();
         interpreter.execute(*program);
+
+        println!("{:#?}",interpreter)
     }
 
 }

@@ -3,6 +3,7 @@ mod tests;
 use std::collections::HashMap;
 use crate::ast::{BlockStatement, Function, Name, Node, Program};
 
+#[derive(Debug)]
 pub struct Interpreter {
     stack: Vec<StackScope>,
     global_scope: StackScope,
@@ -16,11 +17,12 @@ impl Interpreter {
         }
     }
 
-    pub(crate) fn execute(mut self,program: Program) {
-        program.execute(&mut self)
+    pub(crate) fn execute(&mut self,program: Program) {
+        program.execute(self)
     }
 }
 
+#[derive(Debug)]
 struct StackScope {
     variables:HashMap<Name, Value>,
     functions:HashMap<Name, BlockStatement>,
@@ -35,6 +37,7 @@ impl StackScope {
     }
 }
 
+#[derive(Debug)]
 enum Value{
     Float(f32),
     Int(i32),

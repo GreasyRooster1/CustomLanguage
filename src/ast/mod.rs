@@ -143,16 +143,20 @@ impl AST{
     }
 
     fn parse_statement(&mut self) -> Node{
-        match self.peek(){
-            Token::Func => self.parse_function(),
-            Token::Loop => self.parse_loop(),
-            // Token::Name(_) => {}
-            Token::Return => self.parse_return(),
-            Token::EOF => panic!("EOF"),
-            Token::If => self.parse_if(),
+        Node::StatementNode(Box::new(
+            Statement{
+                statement: match self.peek(){
+                    Token::Func => self.parse_function(),
+                    Token::Loop => self.parse_loop(),
+                    // Token::Name(_) => {}
+                    Token::Return => self.parse_return(),
+                    Token::EOF => panic!("EOF"),
+                    Token::If => self.parse_if(),
 
-            _ => {panic!("not implemented {}",self.peek())}
-        }
+                    _ => {panic!("not implemented {}",self.peek())}
+                }
+            }
+        ))
     }
 
     fn parse_loop(&mut self) -> Node{
@@ -276,6 +280,7 @@ pub enum Node{
     RangeNode(Box<Range>), //start, stop, step
     IfNode(Box<If>), //condition, block
     NotNode(Box<Not>),
+    StatementNode(Box<Statement>),
     NopNode,
 }
 
