@@ -30,6 +30,13 @@ impl AST{
         &self.tokens[self.index]
     }
 
+    fn peek_ahead(&self) -> &Token {
+        if self.index+1>=self.tokens.len(){
+            return &Token::EOF;
+        }
+        &self.tokens[self.index+1]
+    }
+
     fn eat(&mut self) -> &Token {
         self.index+=1;
         &self.tokens[self.index-1]
@@ -152,6 +159,16 @@ impl AST{
                     Token::Return => self.parse_return(),
                     Token::EOF => panic!("EOF"),
                     Token::If => self.parse_if(),
+                    Token::Name(_)=>{
+                        if TokenType::Name == self.peek_ahead(){
+                            self.parse_assignment()
+                        }else if TokenType::OpenParam == self.peek_ahead(){
+                            self.parse_function_call()
+                        }else{
+                            panic!("not an assignment or function"
+                            )
+                        }
+                    }
 
                     _ => {panic!("not implemented {}",self.peek())}
                 }
