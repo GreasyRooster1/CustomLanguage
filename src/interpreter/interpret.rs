@@ -1,6 +1,6 @@
 use std::cmp::{Ordering, PartialOrd};
 use std::sync::Arc;
-use crate::ast::{BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
+use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
@@ -154,10 +154,18 @@ impl Interpret for BinOp{
     }
 }
 
+impl Interpret for Assignment{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        let val = self.value.execute(interpreter)?;
+        interpreter.current_scope().variables.insert(self.name.clone(),val);
+        Ok(NoValue)
+    }
+}
+
 impl Interpret for Node {
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         match self {
-            //Node::BinOpNode(n)          => n.execute(interpreter),
+            Node::BinOpNode(n)          => n.execute(interpreter),
             Node::NumberNode(n)         => n.execute(interpreter),
             Node::StringNode(n)         => n.execute(interpreter),
             Node::FunctionNode(n)       => n.execute(interpreter),
@@ -172,7 +180,7 @@ impl Interpret for Node {
             Node::IfNode(n)             => n.execute(interpreter),
             //Node::NotNode(n)            => n.execute(interpreter),
             Node::FunctionCallNode(n)   => n.execute(interpreter),
-            //Node::AssignmentNode(n)     => n.execute(interpreter),
+            Node::AssignmentNode(n)     => n.execute(interpreter),
             Node::NopNode               => Ok(Value::NoValue),
             _ => Ok(Value::NoValue),
         }
