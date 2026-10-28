@@ -16,7 +16,7 @@ pub struct AST{
 }
 
 impl AST{
-    fn new(tokens: Vec<Token>) -> AST{
+    pub(crate) fn new(tokens: Vec<Token>) -> AST{
         AST{
             tokens,
             index:0,
@@ -250,7 +250,7 @@ impl AST{
         }))
     }
 
-    fn parse_program(&mut self) -> Node{
+    pub fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
             statements.push(self.parse_statement());

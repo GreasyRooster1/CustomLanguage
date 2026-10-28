@@ -1,3 +1,5 @@
+mod tests;
+
 use std::collections::HashMap;
 use crate::ast::{BlockStatement, Function, Name, Node, Program};
 
@@ -7,9 +9,28 @@ pub struct Interpreter {
     global_scope: StackScope,
 }
 
+impl Interpreter {
+    pub(crate) fn new(program: Program) -> Self {
+        Interpreter{
+            stack: vec![],
+            ast: program,
+            global_scope: StackScope::new(),
+        }
+    }
+}
+
 struct StackScope {
     variables:HashMap<Name, Value>,
     functions:HashMap<Name, BlockStatement>,
+}
+
+impl StackScope {
+    fn new() -> StackScope {
+        StackScope{
+            variables: HashMap::new(),
+            functions: HashMap::new(),
+        }
+    }
 }
 
 enum Value{
