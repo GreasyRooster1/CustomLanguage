@@ -124,7 +124,7 @@ impl AST{
     }
     fn parse_expr(&mut self) -> Node{
         let mut left = self.parse_add_sub();
-        while TokenType::CheckEq==self.peek() || TokenType::CheckNotEq==self.peek() || TokenType::GreaterThan==self.peek() || TokenType::LessThan==self.peek(){
+        while TokenType::CheckEq==self.peek() || TokenType::CheckNotEq==self.peek() || TokenType::GreaterThan==self.peek() || TokenType::LessThan==self.peek() || TokenType::GreaterThanEq==self.peek() || TokenType::LessThanEq==self.peek(){
             let op = self.eat().clone();
             let right = self.parse_term();
             left = Node::BinOpNode(Box::new(BinOp{
@@ -209,7 +209,7 @@ impl AST{
             name = unwrap_name(name_token).unwrap();
             is_anon = false;
         }
-        
+
         self.expect(TokenType::OpenParam);
 
         let mut params = Vec::new();
