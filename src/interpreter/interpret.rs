@@ -149,6 +149,8 @@ impl Interpret for BinOp{
                 Token::Mod => a%b,
                 Token::GreaterThan => Ok(Value::Bool(a>b)),
                 Token::LessThan => Ok(Value::Bool(a<b)),
+                Token::GreaterThanEq => Ok(Value::Bool(a>=b)),
+                Token::LessThanEq => Ok(Value::Bool(a<=b)),
                 Token::CheckEq => Ok(Value::Bool(a==b)),
                 Token::CheckNotEq => Ok(Value::Bool(a!=b)),
                 _ => Err(Unspecified)
