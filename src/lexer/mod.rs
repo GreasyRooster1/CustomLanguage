@@ -16,6 +16,7 @@ const OPEN_BRACKET_LITERAL: &str = "{";
 const CLOSE_BRACKET_LITERAL: &str = "}";
 const TYPE_DENOTER_LITERAL: &str = "#";
 const RETURN_LITERAL: &str = "ret";
+const SHORT_LITERAL: &str = "short";
 const COMMA_LITERAL: &str = ",";
 const STEP_SEPERATOR_LITERAL: &str = "by";
 const ASSIGNMENT_EQ_LITERAL: &str = "=";
@@ -71,6 +72,7 @@ pub enum Token {
     Not,
     
     Return,
+    Short,
     EOF,
 }
 
@@ -114,6 +116,7 @@ pub enum TokenType {
     Not,
 
     Return,
+    Short,
     EOF,
 }
 
@@ -149,6 +152,7 @@ impl PartialEq<&Token> for TokenType {
             Token::Or => {matches!(self,TokenType::Or)}
             Token::Not => {matches!(self,TokenType::Not)}
             Token::Return => {matches!(self,TokenType::Return)},
+            Token::Short => {matches!(self,TokenType::Short)},
             Token::EOF => {matches!(self,TokenType::EOF)}
         }
     }

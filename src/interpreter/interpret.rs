@@ -1,7 +1,7 @@
 use std::cmp::{Ordering, PartialOrd};
 use std::sync::Arc;
 use std::thread::scope;
-use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program, ReturnStatement};
+use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program, ReturnStatement, ShortStatement};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
@@ -23,9 +23,6 @@ impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
             let val = statement.execute(interpreter)?;
-            if matches!(statement, Node::ReturnStatementNode(_)){
-                return Ok(ShortCircuit(Box::new(val)));
-            }
             if val==ValueType::ShortCircuit{
                 return Ok(val);
             }
@@ -180,7 +177,13 @@ impl Interpret for ReturnStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         let val = self.expression.execute(interpreter)?;
         interpreter.stack.pop();
-        Ok(val)
+        Ok(ShortCircuit(Box::new(val)))
+    }
+}
+impl Interpret for ShortStatement{
+    fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
+        let val = self.expression.execute(interpreter)?;
+        Ok(ShortCircuit(Box::new(val)))
     }
 }
 
@@ -195,6 +198,7 @@ impl Interpret for Node {
             Node::IdentifierNode(n)     => n.execute(interpreter),
             Node::BlockStatementNode(n) => n.execute(interpreter),
             Node::ReturnStatementNode(n)=> n.execute(interpreter),
+            Node::ShortStatementNode(n) => n.execute(interpreter),
             Node::ProgramNode(n)        => n.execute(interpreter),
             Node::ForeverLoopNode(n)    => n.execute(interpreter),
             Node::ForLoopNode(n)        => n.execute(interpreter),

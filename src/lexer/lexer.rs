@@ -74,6 +74,7 @@ pub(crate) fn alloc_rules_with_precidence() -> Vec<Box<dyn TokenRule>> {
         Box::new(OrRule),
         Box::new(NotRule),
         Box::new(ReturnRule),
+        Box::new(ShortRule),
 
         Box::new(NumberLiteralRule),
         Box::new(StringLiteralRule),

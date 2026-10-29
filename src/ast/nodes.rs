@@ -38,6 +38,10 @@ pub struct ReturnStatement{
     pub(crate) expression: Node,
 }
 #[derive(Debug,Serialize, Clone)]
+pub struct ShortStatement{
+    pub(crate) expression: Node,
+}
+#[derive(Debug,Serialize, Clone)]
 pub struct Program{
     pub(crate) statements: Vec<Node>,
 }

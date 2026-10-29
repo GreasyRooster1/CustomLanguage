@@ -8,5 +8,9 @@ fn execute(n:i):i{
 }
 
 debugshort({
- ret execute(10);
+ short execute(10);
 });
+
+debugi(insulate({
+ short execute(10);
+}));

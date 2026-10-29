@@ -169,8 +169,8 @@ impl AST{
         match self.peek() {
             Token::Func => self.parse_function(),
             Token::Loop => self.parse_loop(),
-            // Token::Name(_) => {}
             Token::Return => self.parse_return(),
+            Token::Short => self.parse_short(),
             Token::EOF => panic!("EOF"),
             Token::If => self.parse_if(),
             Token::OpenBracket => self.parse_block(),
@@ -275,6 +275,15 @@ impl AST{
         }))
     }
 
+    fn parse_short(&mut self) -> Node{
+        self.expect(TokenType::Short);
+        let expression = self.parse_expr();
+        self.expect(TokenType::StatementSeparator);
+        Node::ShortStatementNode(Box::new(ShortStatement {
+            expression
+        }))
+    }
+
     fn parse_if(&mut self) -> Node{
         self.expect(TokenType::If);
         let condition = self.parse_expr();
@@ -342,6 +351,7 @@ pub enum Node{
     IdentifierNode(Box<Identifier>),
     BlockStatementNode(Box<BlockStatement>),
     ReturnStatementNode(Box<ReturnStatement>),
+    ShortStatementNode(Box<ShortStatement>),
     ProgramNode(Box<Program>),
     ForeverLoopNode(Box<ForeverLoop>),
     ForLoopNode(Box<ForLoop>), // var, range, block
