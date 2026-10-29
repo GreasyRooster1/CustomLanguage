@@ -15,7 +15,8 @@ pub(crate) enum Value{
     Bool(bool),
     #[serde(skip_serializing)]
     Function(FunctionValue),
-    NoValue
+    NoValue,
+    ShortCircuit(Box<Value>)
 }
 
 #[derive(Debug,Clone,Serialize,Display, PartialEq)]
@@ -25,7 +26,8 @@ pub(crate) enum ValueType{
     String,
     Bool,
     Function,
-    NoValue
+    NoValue,
+    ShortCircuit
 }
 
 #[derive(Clone, Debug)]
@@ -50,6 +52,7 @@ impl From<&Value> for ValueType{
             Value::Bool(_) => ValueType::Bool,
             Value::Function(_) => ValueType::Function,
             Value::NoValue => ValueType::NoValue,
+            Value::ShortCircuit(_) => ValueType::ShortCircuit,
         }
     }
 }

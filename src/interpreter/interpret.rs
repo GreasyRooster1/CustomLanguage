@@ -6,7 +6,7 @@ use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
 use crate::interpreter::{Interpret, Interpreter};
 use crate::interpreter::functions::{BlockFunctionExecution, FunctionHeader};
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
-use crate::interpreter::value::Value::NoValue;
+use crate::interpreter::value::Value::{NoValue, ShortCircuit};
 use crate::lexer::{NumberLiteralAssumption, Token};
 use crate::lexer::Token::Func;
 
@@ -22,8 +22,8 @@ impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
             let val = statement.execute(interpreter)?;
-            if matches!(statement, Node::ReturnStatementNode(_)){
-                return Ok(val);
+            if matches!(statement, Node::ReturnStatementNode(_)) || val == ValueType::ShortCircuit{
+                return Ok(ShortCircuit(Box::new(val)));
             }
         }
         Ok(NoValue)
@@ -60,7 +60,13 @@ impl Interpret for FunctionCall{
         }
 
         let header = FunctionHeader::new(arg_values, function.parameters)?;
-        function.executor.call(header, interpreter)
+        let result = function.executor.call(header, interpreter)?;
+        if result==ValueType::ShortCircuit{
+            let ShortCircuit(val) = result else { return Err(Unspecified) };
+            Ok(*val)
+        }else{
+            Ok(result)
+        }
     }
 }
 
@@ -128,8 +134,8 @@ impl Interpret for Identifier{
 
 impl Interpret for BinOp{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
-        let a = self.right.execute(interpreter)?;
-        let b = self.left.execute(interpreter)?;
+        let a = self.left.execute(interpreter)?;
+        let b = self.right.execute(interpreter)?;
         if (a==ValueType::Int||a==ValueType::Float) && (b==ValueType::Int||b==ValueType::Float){
             match self.op {
                 Token::Add => a+b,

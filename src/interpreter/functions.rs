@@ -1,7 +1,7 @@
 use std::env::Args;
 use std::fmt::Debug;
 use serde::Serialize;
-use crate::ast::{BlockStatement, Parameter};
+use crate::ast::{BlockStatement, Node, Parameter};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::ArgsDontMatchSig;
 use crate::interpreter::{Interpret, Interpreter, StackScope};

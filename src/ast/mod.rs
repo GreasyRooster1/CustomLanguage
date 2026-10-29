@@ -93,8 +93,9 @@ impl AST{
             self.expect(TokenType::CloseParam);
             return node;
         }
-        if TokenType::Name == self.peek() && TokenType::OpenParam == self.peek_ahead(){
-            return self.parse_function_call();
+        match self.parse_executable_factor(){
+            None => {}
+            Some(n) => {return n}
         }
         match self.eat().clone(){
             Token::NumberLiteral(assumption)=>Node::NumberNode(Box::new(Number{
@@ -107,6 +108,17 @@ impl AST{
             _ => {panic!("not a number")}
         }
     }
+
+    fn parse_executable_factor(&mut self) -> Option<Node>{
+        if TokenType::Name == self.peek() && TokenType::OpenParam == self.peek_ahead(){
+            Some(self.parse_function_call())
+        }else if TokenType::OpenBracket == self.peek(){
+            Some(self.parse_block())
+        }else{
+            None
+        }
+    }
+
     fn parse_gate(&mut self) -> Node{
         let mut left = self.parse_factor();
         while TokenType::And==self.peek() || TokenType::Or==self.peek(){
