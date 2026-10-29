@@ -248,7 +248,7 @@ impl From<Name> for ValueType{
             "str" => ValueType::String,
             "b" => ValueType::Bool,
             "func" => ValueType::Function,
-            "short" => ValueType::ShortCircuit,
+            "shortc" => ValueType::ShortCircuit,
             _ => ValueType::NoValue
         }
     }

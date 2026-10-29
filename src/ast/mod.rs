@@ -325,6 +325,7 @@ impl AST{
     pub fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
+            println!("--------\n{:#?} {:#?}",self.peek(), statements);
             statements.push(self.parse_statement(true).unwrap());
         }
         Node::ProgramNode(Box::new(Program {

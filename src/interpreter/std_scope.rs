@@ -64,7 +64,7 @@ fn add_debug_functions(scope:&mut HashMap<Name,Value>){
         executor: Arc::new(DebugFunctionExecution),
         parameters: vec![Parameter{
             name: Name("arg".to_string()),
-            p_type: Name("short".to_string()),
+            p_type: Name("shortc".to_string()),
         }],
         return_value: Name("none".to_string()),
     }));
@@ -75,7 +75,7 @@ fn add_short_insulate(scope:&mut HashMap<Name,Value>){
         executor: Arc::new(InsulateFunctionExecution),
         parameters: vec![Parameter{
             name: Name("arg".to_string()),
-            p_type: Name("short".to_string()),
+            p_type: Name("shortc".to_string()),
         }],
         return_value: Name("any".to_string()),
     }));

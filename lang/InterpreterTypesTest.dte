@@ -5,3 +5,10 @@ my_function func:fn anon(){
 
 debugfunc(my_function);
 debugi(my_function());
+
+my_short shortc:{
+    short 99;
+};
+
+debugshort(my_short);
+debugi(insulate(my_short));
