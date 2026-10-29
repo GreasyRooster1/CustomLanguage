@@ -173,6 +173,7 @@ impl AST{
             Token::Return => self.parse_return(),
             Token::EOF => panic!("EOF"),
             Token::If => self.parse_if(),
+            Token::OpenBracket => self.parse_block(),
             Token::Name(_) => {
                 if TokenType::Name == self.peek_ahead() {
                     self.parse_assignment()

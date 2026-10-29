@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use serde::Serialize;
 use crate::ast::{BlockStatement, Node, Parameter};
 use crate::error::{CompileError, CompileResult};
-use crate::error::CompileError::ArgsDontMatchSig;
+use crate::error::CompileError::{ArgsDontMatchSig, Unspecified};
 use crate::interpreter::{Interpret, Interpreter, StackScope};
 use crate::interpreter::value::{Value, ValueType};
 use crate::interpreter::value::Value::NoValue;
@@ -59,5 +59,14 @@ impl FunctionExecution for DebugFunctionExecution{
     fn call(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value>{
         println!("debug called with header {:#?} and state: {:?}",header,interpreter);
         Ok(NoValue)
+    }
+}
+
+#[derive(Debug)]
+pub struct InsulateFunctionExecution;
+impl FunctionExecution for InsulateFunctionExecution{
+    fn call(&self, header:FunctionHeader, interpreter: &mut Interpreter) -> CompileResult<Value>{
+        let Value::ShortCircuit(val) = header.corresponding_args[0].clone() else { return Err(Unspecified) };
+        Ok(*val)
     }
 }

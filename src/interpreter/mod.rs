@@ -2,6 +2,7 @@ mod tests;
 mod interpret;
 pub(crate) mod value;
 mod functions;
+mod std_scope;
 
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -11,6 +12,7 @@ use strum::Display;
 use crate::ast::{BlockStatement, Function, FunctionCall, Name, Node, Parameter, Program};
 use crate::error::{CompileError, CompileResult};
 use crate::interpreter::functions::DebugFunctionExecution;
+use crate::interpreter::std_scope::get_standard_scope;
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
 
 #[derive(Debug)]
@@ -77,26 +79,7 @@ impl StackScope {
         }
     }
     fn global() -> StackScope {
-        let mut scope:HashMap<Name, Value> = HashMap::new();
-        scope.insert(Name("debug".to_string()),Value::Function(FunctionValue{
-            executor: Arc::new(DebugFunctionExecution),
-            parameters: vec![Parameter{
-                name: Name("arg".to_string()),
-                p_type: Name("str".to_string()),
-            }],
-            return_value: Name("none".to_string()),
-        }));
-        scope.insert(Name("debug_int".to_string()),Value::Function(FunctionValue{
-            executor: Arc::new(DebugFunctionExecution),
-            parameters: vec![Parameter{
-                name: Name("arg".to_string()),
-                p_type: Name("i".to_string()),
-            }],
-            return_value: Name("none".to_string()),
-        }));
-        StackScope {
-            variables: scope,
-        }
+        get_standard_scope()
     }
 }
 

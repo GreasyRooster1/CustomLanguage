@@ -8,6 +8,4 @@ fn execute(n:i):i{
     ret 5;
 }
 
-debug_int({
-    ret execute(10)
-});
+debug_int(execute(1));
