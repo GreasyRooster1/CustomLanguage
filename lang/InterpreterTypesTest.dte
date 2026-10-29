@@ -1,10 +1,10 @@
 
-my_function func: fn (){
-    ret 10;
+my_function func: fn (x:i){
+    ret x+2;
 };
 
 debugfunc(my_function);
-debugi(my_function());
+debugi(my_function(2));
 
 my_short shortc:{
     short 99;
