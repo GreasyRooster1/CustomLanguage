@@ -46,6 +46,7 @@ impl FunctionExecution for BlockFunctionExecution{
         for i in 0..header.parameters.len() {
             scope.variables.insert(header.parameters[i].name.clone(), header.corresponding_args[i].clone());
         }
+        println!("new scope: {:#?}",scope);
         interpreter.stack.push(scope);
 
         self.block.execute(interpreter)

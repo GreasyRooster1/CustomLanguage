@@ -1,7 +1,8 @@
 
 
 fn execute(n:i):i{
+    debug_int(n+5);
     ret n+5;
 }
 
-debug_int(execute(2));
+debug_int(execute(1));

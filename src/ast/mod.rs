@@ -93,6 +93,9 @@ impl AST{
             self.expect(TokenType::CloseParam);
             return node;
         }
+        if TokenType::Name == self.peek() && TokenType::OpenParam == self.peek_ahead(){
+            return self.parse_function_call();
+        }
         match self.eat().clone(){
             Token::NumberLiteral(assumption)=>Node::NumberNode(Box::new(Number{
                 assumption
@@ -162,7 +165,9 @@ impl AST{
                 if TokenType::Name == self.peek_ahead() {
                     self.parse_assignment()
                 } else if TokenType::OpenParam == self.peek_ahead() {
-                    self.parse_function_call()
+                    let res = self.parse_function_call();
+                    self.expect(TokenType::StatementSeparator);
+                    res
                 } else {
                     panic!("not an assignment or function {} & {}", self.peek(), self.peek_ahead());
                 }
@@ -278,7 +283,6 @@ impl AST{
             args.push(self.parse_expr());
         }
         self.expect(TokenType::CloseParam);
-        self.expect(TokenType::StatementSeparator);
         Node::FunctionCallNode(Box::new(FunctionCall{
             name,
             args

@@ -63,19 +63,19 @@ impl Add for Value{
         }
         if self==ValueType::Int && rhs==ValueType::Int{
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Int(a+b))
         }else if(self==ValueType::Float && rhs==ValueType::Int){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a+b as f32))
         }else if(self==ValueType::Int && rhs==ValueType::Float){
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a as f32+b))
         }else if(self==ValueType::Float && rhs==ValueType::Float){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a+b))
         }else{
             Err(CompileError::Unspecified)
@@ -93,19 +93,19 @@ impl Sub for Value{
         }
         if self==ValueType::Int && rhs==ValueType::Int{
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Int(a-b))
         }else if(self==ValueType::Float && rhs==ValueType::Int){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a-b as f32))
         }else if(self==ValueType::Int && rhs==ValueType::Float){
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a as f32-b))
         }else if(self==ValueType::Float && rhs==ValueType::Float){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a-b))
         }else{
             Err(CompileError::Unspecified)
@@ -123,19 +123,19 @@ impl Mul for Value{
         }
         if self==ValueType::Int && rhs==ValueType::Int{
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Int(a*b))
         }else if(self==ValueType::Float && rhs==ValueType::Int){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a*b as f32))
         }else if(self==ValueType::Int && rhs==ValueType::Float){
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a as f32*b))
         }else if(self==ValueType::Float && rhs==ValueType::Float){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a*b))
         }else{
             Err(CompileError::Unspecified)
@@ -153,19 +153,19 @@ impl Div for Value{
         }
         if self==ValueType::Int && rhs==ValueType::Int{
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Int(a/b))
         }else if(self==ValueType::Float && rhs==ValueType::Int){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a/b as f32))
         }else if(self==ValueType::Int && rhs==ValueType::Float){
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a as f32/b))
         }else if(self==ValueType::Float && rhs==ValueType::Float){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a/b))
         }else{
             Err(CompileError::Unspecified)
@@ -183,19 +183,19 @@ impl Rem for Value{
         }
         if self==ValueType::Int && rhs==ValueType::Int{
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Int(a%b))
         }else if(self==ValueType::Float && rhs==ValueType::Int){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Int(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Int(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a%b as f32))
         }else if(self==ValueType::Int && rhs==ValueType::Float){
             let Value::Int(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a as f32%b))
         }else if(self==ValueType::Float && rhs==ValueType::Float){
             let Value::Float(a) =self else { Err(CompileError::Unspecified)? };
-            let Value::Float(b) =self else { Err(CompileError::Unspecified)? };
+            let Value::Float(b) =rhs else { Err(CompileError::Unspecified)? };
             Ok(Value::Float(a%b))
         }else{
             Err(CompileError::Unspecified)
@@ -211,19 +211,19 @@ impl PartialOrd for Value {
         }
         if *self==ValueType::Int && *rhs==ValueType::Int{
             let Value::Int(a) =self else { return None };
-            let Value::Int(b) =self else { return None };
+            let Value::Int(b) =rhs else { return None };
             PartialOrd::partial_cmp(a, b)
         }else if *self==ValueType::Float && *rhs==ValueType::Int{
             let Value::Float(a) =self else { return None };
-            let Value::Int(b) =self else { return None };
+            let Value::Int(b) =rhs else { return None };
             PartialOrd::partial_cmp(a, &(*b as f32))
         }else if *self==ValueType::Int && *rhs==ValueType::Float {
             let Value::Int(a) =self else { return None };
-            let Value::Float(b) =self else { return None };
+            let Value::Float(b) =rhs else { return None };
             PartialOrd::partial_cmp(&(*a as f32), b)
         }else if *self==ValueType::Float && *rhs==ValueType::Float {
             let Value::Float(a) =self else { return None };
-            let Value::Float(b) =self else { return None };
+            let Value::Float(b) =rhs else { return None };
             PartialOrd::partial_cmp(a, b)
         }else{
             None
