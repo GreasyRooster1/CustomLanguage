@@ -41,8 +41,8 @@ impl Interpret for Function{
             return_value: self.ret_type.clone(),
         };
 
-        interpreter.global_scope().variables.insert(self.name.clone(), Value::Function(func));
-        Ok(NoValue)
+        interpreter.global_scope().variables.insert(self.name.clone(), Value::Function(func.clone()));
+        Ok(Value::Function(func))
     }
 }
 

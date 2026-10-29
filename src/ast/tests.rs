@@ -18,7 +18,7 @@ mod tests {
         let parsed = parse(include_str!("../../lang/ASTFuncTest1.dte").to_string());
         println!("{:?}",parsed);
         let mut ast = AST::new(parsed);
-        let node = ast.parse_statement();
+        let node = ast.parse_statement(true);
         println!("{:#?}",node);
     }
 

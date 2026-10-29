@@ -93,7 +93,7 @@ impl AST{
             self.expect(TokenType::CloseParam);
             return node;
         }
-        match self.parse_executable_factor(){
+        match self.parse_statement(false){
             None => {}
             Some(n) => {return n}
         }
@@ -106,16 +106,6 @@ impl AST{
             })),
             Token::StringLiteral(s)=>Node::StringNode(Box::new(s)),
             _ => {panic!("not a number")}
-        }
-    }
-
-    fn parse_executable_factor(&mut self) -> Option<Node>{
-        if TokenType::Name == self.peek() && TokenType::OpenParam == self.peek_ahead(){
-            Some(self.parse_function_call())
-        }else if TokenType::OpenBracket == self.peek(){
-            Some(self.parse_block())
-        }else{
-            None
         }
     }
 
@@ -165,8 +155,8 @@ impl AST{
         }))
     }
 
-    fn parse_statement(&mut self) -> Node{
-        match self.peek() {
+    fn parse_statement(&mut self, standalone:bool) -> Option<Node>{
+        Some(match self.peek() {
             Token::Func => self.parse_function(),
             Token::Loop => self.parse_loop(),
             Token::Return => self.parse_return(),
@@ -179,14 +169,16 @@ impl AST{
                     self.parse_assignment()
                 } else if TokenType::OpenParam == self.peek_ahead() {
                     let res = self.parse_function_call();
-                    self.expect(TokenType::StatementSeparator);
+                    if standalone{
+                        self.expect(TokenType::StatementSeparator);
+                    }
                     res
                 } else {
-                    panic!("not an assignment or function {} & {}", self.peek(), self.peek_ahead());
+                    return None;
                 }
             }
-            _ => panic!("not a statement"),
-        }
+            _ => return None,
+        })
     }
 
     fn parse_loop(&mut self) -> Node {
@@ -255,7 +247,7 @@ impl AST{
         self.expect(TokenType::OpenBracket);
         let mut statements = Vec::new();
         while TokenType::CloseBracket!=self.peek() {
-           statements.push(self.parse_statement());
+           statements.push(self.parse_statement(true).unwrap());
         }
         if statements.len()==0 {
             statements.push(Node::NopNode);
@@ -333,7 +325,7 @@ impl AST{
     pub fn parse_program(&mut self) -> Node{
         let mut statements = Vec::new();
         while TokenType::EOF!=self.peek() {
-            statements.push(self.parse_statement());
+            statements.push(self.parse_statement(true).unwrap());
         }
         Node::ProgramNode(Box::new(Program {
             statements

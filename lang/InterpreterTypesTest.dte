@@ -1,0 +1,7 @@
+
+my_function func:fn anon(){
+    ret 10;
+};
+
+debugfunc(my_function);
+debugi(my_function());
