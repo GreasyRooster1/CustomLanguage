@@ -23,8 +23,11 @@ impl Interpret for BlockStatement{
     fn execute(&self, interpreter: &mut Interpreter) -> CompileResult<Value> {
         for statement in &self.statements{
             let val = statement.execute(interpreter)?;
-            if matches!(statement, Node::ReturnStatementNode(_)) || val == ValueType::ShortCircuit{
+            if matches!(statement, Node::ReturnStatementNode(_)){
                 return Ok(ShortCircuit(Box::new(val)));
+            }
+            if val==ValueType::ShortCircuit{
+                return Ok(val);
             }
         }
         Ok(NoValue)
@@ -61,12 +64,14 @@ impl Interpret for FunctionCall{
         }
 
         let header = FunctionHeader::new(arg_values, function.parameters)?;
-        let mut result = function.executor.call(header, interpreter)?;
-        while result==ValueType::ShortCircuit{
-            let Value::ShortCircuit(val) = result.clone() else { return Err(Unspecified) };
-            result = *val;
+        let result = function.executor.call(header, interpreter)?;
+        if result==ValueType::ShortCircuit{
+            let Value::ShortCircuit(mut val) = result.clone() else { return Err(Unspecified) };
+            println!("val: {:#?},{:#?}",val,result);
+            Ok(*val)
+        }else{
+            Ok(result)
         }
-        Ok(result)
     }
 }
 

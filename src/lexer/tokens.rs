@@ -292,7 +292,14 @@ impl TokenRule for NameRule {
 
 impl TokenRule for StringLiteralRule {
     fn check(&self, string: &String) -> bool {
-        string.starts_with("\"") && string.ends_with("\"")
+        if !(string.starts_with("\"") && string.ends_with("\"")) {
+            return false;
+        }
+        let mut chars = string.chars();
+        chars.next();
+        chars.next_back();
+        let trimmed = chars.as_str();
+        !trimmed.contains('"')
     }
 
     fn get_token(&self, string: &String) -> Token {

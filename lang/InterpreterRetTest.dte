@@ -3,12 +3,9 @@
 fn execute(n:i):i{
     if n>10 {
         debug("if trigger");
-        if n>10 {
-            debug("if trigger");
-            ret 10;
-        }
+        ret 10;
     }
     ret 5;
 }
 
-debug_int(execute(100));
+debug_int(execute(1));
