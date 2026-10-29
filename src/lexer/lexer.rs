@@ -70,6 +70,8 @@ pub(crate) fn alloc_rules_with_precidence() -> Vec<Box<dyn TokenRule>> {
         Box::new(CheckNotEqRule),
         Box::new(GreaterThanRule),
         Box::new(LessThanRule),
+        Box::new(GreaterThanEqRule),
+        Box::new(LessThanEqRule),
         Box::new(AndRule),
         Box::new(OrRule),
         Box::new(NotRule),

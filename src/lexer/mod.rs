@@ -24,6 +24,8 @@ const CHECK_EQ_LITERAL: &str = "==";
 const CHECK_NOT_EQ_LITERAL: &str = "!=";
 const GREATER_THAN_LITERAL: &str = ">";
 const LESS_THAN_LITERAL: &str = "<";
+const GREATER_THAN_EQ_LITERAL: &str = ">=";
+const LESS_THAN_EQ_LITERAL: &str = "<=";
 const AND_LITERAL: &str = "&&";
 const OR_LITERAL: &str = "||";
 const NOT_LITERAL: &str = "!";
@@ -67,6 +69,8 @@ pub enum Token {
     CheckNotEq,
     GreaterThan,
     LessThan,
+    GreaterThanEq,
+    LessThanEq,
     And,
     Or,
     Not,
@@ -111,6 +115,8 @@ pub enum TokenType {
     CheckNotEq,
     GreaterThan,
     LessThan,
+    GreaterThanEq,
+    LessThanEq,
     And,
     Or,
     Not,
@@ -148,6 +154,8 @@ impl PartialEq<&Token> for TokenType {
             Token::CheckNotEq => {matches!(self,TokenType::CheckNotEq)}
             Token::GreaterThan => {matches!(self,TokenType::GreaterThan)}
             Token::LessThan => {matches!(self,TokenType::LessThan)}
+            Token::GreaterThanEq => {matches!(self,TokenType::GreaterThanEq)}
+            Token::LessThanEq => {matches!(self,TokenType::LessThanEq)}
             Token::And => {matches!(self,TokenType::And)}
             Token::Or => {matches!(self,TokenType::Or)}
             Token::Not => {matches!(self,TokenType::Not)}

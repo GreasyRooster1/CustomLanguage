@@ -1,5 +1,5 @@
 use crate::lexer::Token::NumberLiteral;
-use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL, RETURN_LITERAL, STEP_SEPERATOR_LITERAL, IF_LITERAL, ASSIGNMENT_EQ_LITERAL, CHECK_EQ_LITERAL, AND_LITERAL, OR_LITERAL, NOT_LITERAL, CHECK_NOT_EQ_LITERAL, GREATER_THAN_LITERAL, LESS_THAN_LITERAL, STATEMENT_SEPERATOR_LITERAL, SHORT_LITERAL};
+use crate::lexer::{CLOSE_BRACKET_LITERAL, CLOSE_PARAM_LITERAL, FUNC_LITERAL, LOOP_LITERAL, NumberLiteralAssumption, OPEN_BRACKET_LITERAL, OPEN_PARAM_LITERAL, RANGE_SEPERATOR_LITERAL, TYPE_SEPERATOR_LITERAL, TokenRule, Token, NAME_ALLOWED_CHARS, TYPE_DENOTER_LITERAL, COMMA_LITERAL, RETURN_LITERAL, STEP_SEPERATOR_LITERAL, IF_LITERAL, ASSIGNMENT_EQ_LITERAL, CHECK_EQ_LITERAL, AND_LITERAL, OR_LITERAL, NOT_LITERAL, CHECK_NOT_EQ_LITERAL, GREATER_THAN_LITERAL, LESS_THAN_LITERAL, STATEMENT_SEPERATOR_LITERAL, SHORT_LITERAL, GREATER_THAN_EQ_LITERAL, LESS_THAN_EQ_LITERAL};
 
 pub struct FuncRule;
 pub struct LoopRule;
@@ -33,6 +33,8 @@ pub struct CheckEqRule;
 pub struct CheckNotEqRule;
 pub struct GreaterThanRule;
 pub struct LessThanRule;
+pub struct GreaterThanEqRule;
+pub struct LessThanEqRule;
 pub struct AndRule;
 pub struct OrRule;
 pub struct NotRule;
@@ -251,6 +253,24 @@ impl TokenRule for LessThanRule {
         Token::LessThan
     }
 }
+impl TokenRule for GreaterThanEqRule {
+    fn check(&self, string: &String) -> bool {
+        string == GREATER_THAN_EQ_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::GreaterThanEq
+    }
+}
+impl TokenRule for LessThanEqRule {
+    fn check(&self, string: &String) -> bool {
+        string == LESS_THAN_EQ_LITERAL
+    }
+
+    fn get_token(&self, string: &String) -> Token {
+        Token::LessThanEq
+    }
+}
 impl TokenRule for AndRule {
     fn check(&self, string: &String) -> bool {
         string == AND_LITERAL
@@ -310,7 +330,7 @@ impl TokenRule for StringLiteralRule {
 
 impl TokenRule for NumberLiteralRule {
     fn check(&self, string: &String) -> bool {
-        !string.starts_with("+") &&
+        !string.starts_with("+") && !string.starts_with("-") &&
             (string.parse::<f64>().is_ok()
             || string.parse::<i128>().is_ok())
     }
