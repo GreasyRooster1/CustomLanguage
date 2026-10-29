@@ -32,8 +32,16 @@ fn do_again(x:i, y:f):f{
 ```
 
 ## Types
+
 - f - 32-bit float
 - i - 32-bit signed int
+- str - string
+- b - bool
+- func - function
+- short - short circuit
+- 
+Transient:
+- NoValue 
 
 ## Interfaces
 interfaces allow for turing control flow execution into sys calls
