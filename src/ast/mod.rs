@@ -202,8 +202,14 @@ impl AST{
 
     fn parse_function(&mut self) -> Node{
         self.expect(TokenType::Func);
-        let name_token = self.expect_and_get(TokenType::Name);
-        let name = unwrap_name(name_token).unwrap();
+        let mut is_anon = true;
+        let mut name = Name("__anon__".to_string());
+        if TokenType::Name==self.peek(){
+            let name_token = self.expect_and_get(TokenType::Name);
+            name = unwrap_name(name_token).unwrap();
+            is_anon = false;
+        }
+        
         self.expect(TokenType::OpenParam);
 
         let mut params = Vec::new();
@@ -240,6 +246,7 @@ impl AST{
             params,
             ret_type:return_type,
             body:block,
+            is_anon
         }))
     }
 

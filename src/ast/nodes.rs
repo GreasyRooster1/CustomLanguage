@@ -18,6 +18,7 @@ pub struct Function{
     pub(crate) params: Vec<Parameter>,
     pub(crate) ret_type: Name,
     pub(crate) body: Node,
+    pub(crate) is_anon: bool,
 }
 #[derive(Debug,Serialize, Clone)]
 #[derive(PartialEq)]

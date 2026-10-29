@@ -1,5 +1,5 @@
 
-my_function func:fn anon(){
+my_function func: fn (){
     ret 10;
 };
 
