@@ -1,7 +1,10 @@
 
 
 fn fib(n:i):i{
-
+    if(n<=1){
+      ret n;
+    }
+    ret fib(n-1)+fib(n-2);
 }
 
-debug_int(x+y);
+debugi(fib(4));

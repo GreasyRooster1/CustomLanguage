@@ -1,0 +1,5 @@
+my_function func: fn (x:i){
+    ret x+2;
+};
+
+debugi(my_function(2));

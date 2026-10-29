@@ -29,7 +29,7 @@ const OR_LITERAL: &str = "||";
 const NOT_LITERAL: &str = "!";
 const STATEMENT_SEPERATOR_LITERAL: &str = ";";
 
-const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
+const NAME_ALLOWED_CHARS: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_";
 
 #[derive(Debug, Clone, Serialize,Display)]
 pub enum Token {
