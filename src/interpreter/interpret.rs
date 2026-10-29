@@ -1,5 +1,6 @@
 use std::cmp::{Ordering, PartialOrd};
 use std::sync::Arc;
+use std::thread::scope;
 use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program, ReturnStatement};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
@@ -60,13 +61,12 @@ impl Interpret for FunctionCall{
         }
 
         let header = FunctionHeader::new(arg_values, function.parameters)?;
-        let result = function.executor.call(header, interpreter)?;
-        if result==ValueType::ShortCircuit{
-            let ShortCircuit(val) = result else { return Err(Unspecified) };
-            Ok(*val)
-        }else{
-            Ok(result)
+        let mut result = function.executor.call(header, interpreter)?;
+        while result==ValueType::ShortCircuit{
+            let Value::ShortCircuit(val) = result.clone() else { return Err(Unspecified) };
+            result = *val;
         }
+        Ok(result)
     }
 }
 

@@ -3,7 +3,10 @@
 fn execute(n:i):i{
     if n>10 {
         debug("if trigger");
-        ret 10;
+        if n>10 {
+            debug("if trigger");
+            ret 10;
+        }
     }
     ret 5;
 }
