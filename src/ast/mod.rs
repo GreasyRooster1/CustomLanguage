@@ -1,5 +1,6 @@
 mod tests;
 pub mod nodes;
+mod types;
 
 pub use crate::ast::nodes::*;
 use std::cmp::PartialEq;
