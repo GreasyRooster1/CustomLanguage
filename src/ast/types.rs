@@ -8,10 +8,15 @@ enum Type{
     Function,
     ShortCircuit,
     Array(Box<Type>),
-    Custom(CustomType),
+    Struct(Box<StructType>),
+    ShadowType(Box<ShadowType>)
 }
 
-struct CustomType{
+struct StructType{
     name:Name,
-
+    fields:Vec<Type>
+}
+struct ShadowType{
+    name:Name,
+    shadows:Type,
 }
