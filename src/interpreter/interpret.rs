@@ -4,7 +4,7 @@ use std::thread::scope;
 use crate::ast::{Assignment, BinOp, BlockStatement, ForLoop, ForeverLoop, Function, FunctionCall, Identifier, If, Node, Number, Program, ReturnStatement, ShortStatement};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{InvalidOperation, Unspecified, ValueNotFound};
-use crate::interpreter::{Interpret, Interpreter};
+use crate::interpreter::{Interpret, Interpreter, TypedParameter};
 use crate::interpreter::functions::{BlockFunctionExecution, FunctionHeader};
 use crate::interpreter::value::{FunctionValue, Value, ValueType};
 use crate::interpreter::value::Value::{NoValue, ShortCircuit};
@@ -61,8 +61,10 @@ impl Interpret for FunctionCall{
         for arg in &self.args {
             arg_values.push(arg.execute(interpreter)?);
         }
+        
+        let typed_params = TypedParameter::from_params(interpreter,function.parameters)?;
 
-        let header = FunctionHeader::new(arg_values, function.parameters)?;
+        let header = FunctionHeader::new(arg_values, typed_params)?;
         let result = function.executor.call(header, interpreter)?;
         if result==ValueType::ShortCircuit{
             let Value::ShortCircuit(mut val) = result.clone() else { return Err(Unspecified) };

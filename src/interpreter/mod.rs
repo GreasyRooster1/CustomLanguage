@@ -93,3 +93,22 @@ fn expect_type(val:Value,t:ValueType)->CompileResult<Value>{
     }
     Err(CompileError::WrongTypeAssumption { expected: t})
 }
+
+#[derive(Debug,Clone,Serialize)]
+pub(crate) struct TypedParameter{
+    pub(crate) name: Name,
+    pub(crate) p_type: ValueType,
+}
+
+impl TypedParameter{
+    pub(crate) fn from_params(interpreter: &mut Interpreter,params:Vec<Parameter>)->CompileResult<Vec<Self>>{
+        let mut typed = vec![];
+        for p in params{
+            typed.push(TypedParameter{
+                name:p.name,
+                p_type: ValueType::from_name(interpreter,p.p_type)?
+            })
+        }
+        Ok(typed)
+    }
+}

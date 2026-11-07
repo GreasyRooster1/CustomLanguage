@@ -11,6 +11,7 @@ custom_error! {
     IfConditionNotBool="condition not bool",
     NotNumber = "not a number",
     InvalidOperation = "invalid operation",
+    NotAType = "not a type",
 }
 
 pub type CompileResult<T> = std::result::Result<T, CompileError>;

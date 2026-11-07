@@ -4,23 +4,23 @@ use serde::Serialize;
 use crate::ast::{BlockStatement, Node, Parameter};
 use crate::error::{CompileError, CompileResult};
 use crate::error::CompileError::{ArgsDontMatchSig, Unspecified};
-use crate::interpreter::{Interpret, Interpreter, StackScope};
+use crate::interpreter::{Interpret, Interpreter, StackScope, TypedParameter};
 use crate::interpreter::value::{Value, ValueType};
 use crate::interpreter::value::Value::NoValue;
 
 #[derive(Debug,Clone,Serialize)]
 pub struct FunctionHeader{
-    pub(crate) parameters: Vec<Parameter>,
+    pub(crate) parameters: Vec<TypedParameter>,
     pub(crate) corresponding_args: Vec<Value>,
 }
 
 impl FunctionHeader {
-    pub fn new(args:Vec<Value>,parameters: Vec<Parameter>) -> CompileResult<Self> {
+    pub fn new(args:Vec<Value>,parameters: Vec<TypedParameter>) -> CompileResult<Self> {
         if args.len()!=parameters.len(){
             return Err(ArgsDontMatchSig)
         }
         for i in 0..parameters.len(){
-            if args[i]!=ValueType::from(parameters[i].p_type.clone()) {
+            if args[i]!=parameters[i].p_type.clone() {
                 return Err(ArgsDontMatchSig)
             }
         }

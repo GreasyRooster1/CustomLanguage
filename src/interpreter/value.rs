@@ -8,7 +8,9 @@ use serde::Serialize;
 use strum::Display;
 use crate::ast::{Name, Parameter};
 use crate::error::{CompileError, CompileResult};
+use crate::error::CompileError::{NotAType, ValueNotFound};
 use crate::interpreter::functions::FunctionExecution;
+use crate::interpreter::Interpreter;
 
 #[derive(Debug,Clone,Serialize,Display, PartialEq)]
 pub(crate) enum Value{
@@ -39,6 +41,17 @@ pub(crate) enum ValueType{
     Struct(StructType),
     Array(ArrayType),
     Type
+}
+
+impl ValueType {
+    pub(crate) fn from_name(interpreter: &mut Interpreter, name: Name) -> CompileResult<ValueType> {
+        let val = match interpreter.get_variable(&name){
+            Some(val) => val,
+            None => return Err(ValueNotFound)
+        };
+        let Value::Type(typ) = val else {return Err(NotAType)};
+        Ok(*typ)
+    }
 }
 
 #[derive(Clone, Debug, PartialEq,Serialize)]
@@ -247,19 +260,6 @@ impl PartialEq for FunctionValue{
     }
 }
 
-impl From<Name> for ValueType{
-    fn from(value: Name) -> Self {
-        match value.0.as_str() {
-            "f" => ValueType::Float,
-            "i" => ValueType::Int,
-            "str" => ValueType::String,
-            "b" => ValueType::Bool,
-            "func" => ValueType::Function,
-            "shortc" => ValueType::ShortCircuit,
-            _ => ValueType::NoValue
-        }
-    }
-}
 
 impl PartialEq<ValueType> for Value {
     fn eq(&self, other: &ValueType) -> bool {
