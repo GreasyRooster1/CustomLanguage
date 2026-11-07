@@ -245,22 +245,6 @@ impl PartialEq for FunctionValue{
     }
 }
 
-impl From<&Value> for ValueType{
-    fn from(value: &Value) -> Self {
-        match value{
-            Value::Float(_) => ValueType::Float,
-            Value::Int(_) => ValueType::Int,
-            Value::String(_) => ValueType::String,
-            Value::Bool(_) => ValueType::Bool,
-            Value::Function(_) => ValueType::Function,
-            Value::NoValue => ValueType::NoValue,
-            Value::ShortCircuit(_) => ValueType::ShortCircuit,
-            Value::Array(_) => ValueType::Array,
-            Value::Struct(_) => ValueType::Struct,
-        }
-    }
-}
-
 impl From<Name> for ValueType{
     fn from(value: Name) -> Self {
         match value.0.as_str() {
@@ -272,12 +256,6 @@ impl From<Name> for ValueType{
             "shortc" => ValueType::ShortCircuit,
             _ => ValueType::NoValue
         }
-    }
-}
-
-impl PartialEq<&ValueType> for Value {
-    fn eq(&self, other: &&ValueType) -> bool {
-        **other == *self
     }
 }
 
@@ -316,5 +294,11 @@ impl PartialEq<ValueType> for Value {
 impl PartialEq<Value> for ValueType {
     fn eq(&self, other: &Value) -> bool {
         other == self
+    }
+}
+
+impl PartialEq<&ValueType> for Value {
+    fn eq(&self, other: &&ValueType) -> bool {
+        **other == *self
     }
 }
