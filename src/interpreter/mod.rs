@@ -65,17 +65,28 @@ impl Interpreter {
             None => None
         }
     }
+    pub(crate) fn get_type(&mut self, name: &Name) -> Option<ValueType> {
+        match self.current_scope().types.get(&name){
+            Some(v) => Some(v.clone()),
+            None => match self.global_scope().types.get(&name) {
+                Some(v) => Some(v.clone()),
+                None => None
+            }
+        }
+    }
 }
 
 #[derive(Debug)]
 pub(crate) struct StackScope {
     variables:HashMap<Name, Value>,
+    types:HashMap<Name, ValueType>,
 }
 
 impl StackScope {
     fn new() -> StackScope {
         StackScope {
-            variables: HashMap::new(),
+            variables: HashMap::new(), 
+            types: HashMap::new(),
         }
     }
     fn global() -> StackScope {

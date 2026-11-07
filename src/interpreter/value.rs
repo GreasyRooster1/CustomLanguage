@@ -25,7 +25,6 @@ pub(crate) enum Value{
 
     Array(Vec<Value>),
     Struct(Box<HashMap<Name,Value>>),
-    Type(Box<ValueType>)
 }
 
 #[derive(Debug,Clone,Serialize,Display, PartialEq)]
@@ -40,17 +39,15 @@ pub(crate) enum ValueType{
 
     Struct(StructType),
     Array(ArrayType),
-    Type
 }
 
 impl ValueType {
     pub(crate) fn from_name(interpreter: &mut Interpreter, name: Name) -> CompileResult<ValueType> {
-        let val = match interpreter.get_variable(&name){
+        let val = match interpreter.get_type(&name){
             Some(val) => val,
             None => return Err(ValueNotFound)
         };
-        let Value::Type(typ) = val else {return Err(NotAType)};
-        Ok(*typ)
+        Ok(val)
     }
 }
 
@@ -289,7 +286,6 @@ impl PartialEq<ValueType> for Value {
                 }
                 true
             }
-            Value::Type(_)=>matches!(other,ValueType::Type)
         }
     }
 }
