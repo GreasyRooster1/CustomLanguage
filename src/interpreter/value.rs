@@ -2,6 +2,7 @@ use std::cmp::{Ordering, PartialEq};
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::ops::{Add, Div, Mul, Rem, Sub};
+use std::str::Matches;
 use std::sync::Arc;
 use serde::Serialize;
 use strum::Display;
@@ -22,6 +23,7 @@ pub(crate) enum Value{
 
     Array(Vec<Value>),
     Struct(Box<HashMap<Name,Value>>),
+    Type(Box<ValueType>)
 }
 
 #[derive(Debug,Clone,Serialize,Display, PartialEq)]
@@ -36,7 +38,7 @@ pub(crate) enum ValueType{
 
     Struct(StructType),
     Array(ArrayType),
-    Type(Box<ValueType>)
+    Type
 }
 
 #[derive(Clone, Debug, PartialEq,Serialize)]
@@ -287,6 +289,7 @@ impl PartialEq<ValueType> for Value {
                 }
                 true
             }
+            Value::Type(_)=>matches!(other,ValueType::Type)
         }
     }
 }
