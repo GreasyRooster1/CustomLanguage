@@ -261,16 +261,16 @@ impl PartialEq for FunctionValue{
 impl PartialEq<ValueType> for Value {
     fn eq(&self, other: &ValueType) -> bool {
         match self{
-            Value::Float(_) => matches!(other,ValueType::Float),
-            Value::Int(_) => matches!(other,ValueType::Float),
-            Value::String(_) => matches!(other,ValueType::Float),
-            Value::Bool(_) => matches!(other,ValueType::Bool),
-            Value::Function(_) => matches!(other,ValueType::Function),
-            Value::NoValue => matches!(other,ValueType::NoValue),
-            Value::ShortCircuit(_) => matches!(other,ValueType::ShortCircuit),
+            Value::Float(_) => matches!(other,&ValueType::Float),
+            Value::Int(_) => matches!(other,&ValueType::Int),
+            Value::String(_) => matches!(other,&ValueType::String),
+            Value::Bool(_) => matches!(other,&ValueType::Bool),
+            Value::Function(_) => matches!(other,&ValueType::Function),
+            Value::NoValue => matches!(other,&ValueType::NoValue),
+            Value::ShortCircuit(_) => matches!(other,&ValueType::ShortCircuit),
             Value::Array(array) => {
                 for val in array{
-                    if val!=other{
+                    if *val!=*other{
                         return false;
                     }
                 }

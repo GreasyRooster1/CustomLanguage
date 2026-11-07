@@ -85,7 +85,7 @@ pub(crate) struct StackScope {
 impl StackScope {
     fn new() -> StackScope {
         StackScope {
-            variables: HashMap::new(), 
+            variables: HashMap::new(),
             types: HashMap::new(),
         }
     }
