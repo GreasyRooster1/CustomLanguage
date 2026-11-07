@@ -38,7 +38,7 @@ fn do_again(x:i, y:f):f{
 - str - string
 - b - bool
 - func - function
-- short - short circuit
+- shortc - short circuit
 - 
 Transient:
 - NoValue 
