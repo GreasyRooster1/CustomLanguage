@@ -1,4 +1,6 @@
-use std::cmp::Ordering;
+use std::cmp::{Ordering, PartialEq};
+use std::collections::HashMap;
+use std::hash::Hash;
 use std::ops::{Add, Div, Mul, Rem, Sub};
 use std::sync::Arc;
 use serde::Serialize;
@@ -16,7 +18,10 @@ pub(crate) enum Value{
     #[serde(skip_serializing)]
     Function(FunctionValue),
     NoValue,
-    ShortCircuit(Box<Value>)
+    ShortCircuit(Box<Value>),
+
+    Array(Vec<Value>),
+    Struct(Box<HashMap<Name,Value>>),
 }
 
 #[derive(Debug,Clone,Serialize,Display, PartialEq)]
@@ -27,7 +32,21 @@ pub(crate) enum ValueType{
     Bool,
     Function,
     NoValue,
-    ShortCircuit
+    ShortCircuit,
+
+    Struct(StructType),
+    Array(ArrayType),
+    Type(Box<ValueType>)
+}
+
+#[derive(Clone, Debug, PartialEq,Serialize)]
+pub(crate) struct StructType{
+    fields: HashMap<Name,ValueType>,
+}
+#[derive(Clone, Debug, PartialEq,Serialize)]
+pub(crate) struct ArrayType{
+    data: Vec<Value>,
+    data_type:Box<ValueType>,
 }
 
 #[derive(Clone, Debug)]
@@ -40,20 +59,6 @@ pub struct FunctionValue{
 impl Value{
     fn is_num(&self) -> bool{
         *self==ValueType::Float || *self==ValueType::Int
-    }
-}
-
-impl From<&Value> for ValueType{
-    fn from(value: &Value) -> Self {
-        match value{
-            Value::Float(_) => ValueType::Float,
-            Value::Int(_) => ValueType::Int,
-            Value::String(_) => ValueType::String,
-            Value::Bool(_) => ValueType::Bool,
-            Value::Function(_) => ValueType::Function,
-            Value::NoValue => ValueType::NoValue,
-            Value::ShortCircuit(_) => ValueType::ShortCircuit,
-        }
     }
 }
 
@@ -240,6 +245,22 @@ impl PartialEq for FunctionValue{
     }
 }
 
+impl From<&Value> for ValueType{
+    fn from(value: &Value) -> Self {
+        match value{
+            Value::Float(_) => ValueType::Float,
+            Value::Int(_) => ValueType::Int,
+            Value::String(_) => ValueType::String,
+            Value::Bool(_) => ValueType::Bool,
+            Value::Function(_) => ValueType::Function,
+            Value::NoValue => ValueType::NoValue,
+            Value::ShortCircuit(_) => ValueType::ShortCircuit,
+            Value::Array(_) => ValueType::Array,
+            Value::Struct(_) => ValueType::Struct,
+        }
+    }
+}
+
 impl From<Name> for ValueType{
     fn from(value: Name) -> Self {
         match value.0.as_str() {
@@ -254,14 +275,44 @@ impl From<Name> for ValueType{
     }
 }
 
-impl PartialEq<ValueType> for Value {
-    fn eq(&self, other: &ValueType) -> bool {
-        let converted = ValueType::from(self);
-        *other==converted
+impl PartialEq<&ValueType> for Value {
+    fn eq(&self, other: &&ValueType) -> bool {
+        **other == *self
     }
 }
 
-// 2. Enables: SignalColor == PrimaryColor
+impl PartialEq<ValueType> for Value {
+    fn eq(&self, other: &ValueType) -> bool {
+        match self{
+            Value::Float(_) => matches!(other,ValueType::Float),
+            Value::Int(_) => matches!(other,ValueType::Float),
+            Value::String(_) => matches!(other,ValueType::Float),
+            Value::Bool(_) => matches!(other,ValueType::Bool),
+            Value::Function(_) => matches!(other,ValueType::Function),
+            Value::NoValue => matches!(other,ValueType::NoValue),
+            Value::ShortCircuit(_) => matches!(other,ValueType::ShortCircuit),
+            Value::Array(array) => {
+                for val in array{
+                    if val!=other{
+                        return false;
+                    }
+                }
+                true
+            }
+            Value::Struct(st) => {
+                let ValueType::Struct(other_struct) = other else {return false};
+                let str = *(st.clone());
+                for (key,value) in str{
+                    if value!=other_struct.fields.get(&key).unwrap() {
+                        return false;
+                    }
+                }
+                true
+            }
+        }
+    }
+}
+
 impl PartialEq<Value> for ValueType {
     fn eq(&self, other: &Value) -> bool {
         other == self
